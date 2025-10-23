@@ -1,19 +1,29 @@
 @startuml
 
+' Entities
 class Client {
     id
     name
+    username
     email
+    password
     phone
     address
+    profilePicture
+    birthdate
+    country
     Vet
     Pet
+
 }
 
 class Pet {
     id
     species
     age
+    status
+    gender
+
     MedicalHistory
     Client
     Vet
@@ -21,30 +31,80 @@ class Pet {
 
 class MedicalHistory{
     id
-    records
+    medical_description
     Pet
+    Vet
 }
 
 class Vet {
     id
     name
     email
+    phone
+    address
+    Pet
+    Client
+    Clinic
+}
+
+class Vaccine{
+    id_vaccine
+    name
+    price
+}
+
+class Pet_Vaccine{
+    id_pet
+    id_vaccine
+    application_date
 }
 
 class Clinic {
     id
     name
-    email
+    location
+    workingHours
+    Vet
 }
 
 class Cart{
-    id
+    id_cart
+    total_products
+    total_price
     CartItem
 }
 
 class CartItem{
-    id
-    items
+    id_item_cart
+    quantity
 }
+
+class Product{
+    id_product
+    name
+    product_description
+    price
+    discountedPrice
+    pictureProduct
+    CartItem
+   }
+
+
+' Relationships
+Client "1" -- "..N" Pet : owns >
+Pet "1" -- "1" MedicalHistory : has >
+Vet "1" -- "..N" Pet : cares >
+Vet "1" -- "..N" Client : serves >
+Clinic "1" -- "..N" Vet : employs >
+Cart "1" -- "..N" CartItem : has >
+CartItem "N" -- "1" Product : contains >
+Pet "N" -- "N" Vaccine : receives >
+Pet_Vaccine "N" -- "1" Pet : relates >
+Pet_Vaccine "N" -- "1" Vaccine : relates >
+Cart "1" -- "1" Client : has >
+
+
+
+
 
 @enduml
