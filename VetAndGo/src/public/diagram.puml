@@ -1,0 +1,50 @@
+@startuml
+
+class Client {
+    id
+    name
+    email
+    phone
+    address
+    Vet
+    Pet
+}
+
+class Pet {
+    id
+    species
+    age
+    MedicalHistory
+    Client
+    Vet
+}
+
+class MedicalHistory{
+    id
+    records
+    Pet
+}
+
+class Vet {
+    id
+    name
+    email
+}
+
+class Clinic {
+    id
+    name
+    email
+}
+
+class Cart{
+    id
+    CartItem
+}
+
+class CartItem{
+    id
+    items
+}
+
+@enduml
