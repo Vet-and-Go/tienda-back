@@ -1,4 +1,10 @@
 @startuml
+'direccion of the diagram
+left to right direction
+'distance between elements
+skinparam nodesep 50
+skinparam ranksep 100
+
 
 ' Entities
 class Client {
@@ -23,7 +29,6 @@ class Pet {
     age
     status
     gender
-
     MedicalHistory
     Client
     Vet
@@ -47,13 +52,13 @@ class Vet {
     Clinic
 }
 
-class Vaccine{
+class VaccineType{
     id_vaccine
     name
     price
 }
 
-class Pet_Vaccine{
+class PetVaccine{
     id_pet
     id_vaccine
     application_date
@@ -87,21 +92,26 @@ class Product{
     discountedPrice
     pictureProduct
     CartItem
-   }
+}
+
+class ProductCategory{
+    id_category
+    name
+    description
+}
 
 
 ' Relationships
-Client "1" -- "..N" Pet : owns >
+Client "1" -- "N" Pet : owns >
 Pet "1" -- "1" MedicalHistory : has >
-Vet "1" -- "..N" Pet : cares >
-Vet "1" -- "..N" Client : serves >
-Clinic "1" -- "..N" Vet : employs >
-Cart "1" -- "..N" CartItem : has >
+Vet "1" -- "N" Client : serves >
+Clinic "1" -- "N" Vet : employs >
+Cart "1" -- "N" CartItem : has >
 CartItem "N" -- "1" Product : contains >
-Pet "N" -- "N" Vaccine : receives >
-Pet_Vaccine "N" -- "1" Pet : relates >
-Pet_Vaccine "N" -- "1" Vaccine : relates >
+PetVaccine "N" -- "1" Pet : relates >
+PetVaccine "N" -- "1" VaccineType : relates >
 Cart "1" -- "1" Client : has >
+Product "N" -- "N" ProductCategory : relates >
 
 
 
