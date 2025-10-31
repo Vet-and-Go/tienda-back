@@ -1,13 +1,29 @@
 @startuml
-'direccion of the diagram
+'Direccion of the diagram'
 left to right direction
-'distance between elements
-skinparam nodesep 50
-skinparam ranksep 100
+'Used style'
+skinparam backgroundColor #F5E6CC
+'Classes'
+skinparam classBackgroundColor #A7C7E7
+skinparam classBorderColor #000000
+skinparam shadowing true
+skinparam roundcorner 15
+'Titles'
+skinparam classFontColor #000000
+skinparam classFontStyle bold
+'Relationships'
+skinparam classArrowColor #4CAF50
+skinparam classArrowThickness 2
+skinparam classArrowFontColor black
+skinparam classArrowFontSize 11
+skinparam nodesep 20
+skinparam ranksep 5
 
 
-' Entities
-class Client {
+
+
+' Entities'
+class Client{
     id
     name
     username
@@ -101,8 +117,8 @@ class ProductCategory{
 }
 
 
-' Relationships
-Client "1" -- "N" Pet : owns >
+'Relationships'
+Client "1" --- "N" Pet : owns >
 Pet "1" -- "1" MedicalHistory : has >
 Vet "1" -- "N" Client : serves >
 Clinic "1" -- "N" Vet : employs >
