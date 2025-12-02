@@ -31,30 +31,24 @@ class Client{
     password
     phone
     address
-    profilePicture
     birthdate
     country
-    Vet
-    Pet
-
 }
 
 class Pet {
     id
+    petcode
     species
+    breed
+    name
     age
-    status
     gender
-    MedicalHistory
-    Client
-    Vet
+    status
 }
 
 class MedicalHistory{
     id
     medical_description
-    Pet
-    Vet
 }
 
 class Vet {
@@ -63,9 +57,6 @@ class Vet {
     email
     phone
     address
-    Pet
-    Client
-    Clinic
 }
 
 class Clinic {
@@ -73,14 +64,12 @@ class Clinic {
     name
     location
     workingHours
-    Vet
 }
 
 class Cart{
     id_cart
     total_products
     total_price
-    CartItem
 }
 
 class CartItem{
@@ -95,7 +84,6 @@ class Product{
     price
     discountedPrice
     pictureProduct
-    CartItem
 }
 
 class ProductCategory{
@@ -106,15 +94,14 @@ class ProductCategory{
 
 
 'Relationships'
-Client "1" --- "N" Pet : owns >
+Client "1" -- "N" Pet : has >
 Pet "1" -- "1" MedicalHistory : has >
-Vet "1" -- "N" Client : serves >
-Clinic "1" -- "N" Vet : employs >
-Cart "1" -- "N" CartItem : has >
-CartItem "N" -- "1" Product : contains >
-
-Cart "1" -- "1" Client : has >
-Product "N" -- "N" ProductCategory : relates >
+Pet "N" -- "1" Vet : assigned to >
+Vet "N" -- "1" Clinic : works at >
+Cart "1" -- "N" CartItem : contains >
+CartItem "N" -- "1" Product : references >
+Cart "1" -- "1" Client : belongs to >
+Product "N" -- "N" ProductCategory : categorized by >
 
 
 
