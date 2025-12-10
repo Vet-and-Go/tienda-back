@@ -1,0 +1,111 @@
+@startuml
+'Direccion of the diagram'
+left to right direction
+'Used style'
+skinparam backgroundColor #F5E6CC
+'Classes'
+skinparam classBackgroundColor #A7C7E7
+skinparam classBorderColor #000000
+skinparam shadowing true
+skinparam roundcorner 15
+'Titles'
+skinparam classFontColor #000000
+skinparam classFontStyle bold
+'Relationships'
+skinparam classArrowColor #4CAF50
+skinparam classArrowThickness 2
+skinparam classArrowFontColor black
+skinparam classArrowFontSize 11
+skinparam nodesep 20
+skinparam ranksep 5
+
+
+
+
+' Entities'
+class User{
+    id
+    name
+    username
+    email
+    password
+    phone
+    address
+    birthdate
+    country
+    role
+}
+
+class Pet {
+    id
+    petcode
+    species
+    breed
+    name
+    age
+    gender
+    status
+}
+
+class MedicalHistory{
+    id
+    medical_description
+}
+
+class Vet {
+    id
+    name
+    email
+    phone
+    address
+}
+
+class Clinic {
+    id
+    name
+    location
+    workingHours
+}
+
+class Cart{
+    id_cart
+    total_products
+    total_price
+}
+
+class CartItem{
+    id_item_cart
+    quantity
+}
+
+class Product{
+    id_product
+    name
+    product_description
+    price
+    discountedPrice
+    pictureProduct
+}
+
+class ProductCategory{
+    id_category
+    name
+    description
+}
+
+
+'Relationships'
+User "1" -- "N" Pet : has >
+Pet "1" -- "1" MedicalHistory : has >
+Pet "N" -- "1" Vet : assigned to >
+Vet "N" -- "1" Clinic : works at >
+Cart "1" -- "N" CartItem : contains >
+CartItem "N" -- "1" Product : references >
+Cart "1" -- "1" User : belongs to >
+Product "N" -- "1" ProductCategory : categorized by >
+
+
+
+
+
+@enduml
