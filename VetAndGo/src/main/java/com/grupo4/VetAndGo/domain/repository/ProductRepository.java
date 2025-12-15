@@ -14,5 +14,7 @@ public interface ProductRepository {
 
   Optional<ProductJpaEntity> findByName(String name);
 
+  boolean existsByCategoryId(Long categoryId);
+
   void deleteById(Long id);
 }

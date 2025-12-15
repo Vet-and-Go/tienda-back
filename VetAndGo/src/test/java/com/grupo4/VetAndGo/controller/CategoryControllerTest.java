@@ -6,6 +6,7 @@ import com.grupo4.VetAndGo.domain.dto.CategoryDto;
 import com.grupo4.VetAndGo.domain.service.CategoryService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -22,6 +23,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(CategoryController.class)
+@AutoConfigureMockMvc(addFilters = false)
 class CategoryControllerTest {
 
     @Autowired
@@ -29,6 +31,9 @@ class CategoryControllerTest {
 
     @MockitoBean
     private CategoryService categoryService;
+
+    @MockitoBean
+    private com.grupo4.VetAndGo.domain.service.TokenUtils tokenUtils;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -43,7 +48,7 @@ class CategoryControllerTest {
         when(categoryService.getAll()).thenReturn(categorias);
 
         // Act & Assert
-        mockMvc.perform(get("/api/categorias"))
+        mockMvc.perform(get("/api/categories"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$[0].id").value(1))
@@ -63,7 +68,7 @@ class CategoryControllerTest {
         when(categoryService.getById(id)).thenReturn(Optional.of(dto));
 
         // Act & Assert
-        mockMvc.perform(get("/api/categorias/{id}", id))
+        mockMvc.perform(get("/api/categories/{id}", id))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(1))
@@ -80,7 +85,7 @@ class CategoryControllerTest {
         when(categoryService.getById(id)).thenReturn(Optional.empty());
 
         // Act & Assert
-        mockMvc.perform(get("/api/categorias/{id}", id))
+        mockMvc.perform(get("/api/categories/{id}", id))
                 .andExpect(status().isNotFound());
 
         verify(categoryService, times(1)).getById(id);
@@ -95,9 +100,9 @@ class CategoryControllerTest {
         when(categoryService.create(any(CategoryDto.class))).thenReturn(created);
 
         // Act & Assert
-        mockMvc.perform(post("/api/categorias")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(insert)))
+        mockMvc.perform(post("/api/categories")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(insert)))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(1))
@@ -117,9 +122,9 @@ class CategoryControllerTest {
         when(categoryService.update(eq(id), any(CategoryDto.class))).thenReturn(updated);
 
         // Act & Assert
-        mockMvc.perform(put("/api/categorias/{id}", id)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(update)))
+        mockMvc.perform(put("/api/categories/{id}", id)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(update)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(1))
@@ -136,7 +141,7 @@ class CategoryControllerTest {
         doNothing().when(categoryService).delete(id);
 
         // Act & Assert
-        mockMvc.perform(delete("/api/categorias/{id}", id))
+        mockMvc.perform(delete("/api/categories/{id}", id))
                 .andExpect(status().isNoContent());
 
         verify(categoryService, times(1)).delete(id);

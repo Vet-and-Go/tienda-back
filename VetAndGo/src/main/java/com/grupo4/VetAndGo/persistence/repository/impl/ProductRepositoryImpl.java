@@ -15,6 +15,11 @@ public class ProductRepositoryImpl implements ProductRepository {
     return productJpaDao.findByName(name);
   }
 
+  @Override
+  public boolean existsByCategoryId(Long categoryId) {
+    return productJpaDao.existsByCategoryId(categoryId);
+  }
+
   private final ProductJpaDao productJpaDao;
 
   public ProductRepositoryImpl(ProductJpaDao productJpaDao) {

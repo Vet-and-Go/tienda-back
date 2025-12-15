@@ -3,8 +3,6 @@ package com.grupo4.VetAndGo.persistence.dao.jpa.entity;
 import com.grupo4.VetAndGo.domain.model.Role;
 import jakarta.persistence.*;
 
-import java.util.Objects;
-
 @Entity
 @Table(name = "clients")
 public class UserJpaEntity {
@@ -28,7 +26,6 @@ public class UserJpaEntity {
         this.password = password;
         this.role = role;
     }
-
 
     public Long getId() {
         return id;

@@ -14,7 +14,7 @@ class ProductMapperTest {
 
   @Test
   void testFromProductDtoToProductResponse() {
-    ProductDto productDto = new ProductDto(1L, "Dog Food", "Food", "Premium dog food", 29.99, 100);
+    ProductDto productDto = new ProductDto(1L, "Dog Food", 1L, "Premium dog food", 29.99, 100);
     ProductResponse productResponse = ProductMapper.fromProductDtoToProductResponse(productDto);
     assertAll(
         () -> assertEquals(productDto.id(), productResponse.id()),
@@ -27,7 +27,7 @@ class ProductMapperTest {
 
   @Test
   void testFromProductRequestToProductDto() {
-    ProductRequest productRequest = new ProductRequest(2L, "Cat Toy", "Toys", "Fun cat toy", 9.99, 50);
+    ProductRequest productRequest = new ProductRequest(2L, "Cat Toy", 2L, "Fun cat toy", 9.99, 50);
     ProductDto productDto = ProductMapper.fromProductRequestToProductDto(productRequest);
     assertAll(
         () -> assertEquals(productRequest.id(), productDto.id()),

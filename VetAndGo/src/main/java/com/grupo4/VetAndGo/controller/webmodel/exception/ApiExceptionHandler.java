@@ -1,5 +1,6 @@
 package com.grupo4.VetAndGo.controller.webmodel.exception;
 
+import com.grupo4.VetAndGo.domain.exception.BussinesException;
 import com.grupo4.VetAndGo.domain.exception.ResourceNotFoundException;
 import com.grupo4.VetAndGo.domain.exception.ValidationException;
 

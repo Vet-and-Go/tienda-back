@@ -3,6 +3,7 @@ package com.grupo4.VetAndGo.domain.service.impl;
 import com.grupo4.VetAndGo.domain.dto.CategoryDto;
 import com.grupo4.VetAndGo.domain.mapper.CategoryMapper;
 import com.grupo4.VetAndGo.domain.repository.CategoryRepository;
+import com.grupo4.VetAndGo.domain.repository.ProductRepository;
 import com.grupo4.VetAndGo.domain.service.CategoryService;
 
 import java.util.List;
@@ -11,9 +12,11 @@ import java.util.Optional;
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final ProductRepository productRepository;
 
-    public CategoryServiceImpl(CategoryRepository categoryRepository) {
+    public CategoryServiceImpl(CategoryRepository categoryRepository, ProductRepository productRepository) {
         this.categoryRepository = categoryRepository;
+        this.productRepository = productRepository;
     }
 
     @Override
@@ -58,6 +61,15 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void delete(Long id) {
+        if (!categoryRepository.findById(id).isPresent()) {
+            throw new IllegalArgumentException("La categoría con ID " + id + " no existe.");
+
+        }
+        if (productRepository.existsByCategoryId(id)) {
+            throw new IllegalArgumentException(
+                    "No se puede eliminar la categoría con ID " + id + " porque está asociada a productos.");
+        }
+
         categoryRepository.deleteById(id);
 
     }

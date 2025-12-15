@@ -3,7 +3,6 @@ package com.grupo4.VetAndGo.controller;
 import com.grupo4.VetAndGo.controller.webmodel.request.Category.CategoryInsert;
 import com.grupo4.VetAndGo.domain.dto.CategoryDto;
 import com.grupo4.VetAndGo.domain.service.CategoryService;
-import com.grupo4.VetAndGo.spring.annotation.PublicEndpoint;
 import com.grupo4.VetAndGo.spring.annotation.RequireAdmin;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,14 +20,12 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    @PublicEndpoint
     @GetMapping
     public ResponseEntity<List<CategoryDto>> getAllCategories() {
         List<CategoryDto> categories = categoryService.getAll();
         return ResponseEntity.ok(categories);
     }
 
-    @PublicEndpoint
     @GetMapping("/{id}")
     public ResponseEntity<CategoryDto> getCategoryById(@PathVariable Long id) {
         return categoryService.getById(id)
@@ -58,4 +55,3 @@ public class CategoryController {
         return ResponseEntity.noContent().build();
     }
 }
-

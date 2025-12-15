@@ -13,5 +13,7 @@ public interface ProductJpaDao extends GenericJpaDao<ProductJpaEntity> {
 
   Optional<ProductJpaEntity> findByName(String name);
 
+  boolean existsByCategoryId(Long categoryId);
+
   void deleteById(Long id);
 }

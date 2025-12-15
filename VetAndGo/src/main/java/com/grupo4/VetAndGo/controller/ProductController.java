@@ -2,6 +2,7 @@ package com.grupo4.VetAndGo.controller;
 
 import java.util.List;
 
+import com.grupo4.VetAndGo.spring.annotation.RequireAdmin;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,6 +42,7 @@ public class ProductController {
         return new ResponseEntity<>(productResponsePage, org.springframework.http.HttpStatus.OK);
     }
 
+    @RequireAdmin
     @PostMapping
     public ResponseEntity<ProductResponse> createProduct(@RequestBody ProductRequest productRequest) {
         ProductDto productDto = ProductMapper.fromProductRequestToProductDto(productRequest);
@@ -49,6 +51,7 @@ public class ProductController {
         return new ResponseEntity<>(productResponse, org.springframework.http.HttpStatus.CREATED);
     }
 
+    @RequireAdmin
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         productService.deleteById(id);

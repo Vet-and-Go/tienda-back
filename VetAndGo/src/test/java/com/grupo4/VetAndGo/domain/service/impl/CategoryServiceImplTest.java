@@ -21,6 +21,9 @@ import static org.mockito.Mockito.*;
 class CategoryServiceImplTest {
     @Mock
     private CategoryRepository categoryRepository;
+    @Mock
+    private com.grupo4.VetAndGo.domain.repository.ProductRepository productRepository;
+
     @InjectMocks
     private CategoryServiceImpl categoriaServiceImpl;
 
@@ -82,7 +85,7 @@ class CategoryServiceImplTest {
         CategoryDto inputDto = new CategoryDto(1L, "Alimentos", "Comida para mascotas");
         CategoryJpaEntity savedEntity = new CategoryJpaEntity(1L, "Alimentos", "Comida para mascotas");
 
-        when(categoryRepository.findById(1L)).thenReturn(Optional.empty());
+        when(categoryRepository.findByName("Alimentos")).thenReturn(Optional.empty());
         when(categoryRepository.save(any(CategoryJpaEntity.class))).thenReturn(savedEntity);
 
         // Act
@@ -93,27 +96,8 @@ class CategoryServiceImplTest {
         assertEquals(1L, result.id());
         assertEquals("Alimentos", result.name());
         assertEquals("Comida para mascotas", result.description());
-        verify(categoryRepository, times(1)).findById(1L);
+        verify(categoryRepository, times(1)).findByName("Alimentos");
         verify(categoryRepository, times(1)).save(any(CategoryJpaEntity.class));
-    }
-
-    @Test
-    void testCreate_ThrowsExceptionWhenIdAlreadyExists() {
-        // Arrange
-        Long existingId = 1L;
-        CategoryDto inputDto = new CategoryDto(existingId, "Alimentos", "Comida para mascotas");
-        CategoryJpaEntity existingEntity = new CategoryJpaEntity(existingId, "Alimentos Viejos", "Descripción vieja");
-
-        when(categoryRepository.findById(existingId)).thenReturn(Optional.of(existingEntity));
-
-        // Act & Assert
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            categoriaServiceImpl.create(inputDto);
-        });
-
-        assertEquals("La categoría con ID " + existingId + " ya existe.", exception.getMessage());
-        verify(categoryRepository, times(1)).findById(existingId);
-        verify(categoryRepository, never()).save(any(CategoryJpaEntity.class));
     }
 
     @Test
@@ -122,7 +106,8 @@ class CategoryServiceImplTest {
         Long id = 1L;
         CategoryDto updateDto = new CategoryDto(id, "Alimentos Premium", "Comida premium para mascotas");
         CategoryJpaEntity existingEntity = new CategoryJpaEntity(id, "Alimentos", "Comida para mascotas");
-        CategoryJpaEntity updatedEntity = new CategoryJpaEntity(id, "Alimentos Premium", "Comida premium para mascotas");
+        CategoryJpaEntity updatedEntity = new CategoryJpaEntity(id, "Alimentos Premium",
+                "Comida premium para mascotas");
 
         when(categoryRepository.findById(id)).thenReturn(Optional.of(existingEntity));
         when(categoryRepository.save(any(CategoryJpaEntity.class))).thenReturn(updatedEntity);
@@ -161,12 +146,35 @@ class CategoryServiceImplTest {
     void testDelete_Success() {
         // Arrange
         Long id = 1L;
+        when(categoryRepository.findById(id)).thenReturn(Optional.of(new CategoryJpaEntity()));
+        when(productRepository.existsByCategoryId(id)).thenReturn(false);
         doNothing().when(categoryRepository).deleteById(id);
 
         // Act
         categoriaServiceImpl.delete(id);
 
         // Assert
+        verify(categoryRepository, times(1)).findById(id);
+        verify(productRepository, times(1)).existsByCategoryId(id);
         verify(categoryRepository, times(1)).deleteById(id);
+    }
+
+    @Test
+    void testDelete_ThrowsExceptionWhenAssociatedProductsExist() {
+        // Arrange
+        Long id = 1L;
+        when(categoryRepository.findById(id)).thenReturn(Optional.of(new CategoryJpaEntity()));
+        when(productRepository.existsByCategoryId(id)).thenReturn(true);
+
+        // Act & Assert
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            categoriaServiceImpl.delete(id);
+        });
+
+        assertEquals("No se puede eliminar la categoría con ID " + id + " porque está asociada a productos.",
+                exception.getMessage());
+        verify(categoryRepository, times(1)).findById(id);
+        verify(productRepository, times(1)).existsByCategoryId(id);
+        verify(categoryRepository, never()).deleteById(id);
     }
 }

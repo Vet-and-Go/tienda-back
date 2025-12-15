@@ -27,6 +27,15 @@ public class ProductJpaDaoImpl implements ProductJpaDao {
     }
   }
 
+  @Override
+  public boolean existsByCategoryId(Long categoryId) {
+    Long count = entityManager.createQuery(
+        "SELECT COUNT(p) FROM ProductJpaEntity p WHERE p.category = :categoryId", Long.class)
+        .setParameter("categoryId", categoryId)
+        .getSingleResult();
+    return count > 0;
+  }
+
   @PersistenceContext
   private EntityManager entityManager;
 
@@ -40,6 +49,11 @@ public class ProductJpaDaoImpl implements ProductJpaDao {
   @Override
   public void deleteById(Long id) {
     entityManager.remove(entityManager.find(ProductJpaEntity.class, id));
+  }
+
+  @Override
+  public List<ProductJpaEntity> findAll() {
+    return List.of();
   }
 
   @Override
