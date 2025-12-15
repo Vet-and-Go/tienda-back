@@ -16,42 +16,42 @@ import com.grupo4.VetAndGo.controller.mapper.ProductMapper;
 @RequestMapping("/api/products")
 public class ProductController {
 
-  private final ProductService productService;
+    private final ProductService productService;
 
-  public ProductController(ProductService productService) {
-    this.productService = productService;
-  }
+    public ProductController(ProductService productService) {
+        this.productService = productService;
+    }
 
-  @GetMapping
-  public ResponseEntity<Page<ProductResponse>> getAllProducts(
-      @RequestParam(required = false, defaultValue = "1") int page,
-      @RequestParam(required = false, defaultValue = "10") int size) {
+    @GetMapping
+    public ResponseEntity<Page<ProductResponse>> getAllProducts(
+            @RequestParam(required = false, defaultValue = "1") int page,
+            @RequestParam(required = false, defaultValue = "10") int size) {
 
-    Page<ProductDto> productDtoPage = productService.getAll(page, size);
+        Page<ProductDto> productDtoPage = productService.getAll(page, size);
 
-    List<ProductResponse> productResponses = productDtoPage.data().stream()
-        .map(ProductMapper::fromProductDtoToProductResponse)
-        .toList();
+        List<ProductResponse> productResponses = productDtoPage.data().stream()
+                .map(ProductMapper::fromProductDtoToProductResponse)
+                .toList();
 
-    Page<ProductResponse> productResponsePage = new Page<>(
-        productResponses,
-        productDtoPage.pageNumber(),
-        productDtoPage.pageSize(),
-        productDtoPage.totalElements());
-    return new ResponseEntity<>(productResponsePage, org.springframework.http.HttpStatus.OK);
-  }
+        Page<ProductResponse> productResponsePage = new Page<>(
+                productResponses,
+                productDtoPage.pageNumber(),
+                productDtoPage.pageSize(),
+                productDtoPage.totalElements());
+        return new ResponseEntity<>(productResponsePage, org.springframework.http.HttpStatus.OK);
+    }
 
-  @PostMapping
-  public ResponseEntity<ProductResponse> createProduct(@RequestBody ProductRequest productRequest) {
-    ProductDto productDto = ProductMapper.fromProductRequestToProductDto(productRequest);
-    ProductDto createdProduct = productService.create(productDto);
-    ProductResponse productResponse = ProductMapper.fromProductDtoToProductResponse(createdProduct);
-    return new ResponseEntity<>(productResponse, org.springframework.http.HttpStatus.CREATED);
-  }
+    @PostMapping
+    public ResponseEntity<ProductResponse> createProduct(@RequestBody ProductRequest productRequest) {
+        ProductDto productDto = ProductMapper.fromProductRequestToProductDto(productRequest);
+        ProductDto createdProduct = productService.create(productDto);
+        ProductResponse productResponse = ProductMapper.fromProductDtoToProductResponse(createdProduct);
+        return new ResponseEntity<>(productResponse, org.springframework.http.HttpStatus.CREATED);
+    }
 
-  @DeleteMapping("/{id}")
-  public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
-    productService.deleteById(id);
-    return new ResponseEntity<>(org.springframework.http.HttpStatus.NO_CONTENT);
-  }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
+        productService.deleteById(id);
+        return new ResponseEntity<>(org.springframework.http.HttpStatus.NO_CONTENT);
+    }
 }

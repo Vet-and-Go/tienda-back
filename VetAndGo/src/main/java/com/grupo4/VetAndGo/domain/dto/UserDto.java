@@ -1,15 +1,11 @@
 package com.grupo4.VetAndGo.domain.dto;
 
+import com.grupo4.VetAndGo.domain.model.Role;
+
 public record UserDto(
-        Integer id,
-        String name,
+        Long id,
         String username,
-        String email,
         String password,
-        int phone,
-        String address,
-        String birthDate,
-        String country,
-        String role
+        Role role
 ) {
 }

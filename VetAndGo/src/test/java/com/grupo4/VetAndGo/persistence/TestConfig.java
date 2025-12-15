@@ -18,4 +18,9 @@ public class TestConfig {
     public CategoryJpaDao categoriaJpaDao(EntityManager entityManager) {
         return new CategoryJpaDaoImpl();
     }
+
+    @Bean
+    public com.grupo4.VetAndGo.persistence.dao.jpa.UserJpaDao userJpaDao() {
+        return new com.grupo4.VetAndGo.persistence.dao.jpa.impl.UserJpaDaoImpl();
+    }
 }

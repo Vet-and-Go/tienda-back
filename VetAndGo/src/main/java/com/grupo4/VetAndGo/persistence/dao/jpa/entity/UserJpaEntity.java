@@ -1,9 +1,7 @@
 package com.grupo4.VetAndGo.persistence.dao.jpa.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.grupo4.VetAndGo.domain.model.Role;
+import jakarta.persistence.*;
 
 import java.util.Objects;
 
@@ -11,55 +9,33 @@ import java.util.Objects;
 @Table(name = "clients")
 public class UserJpaEntity {
     @Id
-    Integer id;
-    @Column(name = "name")
-    String name;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
     @Column(name = "username")
     String username;
-    @Column(name = "email")
-    String email;
-    @Column(name =" password")
+    @Column(name = "password")
     String password;
-    @Column(name = "phone")
-    int phone;
-    @Column(name = "address")
-    String address;
-    @Column(name = "birth_date")
-    String birthDate;
-    @Column(name = "country")
-    String country;
+    @Enumerated(EnumType.STRING)
     @Column(name = "role")
-    String role;
+    Role role;
 
     public UserJpaEntity() {
     }
-    public UserJpaEntity(Integer id, String name, String username, String email, String password, int phone, String address, String birthDate, String country, String role) {
+
+    public UserJpaEntity(Long id, String username, String password, Role role) {
         this.id = id;
-        this.name = name;
         this.username = username;
-        this.email = email;
         this.password = password;
-        this.phone = phone;
-        this.address = address;
-        this.birthDate = birthDate;
-        this.country = country;
         this.role = role;
     }
 
-    public Integer getId() {
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getUsername() {
@@ -70,14 +46,6 @@ public class UserJpaEntity {
         this.username = username;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getPassword() {
         return password;
     }
@@ -86,41 +54,11 @@ public class UserJpaEntity {
         this.password = password;
     }
 
-    public int getPhone() {
-        return phone;
-    }
-
-    public void setPhone(int phone) {
-        this.phone = phone;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getBirthDate() {
-        return birthDate;
-    }
-
-    public void setBirthDate(String birthDate) {
-        this.birthDate = birthDate;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
-    public void setRole(String role) {
+
+    public void setRole(Role role) {
         this.role = role;
     }
 

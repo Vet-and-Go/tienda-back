@@ -5,14 +5,10 @@ import java.util.Optional;
 
 public interface GenericJpaDao<T> {
 
-  Optional<T> findById(Long id);
-
-  T insert(T entity);
-
-  T update(T entity);
-
-  void deleteById(Long id);
-
-  long count();
-
+    List<T> findAll();
+    Optional<T> findById(Long id);
+    T insert(T jpaEntity);
+    T update(T jpaEntity);
+    void deleteById(Long id);
+    long count();
 }

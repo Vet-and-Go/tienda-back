@@ -7,19 +7,21 @@ import com.grupo4.VetAndGo.domain.service.CategoryService;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class CategoryServiceImpl implements CategoryService {
+
     private final CategoryRepository categoryRepository;
+
     public CategoryServiceImpl(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
     }
+
     @Override
     public List<CategoryDto> getAll() {
         return categoryRepository.findAll().stream()
                 .map(CategoryMapper::FromCategoriaEntityJpatoCategoria)
                 .map(CategoryMapper::FromCategoriaToCategoriaDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -32,15 +34,13 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto create(CategoryDto categoryDto) {
         if (categoryRepository.findByName(categoryDto.name()).isPresent()) {
-            throw new IllegalArgumentException("La categoría con nombre " + categoryDto.id() + " ya existe.");
+            throw new IllegalArgumentException("La categoría con nombre '" + categoryDto.name() + "' ya existe.");
         }
-
-        System.out.println("Creating category: " + categoryDto);
 
         var categoria = CategoryMapper.FromCategoriaDtoToCategoria(categoryDto);
         var saved = categoryRepository.save(CategoryMapper.FromCategoriaToCategoriaEntityJpa(categoria));
         var result = CategoryMapper.FromCategoriaEntityJpatoCategoria(saved);
-        return new CategoryDto(result.getId(), result.getName(), result.getDescription());
+        return CategoryMapper.FromCategoriaToCategoriaDto(result);
     }
 
     @Override

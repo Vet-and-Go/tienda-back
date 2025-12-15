@@ -1,15 +1,11 @@
 package com.grupo4.VetAndGo.controller.webmodel.request.User;
 
+import com.grupo4.VetAndGo.domain.model.Role;
+
 public record UserUpdate(
         Integer id,
-        String name,
         String username,
-        String email,
         String password,
-        int phone,
-        String address,
-        String birthDate,
-        String country,
-        String role
+        Role role
 ) {
 }

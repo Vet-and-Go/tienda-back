@@ -1,16 +1,14 @@
-// java
 package com.grupo4.VetAndGo.persistence.dao.jpa.impl;
 
 import com.grupo4.VetAndGo.persistence.dao.jpa.CategoryJpaDao;
 import com.grupo4.VetAndGo.persistence.dao.jpa.entity.CategoryJpaEntity;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
-import jakarta.transaction.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-
 
 public class CategoryJpaDaoImpl implements CategoryJpaDao {
 
@@ -20,13 +18,11 @@ public class CategoryJpaDaoImpl implements CategoryJpaDao {
     @Override
     public Optional<CategoryJpaEntity> findByName(String nombre) {
         TypedQuery<CategoryJpaEntity> query = entityManager.createQuery(
-                "SELECT c FROM CategoryJpaEntity c WHERE c.name = :name",
-                CategoryJpaEntity.class
-        );
+                "SELECT c FROM CategoryJpaEntity c WHERE c.name = :name", CategoryJpaEntity.class);
         query.setParameter("name", nombre);
         try {
             return Optional.of(query.getSingleResult());
-        } catch (Exception e) {
+        } catch (NoResultException e) {
             return Optional.empty();
         }
     }
@@ -34,16 +30,13 @@ public class CategoryJpaDaoImpl implements CategoryJpaDao {
     @Override
     public List<CategoryJpaEntity> findAll() {
         TypedQuery<CategoryJpaEntity> query = entityManager.createQuery(
-                "SELECT c FROM CategoryJpaEntity c",
-                CategoryJpaEntity.class
-        );
+                "SELECT c FROM CategoryJpaEntity c", CategoryJpaEntity.class);
         return query.getResultList();
     }
 
     @Override
     public Optional<CategoryJpaEntity> findById(Long id) {
-        CategoryJpaEntity categoria = entityManager.find(CategoryJpaEntity.class, id);
-        return Optional.ofNullable(categoria);
+        return Optional.ofNullable(entityManager.find(CategoryJpaEntity.class, id));
     }
 
     @Override
@@ -68,9 +61,7 @@ public class CategoryJpaDaoImpl implements CategoryJpaDao {
     @Override
     public long count() {
         TypedQuery<Long> query = entityManager.createQuery(
-                "SELECT COUNT(c) FROM CategoryJpaEntity c",
-                Long.class
-        );
+                "SELECT COUNT(c) FROM CategoryJpaEntity c", Long.class);
         return query.getSingleResult();
     }
 }

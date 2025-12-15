@@ -1,14 +1,11 @@
 package com.grupo4.VetAndGo.controller.webmodel.response.User;
 
+import com.grupo4.VetAndGo.domain.model.Role;
+
 public record UserDetail(
-        Integer id,
+        Long id,
         String name,
         String username,
-        String email,
-        int phone,
-        String address,
-        String birthDate,
-        String country,
-        String role
+        Role role
 ) {
 }

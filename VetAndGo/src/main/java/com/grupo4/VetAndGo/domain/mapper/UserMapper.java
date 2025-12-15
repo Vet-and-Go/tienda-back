@@ -12,31 +12,19 @@ public class UserMapper {
         }
         return new User(
                 userJpaEntity.getId(),
-                userJpaEntity.getName(),
                 userJpaEntity.getUsername(),
-                userJpaEntity.getEmail(),
                 userJpaEntity.getPassword(),
-                userJpaEntity.getPhone(),
-                userJpaEntity.getAddress(),
-                userJpaEntity.getBirthDate(),
-                userJpaEntity.getCountry(),
                 userJpaEntity.getRole()
         );
     }
-    public static User FromUsertoUserJpaEntity(User user){
+    public static UserJpaEntity FromUsertoUserJpaEntity(User user){
         if (user == null){
             return null;
         }
-        return new User(
+        return new UserJpaEntity(
                 user.getId(),
-                user.getName(),
                 user.getUsername(),
-                user.getEmail(),
                 user.getPassword(),
-                user.getPhone(),
-                user.getAddress(),
-                user.getBirthDate(),
-                user.getCountry(),
                 user.getRole()
         );
     }
@@ -46,14 +34,8 @@ public class UserMapper {
         }
         return new User(
                 userDto.id(),
-                userDto.name(),
                 userDto.username(),
-                userDto.email(),
                 userDto.password(),
-                userDto.phone(),
-                userDto.address(),
-                userDto.birthDate(),
-                userDto.country(),
                 userDto.role()
         );
     }
@@ -63,14 +45,8 @@ public class UserMapper {
         }
         return new UserDto(
                 user.getId(),
-                user.getName(),
                 user.getUsername(),
-                user.getEmail(),
                 user.getPassword(),
-                user.getPhone(),
-                user.getAddress(),
-                user.getBirthDate(),
-                user.getCountry(),
                 user.getRole()
         );
     }
