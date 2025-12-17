@@ -58,6 +58,7 @@ public class ProductController {
     return new ResponseEntity<>(productResponse, org.springframework.http.HttpStatus.CREATED);
   }
 
+  @RequireAdmin
   @PutMapping("/{id}")
   public ResponseEntity<ProductResponse> updateProduct(@PathVariable Long id,
       @RequestBody ProductUpdate productRequest) {
