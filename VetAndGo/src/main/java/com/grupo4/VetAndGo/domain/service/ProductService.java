@@ -1,5 +1,7 @@
 package com.grupo4.VetAndGo.domain.service;
 
+import com.grupo4.VetAndGo.controller.webmodel.request.product.ProductInsert;
+import com.grupo4.VetAndGo.controller.webmodel.request.product.ProductUpdate;
 import com.grupo4.VetAndGo.domain.dto.ProductDto;
 import com.grupo4.VetAndGo.domain.model.Page;
 
@@ -12,9 +14,9 @@ public interface ProductService {
 
   Optional<ProductDto> findById(Long id);
 
-  ProductDto create(ProductDto productDto);
+  ProductDto create(ProductInsert productRequest);
 
-  ProductDto update(ProductDto productDto);
+  ProductDto update(ProductUpdate productRequest);
 
   void deleteById(Long id);
 }

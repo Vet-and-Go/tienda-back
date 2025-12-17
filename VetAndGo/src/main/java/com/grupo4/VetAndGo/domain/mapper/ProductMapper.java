@@ -25,7 +25,7 @@ public class ProductMapper {
     return new ProductDto(
         product.getId(),
         product.getName(),
-        product.getCategory(),
+        CategoryMapper.FromCategoriaToCategoriaDto(product.getCategory()),
         product.getDescription(),
         product.getPrice(),
         product.getStock());
@@ -38,7 +38,7 @@ public class ProductMapper {
     return new Product(
         productDto.id(),
         productDto.name(),
-        productDto.category(),
+        CategoryMapper.FromCategoriaDtoToCategoria(productDto.category()),
         productDto.description(),
         productDto.price(),
         productDto.stock());
@@ -52,7 +52,7 @@ public class ProductMapper {
       return new Product(
           productJpaEntity.getId(),
           productJpaEntity.getName(),
-          productJpaEntity.getCategory(),
+          CategoryMapper.FromCategoriaEntityJpatoCategoria(productJpaEntity.getCategory()),
           productJpaEntity.getDescription(),
           productJpaEntity.getPrice(),
           productJpaEntity.getStock());
@@ -67,9 +67,9 @@ public class ProductMapper {
     }
     try {
       return new ProductJpaEntity(
-          null,
+          product.getId(),
           product.getName(),
-          product.getCategory(),
+          CategoryMapper.FromCategoriaToCategoriaEntityJpa(product.getCategory()),
           product.getDescription(),
           product.getPrice(),
           product.getStock());

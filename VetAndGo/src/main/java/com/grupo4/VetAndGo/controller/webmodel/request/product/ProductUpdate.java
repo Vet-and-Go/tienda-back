@@ -1,6 +1,6 @@
-package com.grupo4.VetAndGo.controller.webmodel.request;
+package com.grupo4.VetAndGo.controller.webmodel.request.product;
 
-public record ProductRequest(
+public record ProductUpdate(
     Long id,
     String name,
     Long category,

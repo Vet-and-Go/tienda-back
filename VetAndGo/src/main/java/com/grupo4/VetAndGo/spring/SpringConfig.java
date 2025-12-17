@@ -30,70 +30,78 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories(basePackages = "com.grupo4.VetAndGo.persistence.dao.jpa")
 @EntityScan(basePackages = "com.grupo4.VetAndGo.persistence.dao.jpa.entity")
 public class SpringConfig {
-    @Bean
-    public CategoryRepository categoryRepository(CategoryJpaDao categoryJpaDao) {
-        return new CategoryRepositoryImpl(categoryJpaDao);
-    }
+  @Bean
+  public CategoryRepository categoryRepository(CategoryJpaDao categoryJpaDao) {
+    return new CategoryRepositoryImpl(categoryJpaDao);
+  }
 
-    @Bean
-    public CategoryService categoryService(CategoryRepository categoryRepository, ProductRepository productRepository) {
-        return new CategoryServiceImpl(categoryRepository, productRepository);
-    }
+  @Bean
+  public CategoryService categoryService(CategoryRepository categoryRepository, ProductRepository productRepository) {
+    return new CategoryServiceImpl(categoryRepository, productRepository);
+  }
 
-    @Bean
-    public CategoryJpaDao categoryJpaDao() {
+  @Bean
+  public CategoryJpaDao categoryJpaDao() {
 
-        return new CategoryJpaDaoImpl();
-    }
+    return new CategoryJpaDaoImpl();
+  }
 
-    @Bean
-    public UserRepository userRepository(UserJpaDao userJpaDao) {
-        return new UserRepositoryImpl(userJpaDao);
-    }
+  @Bean
+  public UserRepository userRepository(UserJpaDao userJpaDao) {
+    return new UserRepositoryImpl(userJpaDao);
+  }
 
-    @Bean
-    public UserJpaDao userJpaDao() {
-        return new UserJpaDaoImpl();
-    }
+  @Bean
+  public UserJpaDao userJpaDao() {
+    return new UserJpaDaoImpl();
+  }
 
-    @Bean
-    public PasswordEncoderService passwordEncoderService() {
-        return new PasswordEncoderImpl();
-    }
+  @Bean
+  public ProductService productService(ProductRepository productRepository, CategoryRepository categoryRepository) {
+    return new ProductServiceImpl(productRepository, categoryRepository);
+  }
 
-    @Bean
-    public UserService userService(UserRepository userRepository, PasswordEncoderService passwordEncoderService,
-            TokenUtilsRepository token) {
-        return new UserServiceImpl(passwordEncoderService, token, userRepository);
-    }
+  @Bean
+  public PasswordEncoderService passwordEncoderService() {
+    return new PasswordEncoderImpl();
+  }
 
-    @Bean
-    public TokenUtils tokenUtils(TokenUtilsRepository tokenUtilsRepository) {
-        return new TokenUtilsImpl(tokenUtilsRepository);
-    }
+  @Bean
+  public UserService userService(UserRepository userRepository, PasswordEncoderService passwordEncoderService,
+      TokenUtilsRepository token) {
+    return new UserServiceImpl(passwordEncoderService, token, userRepository);
+  }
 
-    @Bean
-    TokenUtilsRepository tokenUtilsRepository(TokenUtilsJpaDao tokenUtilsJpaDao) {
-        return new TokenUtilsRepositoryImpl(tokenUtilsJpaDao);
-    }
+  @Bean
+  public TokenUtils tokenUtils(TokenUtilsRepository tokenUtilsRepository) {
+    return new TokenUtilsImpl(tokenUtilsRepository);
+  }
 
-    @Bean
-    TokenUtilsJpaDao tokenUtilsJpaDao() {
-        return new TokenUtilsJpaDaoImpl();
-    }
+  @Bean
+  TokenUtilsRepository tokenUtilsRepository(TokenUtilsJpaDao tokenUtilsJpaDao) {
+    return new TokenUtilsRepositoryImpl(tokenUtilsJpaDao);
+  }
 
-    @Bean
-    public ProductJpaDao productJpaDao() {
-        return new ProductJpaDaoImpl();
-    }
+  @Bean
+  TokenUtilsJpaDao tokenUtilsJpaDao() {
+    return new TokenUtilsJpaDaoImpl();
+  }
 
-    @Bean
-    public ProductRepository productRepository(ProductJpaDao productJpaDao) {
-        return new ProductRepositoryImpl(productJpaDao);
-    }
+  @Bean
+  public ProductJpaDao productJpaDao() {
+    return new ProductJpaDaoImpl();
+  }
 
-    @Bean
-    public ProductService productService(ProductRepository productRepository) {
-        return new ProductServiceImpl(productRepository);
-    }
+  @Bean
+  public ProductRepository productRepository(ProductJpaDao productJpaDao) {
+    return new ProductRepositoryImpl(productJpaDao);
+  }
+
+/*
+  @Bean
+  public ProductService productService(ProductRepository productRepository) {
+    return new ProductServiceImpl(productRepository);
+  }
+  */
+
 }

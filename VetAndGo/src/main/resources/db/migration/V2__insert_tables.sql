@@ -25,3 +25,7 @@ INSERT INTO products (name, category_id, description, stock, price) VALUES
 ('Bullcrap', 10, 'Something you dont like', 40, 89.99),
 ('Bullcrap', 11, 'Something you dont like', 40, 89.99),
 ('Bullcrap', 12, 'Something you dont like', 40, 89.99);
+
+-- INSERT INTO clients (username, password, role) VALUES
+-- ('user1', 'pass', 'USER'),
+-- ('admin', 'admin', 'ADMIN');

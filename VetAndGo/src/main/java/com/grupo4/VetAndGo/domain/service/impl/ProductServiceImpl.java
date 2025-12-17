@@ -1,45 +1,58 @@
 package com.grupo4.VetAndGo.domain.service.impl;
 
-import java.util.List;
-import java.util.Optional;
-
+import com.grupo4.VetAndGo.controller.webmodel.request.product.ProductInsert;
+import com.grupo4.VetAndGo.controller.webmodel.request.product.ProductUpdate;
+import com.grupo4.VetAndGo.domain.dto.CategoryDto;
 import com.grupo4.VetAndGo.domain.dto.ProductDto;
+import com.grupo4.VetAndGo.domain.mapper.CategoryMapper;
 import com.grupo4.VetAndGo.domain.mapper.ProductMapper;
 import com.grupo4.VetAndGo.domain.model.Page;
 import com.grupo4.VetAndGo.domain.model.Product;
+import com.grupo4.VetAndGo.domain.repository.CategoryRepository;
 import com.grupo4.VetAndGo.domain.repository.ProductRepository;
 import com.grupo4.VetAndGo.domain.service.ProductService;
 import com.grupo4.VetAndGo.persistence.dao.jpa.entity.ProductJpaEntity;
 
 import jakarta.transaction.Transactional;
 
+import java.util.List;
+import java.util.Optional;
+
 public class ProductServiceImpl implements ProductService {
 
   private final ProductRepository productRepository;
+  private final CategoryRepository categoryRepository;
 
-  public ProductServiceImpl(ProductRepository productRepository) {
+  public ProductServiceImpl(ProductRepository productRepository, CategoryRepository categoryRepository) {
     this.productRepository = productRepository;
+    this.categoryRepository = categoryRepository;
   }
 
   @Override
   @Transactional
-  public ProductDto create(ProductDto productDto) {
-    if (productRepository.findByName(productDto.name()).isPresent()) {
+  public ProductDto create(ProductInsert productInsert) {
+    if (productRepository.findByName(productInsert.name()).isPresent()) {
       throw new IllegalArgumentException("Cannot create a product with an existing ID.");
     }
-    System.out.println("Creating product: " + productDto);
+
+    CategoryDto categoryDto = categoryRepository.findById(productInsert.category())
+        .map(CategoryMapper::FromCategoriaEntityJpatoCategoria)
+        .map(CategoryMapper::FromCategoriaToCategoriaDto)
+        .orElseThrow(() -> new RuntimeException("Category not found"));
+
+    ProductDto productDto = new ProductDto(
+        null,
+        productInsert.name(),
+        categoryDto,
+        productInsert.description(),
+        productInsert.price(),
+        productInsert.stock());
 
     var product = ProductMapper.getInstance().fromProductDtoToProduct(productDto);
     var saved = productRepository.save(ProductMapper.getInstance().fromProductToProductJpaEntity(product));
     var result = ProductMapper.getInstance().fromProductJpaEntityToProduct(saved);
 
-    return new ProductDto(
-        result.getId(),
-        result.getName(),
-        result.getCategory(),
-        result.getDescription(),
-        result.getPrice(),
-        result.getStock());
+    return ProductMapper.getInstance().fromProductToProductDto(result);
   }
 
   @Override
@@ -89,17 +102,60 @@ public class ProductServiceImpl implements ProductService {
 
   @Override
   @Transactional
-  public ProductDto update(ProductDto productDto) {
-    if (productRepository.findByName(productDto.name()).isPresent()) {
-      throw new IllegalArgumentException("Cannot create a product with an existing ID.");
-    }
-    getById(productDto.id());
-    ProductJpaEntity newProductJpaEntity = buildProductJpaEntityFromProductDto(productDto);
+  public ProductDto update(ProductUpdate productUpdate) {
+    return productRepository.findById(productUpdate.id())
+        .map(existingProductJpaEntity -> {
+          CategoryDto categoryDto = categoryRepository.findById(productUpdate.category())
+              .map(CategoryMapper::FromCategoriaEntityJpatoCategoria)
+              .map(CategoryMapper::FromCategoriaToCategoriaDto)
+              .orElseThrow(() -> new RuntimeException("Category not found"));
 
-    return ProductMapper.getInstance().fromProductToProductDto(
-        ProductMapper.getInstance().fromProductJpaEntityToProduct(
-            productRepository.save(newProductJpaEntity)));
+          ProductDto updatedProductDto = new ProductDto(
+              productUpdate.id(),
+              productUpdate.name(),
+              categoryDto,
+              productUpdate.description(),
+              productUpdate.price(),
+              productUpdate.stock());
+
+          ProductJpaEntity updatedProductJpaEntity = buildProductJpaEntityFromProductDto(updatedProductDto);
+          return ProductMapper.getInstance().fromProductToProductDto(
+              ProductMapper.getInstance().fromProductJpaEntityToProduct(
+                  productRepository.save(updatedProductJpaEntity)));
+        })
+        .orElseThrow(() -> new RuntimeException("Product not found"));
+
   }
+
+  /*
+   * @Override
+   * 
+   * @Transactional
+   * public ProductDto update(ProductUpdate productUpdate) {
+   * getById(productUpdate.id());
+   * 
+   * CategoryDto categoryDto =
+   * categoryRepository.findById(productUpdate.category())
+   * .map(CategoryMapper::FromCategoriaEntityJpatoCategoria)
+   * .map(CategoryMapper::FromCategoriaToCategoriaDto)
+   * .orElseThrow(() -> new RuntimeException("Category not found"));
+   * 
+   * ProductDto productDto = new ProductDto(
+   * productUpdate.id(),
+   * productUpdate.name(),
+   * categoryDto,
+   * productUpdate.description(),
+   * productUpdate.price(),
+   * productUpdate.stock());
+   * 
+   * ProductJpaEntity newProductJpaEntity =
+   * buildProductJpaEntityFromProductDto(productDto);
+   * 
+   * return ProductMapper.getInstance().fromProductToProductDto(
+   * ProductMapper.getInstance().fromProductJpaEntityToProduct(
+   * productRepository.save(newProductJpaEntity)));
+   * }
+   */
 
   private ProductJpaEntity buildProductJpaEntityFromProductDto(ProductDto productDto) {
     Product newProduct = ProductMapper.getInstance().fromProductDtoToProduct(productDto);

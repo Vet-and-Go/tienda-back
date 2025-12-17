@@ -13,12 +13,9 @@ public class ProductJpaEntity implements Serializable {
   @Column(name = "name")
   private String name;
 
-  /*
-   * @ManyToOne(fetch = FetchType.LAZY)
-   * 
-   * @JoinColumn(name = "category_id")
-   * private CategoryJpaEntity category;
-   */
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "category_id")
+  private CategoryJpaEntity category;
 
   @Column(name = "description")
   private String description;
@@ -26,13 +23,11 @@ public class ProductJpaEntity implements Serializable {
   private Double price;
   @Column(name = "stock")
   private Integer stock;
-  @Column(name = "category_id")
-  private Long category;
 
   public ProductJpaEntity() {
   }
 
-  public ProductJpaEntity(Long id, String name, Long category, String description, Double price,
+  public ProductJpaEntity(Long id, String name, CategoryJpaEntity category, String description, Double price,
       Integer stock) {
     this.id = id;
     this.name = name;
@@ -58,21 +53,11 @@ public class ProductJpaEntity implements Serializable {
     this.name = name;
   }
 
-  /*
-   * public CategoryJpaEntity getCategory() {
-   * return category;
-   * }
-   * 
-   * public void setCategory(CategoryJpaEntity category) {
-   * this.category = category;
-   * }
-   */
-
-  public Long getCategory() {
+  public CategoryJpaEntity getCategory() {
     return category;
   }
 
-  public void setCategory(Long category) {
+  public void setCategory(CategoryJpaEntity category) {
     this.category = category;
   }
 

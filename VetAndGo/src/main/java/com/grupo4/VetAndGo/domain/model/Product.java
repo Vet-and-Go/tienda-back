@@ -3,12 +3,12 @@ package com.grupo4.VetAndGo.domain.model;
 public class Product {
   private Long id;
   private String name;
-  private Long category;
+  private Category category;
   private String description;
   private Double price;
   private Integer stock;
 
-  public Product(Long id, String name, Long category, String description, Double price, Integer stock) {
+  public Product(Long id, String name, Category category, String description, Double price, Integer stock) {
     this.id = id;
     this.name = name;
     this.category = category;
@@ -58,11 +58,11 @@ public class Product {
     this.stock = stock;
   }
 
-  public Long getCategory() {
+  public Category getCategory() {
     return category;
   }
 
-  public void setCategory(Long category) {
+  public void setCategory(Category category) {
     this.category = category;
   }
 }

@@ -72,11 +72,11 @@ public class ProductJpaDaoImpl implements ProductJpaDao {
     int pageIndex = Math.max(page - 1, 0);
 
     String sql = "SELECT p FROM ProductJpaEntity p ORDER BY p.id";
-    TypedQuery<ProductJpaEntity> bookJpaEntityPage = entityManager
+    TypedQuery<ProductJpaEntity> productJpaEntityPage = entityManager
         .createQuery(sql, ProductJpaEntity.class)
         .setFirstResult(pageIndex * size)
         .setMaxResults(size);
-    return bookJpaEntityPage.getResultList();
+    return productJpaEntityPage.getResultList();
   }
 
   @Override
