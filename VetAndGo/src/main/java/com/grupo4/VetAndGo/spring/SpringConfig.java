@@ -62,8 +62,18 @@ public class SpringConfig {
   }
 
   @Bean
+  public ProductJpaDao productJpaDao() {
+      return new ProductJpaDaoImpl();
+  }
+
+  @Bean
+  public ProductRepository productRepository(ProductJpaDao productJpaDao) {
+      return new ProductRepositoryImpl(productJpaDao);
+  }
+
+  @Bean
   public PasswordEncoderService passwordEncoderService() {
-    return new PasswordEncoderImpl();
+      return new PasswordEncoderImpl();
   }
 
   @Bean
@@ -86,22 +96,5 @@ public class SpringConfig {
   TokenUtilsJpaDao tokenUtilsJpaDao() {
     return new TokenUtilsJpaDaoImpl();
   }
-
-  @Bean
-  public ProductJpaDao productJpaDao() {
-    return new ProductJpaDaoImpl();
-  }
-
-  @Bean
-  public ProductRepository productRepository(ProductJpaDao productJpaDao) {
-    return new ProductRepositoryImpl(productJpaDao);
-  }
-
-/*
-  @Bean
-  public ProductService productService(ProductRepository productRepository) {
-    return new ProductServiceImpl(productRepository);
-  }
-  */
 
 }
