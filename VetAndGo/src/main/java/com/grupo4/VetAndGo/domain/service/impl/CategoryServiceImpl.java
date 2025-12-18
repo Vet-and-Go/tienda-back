@@ -5,6 +5,9 @@ import com.grupo4.VetAndGo.domain.mapper.CategoryMapper;
 import com.grupo4.VetAndGo.domain.repository.CategoryRepository;
 import com.grupo4.VetAndGo.domain.repository.ProductRepository;
 import com.grupo4.VetAndGo.domain.service.CategoryService;
+import com.grupo4.VetAndGo.domain.exception.BussinesException;
+import com.grupo4.VetAndGo.domain.exception.ResourceNotFoundException;
+import com.grupo4.VetAndGo.persistence.dao.jpa.entity.CategoryJpaEntity;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,23 +24,32 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryDto> getAll() {
-        return categoryRepository.findAll().stream()
+        List<CategoryJpaEntity> categories = categoryRepository.findAll();
+        if (categories.isEmpty()) {
+            throw new ResourceNotFoundException("No se encontraron categorías.");
+        }
+        return categories.stream()
                 .map(CategoryMapper::FromCategoriaEntityJpatoCategoria)
                 .map(CategoryMapper::FromCategoriaToCategoriaDto)
                 .toList();
     }
 
     @Override
-    public Optional<CategoryDto> getById(Long id) {
-        return categoryRepository.findById(id)
+    public CategoryDto getById(Long id) {
+        Optional<CategoryJpaEntity> category = categoryRepository.findById(id);
+        if (category.isEmpty()) {
+            throw new ResourceNotFoundException("No se encontró la categoría con ID " + id + ".");
+        }
+        return category
                 .map(CategoryMapper::FromCategoriaEntityJpatoCategoria)
-                .map(CategoryMapper::FromCategoriaToCategoriaDto);
+                .map(CategoryMapper::FromCategoriaToCategoriaDto)
+                .get();
     }
 
     @Override
     public CategoryDto create(CategoryDto categoryDto) {
         if (categoryRepository.findByName(categoryDto.name()).isPresent()) {
-            throw new IllegalArgumentException("La categoría con nombre '" + categoryDto.name() + "' ya existe.");
+            throw new BussinesException("La categoría con nombre '" + categoryDto.name() + "' ya existe.");
         }
 
         var categoria = CategoryMapper.FromCategoriaDtoToCategoria(categoryDto);
@@ -48,6 +60,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto update(Long id, CategoryDto categoryDto) {
+
         return categoryRepository.findById(id)
                 .map(existing -> {
                     existing.setName(categoryDto.name());
@@ -56,18 +69,18 @@ public class CategoryServiceImpl implements CategoryService {
                 })
                 .map(CategoryMapper::FromCategoriaEntityJpatoCategoria)
                 .map(CategoryMapper::FromCategoriaToCategoriaDto)
-                .orElseThrow(() -> new IllegalArgumentException("La categoría con ID " + id + " no existe."));
+                .orElseThrow(() -> new ResourceNotFoundException("La categoría con ID " + id + " no existe."));
     }
 
     @Override
     public void delete(Long id) {
         if (!categoryRepository.findById(id).isPresent()) {
-            throw new IllegalArgumentException("La categoría con ID " + id + " no existe.");
+            throw new ResourceNotFoundException("La categoría con ID " + id + " no existe.");
 
         }
         if (productRepository.existsByCategoryId(id)) {
-            throw new IllegalArgumentException(
-                    "No se puede eliminar la categoría con ID " + id + " porque está asociada a productos.");
+            throw new BussinesException(
+                    "No se puede eliminar la categoría con ID " + id + " porque está asociada a un producto.");
         }
 
         categoryRepository.deleteById(id);

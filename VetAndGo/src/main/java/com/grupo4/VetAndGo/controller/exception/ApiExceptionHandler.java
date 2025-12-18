@@ -1,4 +1,4 @@
-package com.grupo4.VetAndGo.controller.webmodel.exception;
+package com.grupo4.VetAndGo.controller.exception;
 
 import com.grupo4.VetAndGo.domain.exception.BussinesException;
 import com.grupo4.VetAndGo.domain.exception.ResourceNotFoundException;
@@ -19,9 +19,9 @@ public class ApiExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({ ValidationException.class, IllegalArgumentException.class })
+    @ExceptionHandler({ ValidationException.class })
     @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ErrorMessage handleValidationException(Exception ex) {
+    public ErrorMessage handleValidationException(ValidationException ex) {
         return new ErrorMessage(ex, HttpStatus.BAD_REQUEST.value());
     }
 

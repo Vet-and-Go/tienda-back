@@ -189,7 +189,8 @@ class ProductJpaDaoImplTest {
     entityManager.flush();
 
     for (int i = 1; i <= 15; i++) {
-      ProductJpaEntity product = new ProductJpaEntity(null, "Product " + i, category, "Description " + i, 10.0 * i, 100 + i);
+      ProductJpaEntity product = new ProductJpaEntity(null, "Product " + i, category, "Description " + i, 10.0 * i,
+          100 + i);
       entityManager.persist(product);
     }
     entityManager.flush();
@@ -209,7 +210,8 @@ class ProductJpaDaoImplTest {
     entityManager.flush();
 
     for (int i = 1; i <= 15; i++) {
-      ProductJpaEntity product = new ProductJpaEntity(null, "Product " + i, category, "Description " + i, 10.0 * i, 100 + i);
+      ProductJpaEntity product = new ProductJpaEntity(null, "Product " + i, category, "Description " + i, 10.0 * i,
+          100 + i);
       entityManager.persist(product);
     }
     entityManager.flush();
@@ -236,5 +238,32 @@ class ProductJpaDaoImplTest {
     });
 
     assertThat(exception.getMessage()).contains("Product with id 999 not found");
+  }
+
+  @Test
+  void testExistsByCategoryId_Success() {
+    // Arrange
+    CategoryJpaEntity category = new CategoryJpaEntity(null, "Alimentos", "Comida para mascotas");
+    entityManager.persist(category);
+    entityManager.flush();
+
+    ProductJpaEntity product = new ProductJpaEntity(null, "Dog Food", category, "Premium dog food", 29.99, 100);
+    entityManager.persist(product);
+    entityManager.flush();
+
+    // Act
+    boolean exists = productJpaDao.existsByCategoryId(category.getId());
+
+    // Assert
+    assertTrue(exists);
+  }
+
+  @Test
+  void testExistsByCategoryId_NotFound() {
+    // Act
+    boolean exists = productJpaDao.existsByCategoryId(999L);
+
+    // Assert
+    assertFalse(exists);
   }
 }

@@ -2,6 +2,9 @@ package com.grupo4.VetAndGo.domain.service.impl;
 
 import com.grupo4.VetAndGo.domain.dto.LoginDto;
 import com.grupo4.VetAndGo.domain.dto.UserDto;
+import com.grupo4.VetAndGo.domain.exception.BussinesException;
+import com.grupo4.VetAndGo.domain.exception.ResourceNotFoundException;
+import com.grupo4.VetAndGo.domain.exception.ValidationException;
 import com.grupo4.VetAndGo.domain.mapper.UserMapper;
 import com.grupo4.VetAndGo.domain.model.User;
 import com.grupo4.VetAndGo.domain.repository.TokenUtilsRepository;
@@ -19,8 +22,8 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     public UserServiceImpl(PasswordEncoderService passwordEncoderService,
-                          TokenUtilsRepository tokenUtils,
-                          UserRepository userRepository) {
+            TokenUtilsRepository tokenUtils,
+            UserRepository userRepository) {
         this.passwordEncoderService = passwordEncoderService;
         this.tokenUtils = tokenUtils;
         this.userRepository = userRepository;
@@ -38,7 +41,7 @@ public class UserServiceImpl implements UserService {
     public UserDto getById(Long id) {
         UserJpaEntity user = userRepository.findById(id);
         if (user == null) {
-            throw new IllegalArgumentException("User with id " + id + " not found");
+            throw new ResourceNotFoundException("User with id " + id + " not found");
         }
         return UserMapper.FromUserToUserDto(UserMapper.FromUserJpaEntitytoUser(user));
     }
@@ -48,11 +51,14 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUsername(username)
                 .map(UserMapper::FromUserJpaEntitytoUser)
                 .map(UserMapper::FromUserToUserDto)
-                .orElseThrow(() -> new IllegalArgumentException("User with username " + username + " not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User with username " + username + " not found"));
     }
 
     @Override
     public UserDto create(UserDto userDto) {
+        if (userDto.id() != null && userRepository.findById(userDto.id()) != null) {
+            throw new BussinesException("User with id " + userDto.id() + " already exists");
+        }
         String hashedPassword = passwordEncoderService.encode(userDto.password());
         UserDto userToSave = new UserDto(null, userDto.username(), hashedPassword, userDto.role());
 
@@ -65,7 +71,10 @@ public class UserServiceImpl implements UserService {
     public UserDto update(Long id, UserDto userDto) {
         UserJpaEntity existingUser = userRepository.findById(id);
         if (existingUser == null) {
-            throw new IllegalArgumentException("User with id " + id + " not found");
+            throw new ResourceNotFoundException("User with id " + id + " not found");
+        }
+        if (userDto.role() == null) {
+            throw new ValidationException("Role is required");
         }
 
         String password = determinePassword(userDto.password(), existingUser.getPassword());
@@ -74,8 +83,7 @@ public class UserServiceImpl implements UserService {
                 id,
                 userDto.username() != null ? userDto.username() : existingUser.getUsername(),
                 password,
-                userDto.role() != null ? userDto.role() : existingUser.getRole()
-        );
+                userDto.role() != null ? userDto.role() : existingUser.getRole());
 
         User user = UserMapper.FromUserDtoToUser(userToUpdate);
         UserJpaEntity updatedUser = userRepository.save(UserMapper.FromUsertoUserJpaEntity(user));
@@ -86,7 +94,7 @@ public class UserServiceImpl implements UserService {
     public void delete(Long id) {
         UserJpaEntity existingUser = userRepository.findById(id);
         if (existingUser == null) {
-            throw new IllegalArgumentException("User with id " + id + " not found");
+            throw new ResourceNotFoundException("User with id " + id + " not found");
         }
         userRepository.delete(id);
     }
@@ -94,10 +102,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public String login(LoginDto loginDto) {
         UserJpaEntity user = userRepository.findByUsername(loginDto.username())
-                .orElseThrow(() -> new IllegalArgumentException("User " + loginDto.username() + " not found."));
+                .orElseThrow(() -> new ValidationException("User " + loginDto.username() + " not found."));
 
         if (!passwordEncoderService.verify(loginDto.password(), user.getPassword())) {
-            throw new IllegalArgumentException("Incorrect password for user " + loginDto.username() + ".");
+            throw new ValidationException("Incorrect password for user " + loginDto.username() + ".");
         }
         return tokenUtils.createSessionToken(user.getId());
     }
@@ -105,7 +113,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void logout(LoginDto loginDto) {
         UserJpaEntity user = userRepository.findByUsername(loginDto.username())
-                .orElseThrow(() -> new IllegalArgumentException("User " + loginDto.username() + " not found."));
+                .orElseThrow(() -> new ValidationException("User " + loginDto.username() + " not found."));
         tokenUtils.deleteToken(user.getId());
     }
 

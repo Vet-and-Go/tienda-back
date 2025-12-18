@@ -33,33 +33,47 @@ public class AuthFilter extends OncePerRequestFilter {
         try {
             HandlerExecutionChain handlerChain = handlerMapping.getHandler(request);
 
-            if (handlerChain.getHandler() instanceof HandlerMethod handlerMethod
+            if (handlerChain != null && handlerChain.getHandler() instanceof HandlerMethod handlerMethod
                     && handlerMethod.hasMethodAnnotation(RequireAdmin.class)) {
-                String token = extractToken(request);
-                if (token == null) {
-                    sendError(response, HttpServletResponse.SC_UNAUTHORIZED, "Missing or invalid token");
-                    return;
-                }
-                User user = tokenUtils.getUserbFromToken(token);
-                if (user.getRole() != Role.ADMIN) {
-                    sendError(response, HttpServletResponse.SC_FORBIDDEN, "Admin role required");
-                    return;
-                }
-                request.setAttribute("user", user);
-            }
-            filterChain.doFilter(request, response);
 
-        } catch (IllegalArgumentException e) {
-            sendError(response, HttpServletResponse.SC_UNAUTHORIZED, "Invalid or expired token");
+                try {
+                    String token = extractToken(request);
+                    if (token == null) {
+                        sendError(response, HttpServletResponse.SC_UNAUTHORIZED, "Missing or invalid token");
+                        return;
+                    }
+
+                    User user = tokenUtils.getUserFromToken(token);
+                    if (user == null) {
+                        sendError(response, HttpServletResponse.SC_UNAUTHORIZED, "Missing or invalid token");
+                        return;
+                    }
+
+                    if (user.getRole() != Role.ADMIN) {
+                        sendError(response, HttpServletResponse.SC_FORBIDDEN, "Admin role required");
+                        return;
+                    }
+                } catch (IllegalArgumentException e) {
+                    sendError(response, HttpServletResponse.SC_UNAUTHORIZED, "Invalid or expired token");
+                    return;
+                } catch (Exception e) {
+                    sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Authentication error");
+                    return;
+                }
+            }
         } catch (Exception e) {
-            sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Authentication error");
+            // Ignore errors in handler mapping to allow request to proceed to 404 or other
+            // handlers
         }
+
+        filterChain.doFilter(request, response);
     }
 
     private String extractToken(HttpServletRequest request) {
         String authHeader = request.getHeader("Authorization");
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            return authHeader.substring(7);
+            String token = authHeader.substring(7);
+            return token;
         }
         return null;
     }

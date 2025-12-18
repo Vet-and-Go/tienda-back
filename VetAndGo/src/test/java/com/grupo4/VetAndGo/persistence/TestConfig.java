@@ -2,8 +2,10 @@ package com.grupo4.VetAndGo.persistence;
 
 import com.grupo4.VetAndGo.persistence.dao.jpa.CategoryJpaDao;
 import com.grupo4.VetAndGo.persistence.dao.jpa.ProductJpaDao;
+import com.grupo4.VetAndGo.persistence.dao.jpa.UserJpaDao;
 import com.grupo4.VetAndGo.persistence.dao.jpa.impl.CategoryJpaDaoImpl;
 import com.grupo4.VetAndGo.persistence.dao.jpa.impl.ProductJpaDaoImpl;
+import com.grupo4.VetAndGo.persistence.dao.jpa.impl.UserJpaDaoImpl;
 import jakarta.persistence.EntityManager;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -27,7 +29,7 @@ public class TestConfig {
     }
 
     @Bean
-    public com.grupo4.VetAndGo.persistence.dao.jpa.UserJpaDao userJpaDao() {
-        return new com.grupo4.VetAndGo.persistence.dao.jpa.impl.UserJpaDaoImpl();
+    public UserJpaDao userJpaDao() {
+        return new UserJpaDaoImpl();
     }
 }

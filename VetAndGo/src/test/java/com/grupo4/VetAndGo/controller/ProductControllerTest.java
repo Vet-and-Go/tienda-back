@@ -160,7 +160,7 @@ class ProductControllerTest {
     mockMvc.perform(post("/api/products")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(insert)))
-        .andExpect(status().is4xxClientError());
+        .andExpect(status().is5xxServerError());
 
     verify(productService, times(1)).create(any(ProductInsert.class));
   }

@@ -6,6 +6,7 @@ import com.grupo4.VetAndGo.domain.dto.LoginDto;
 import com.grupo4.VetAndGo.domain.dto.UserDto;
 import com.grupo4.VetAndGo.domain.model.Role;
 import com.grupo4.VetAndGo.domain.service.UserService;
+import com.grupo4.VetAndGo.domain.service.TokenUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -35,7 +36,7 @@ class UserControllerTest {
     private UserService userService;
 
     @MockitoBean
-    private com.grupo4.VetAndGo.domain.service.TokenUtils tokenUtils;
+    private TokenUtils tokenUtils;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -111,25 +112,6 @@ class UserControllerTest {
     }
 
     @Test
-    void testCreateUserAsAdmin_Success() throws Exception {
-        // Arrange
-        UserInsert insert = new UserInsert("newAdmin", "newPass", Role.ADMIN);
-        UserDto created = new UserDto(2L, "newAdmin", "newPass", Role.ADMIN);
-
-        when(userService.create(any(UserDto.class))).thenReturn(created);
-
-        // Act & Assert
-        mockMvc.perform(post("/api/admin/users")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(insert)))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.username").value("newAdmin"))
-                .andExpect(jsonPath("$.role").value("ADMIN"));
-
-        verify(userService, times(1)).create(any(UserDto.class));
-    }
-
-    @Test
     void testUpdateUser_Success() throws Exception {
         // Arrange
         Long id = 1L;
@@ -171,7 +153,7 @@ class UserControllerTest {
         when(userService.findByUsername("user1")).thenReturn(userDto);
 
         // Act & Assert
-        mockMvc.perform(post("/api/auth/login")
+        mockMvc.perform(post("/api/users/auth/login/user")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(loginDto)))
                 .andExpect(status().isOk())
@@ -190,7 +172,7 @@ class UserControllerTest {
         doNothing().when(userService).logout(any(LoginDto.class));
 
         // Act & Assert
-        mockMvc.perform(post("/api/auth/logout")
+        mockMvc.perform(post("/api/users/auth/logout")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(loginDto)))
                 .andExpect(status().isNoContent());

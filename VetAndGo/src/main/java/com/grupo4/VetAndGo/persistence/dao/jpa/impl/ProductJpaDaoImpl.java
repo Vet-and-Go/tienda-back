@@ -30,7 +30,7 @@ public class ProductJpaDaoImpl implements ProductJpaDao {
   @Override
   public boolean existsByCategoryId(Long categoryId) {
     Long count = entityManager.createQuery(
-        "SELECT COUNT(p) FROM ProductJpaEntity p WHERE p.category = :categoryId", Long.class)
+        "SELECT COUNT(p) FROM ProductJpaEntity p WHERE p.category.id = :categoryId", Long.class)
         .setParameter("categoryId", categoryId)
         .getSingleResult();
     return count > 0;

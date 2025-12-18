@@ -1,5 +1,6 @@
 package com.grupo4.VetAndGo.domain.service.impl;
 
+import com.grupo4.VetAndGo.domain.exception.ValidationException;
 import com.grupo4.VetAndGo.domain.mapper.UserMapper;
 import com.grupo4.VetAndGo.domain.model.User;
 import com.grupo4.VetAndGo.domain.repository.TokenUtilsRepository;
@@ -15,18 +16,24 @@ public class TokenUtilsImpl implements TokenUtils {
     }
 
     @Override
-    public User getUserbFromToken(String token) {
+    public User getUserFromToken(String token) {
         UserJpaEntity user = tokenUtilsRepository.getUserFromToken(token);
         if (user == null) {
-            throw new IllegalArgumentException("Invalid token.");
+            throw new ValidationException("Invalid token.");
         }
         return UserMapper.FromUserJpaEntitytoUser(user);
     }
 
     @Override
     public void deleteToken(String token) {
-        User user = getUserbFromToken(token);
+        User user = getUserFromToken(token);
         tokenUtilsRepository.deleteToken(user.getId());
 
+    }
+
+    @Override
+    public User validateToken(String token) {
+        User user = getUserFromToken(token);
+        return user;
     }
 }

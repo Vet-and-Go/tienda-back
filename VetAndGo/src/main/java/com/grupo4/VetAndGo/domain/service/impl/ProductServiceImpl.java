@@ -4,6 +4,9 @@ import com.grupo4.VetAndGo.controller.webmodel.request.product.ProductInsert;
 import com.grupo4.VetAndGo.controller.webmodel.request.product.ProductUpdate;
 import com.grupo4.VetAndGo.domain.dto.CategoryDto;
 import com.grupo4.VetAndGo.domain.dto.ProductDto;
+import com.grupo4.VetAndGo.domain.exception.BussinesException;
+import com.grupo4.VetAndGo.domain.exception.ResourceNotFoundException;
+import com.grupo4.VetAndGo.domain.exception.ValidationException;
 import com.grupo4.VetAndGo.domain.mapper.CategoryMapper;
 import com.grupo4.VetAndGo.domain.mapper.ProductMapper;
 import com.grupo4.VetAndGo.domain.model.Page;
@@ -32,13 +35,13 @@ public class ProductServiceImpl implements ProductService {
   @Transactional
   public ProductDto create(ProductInsert productInsert) {
     if (productRepository.findByName(productInsert.name()).isPresent()) {
-      throw new IllegalArgumentException("Cannot create a product with an existing ID.");
+      throw new BussinesException("Cannot create a product with an existing name.");
     }
 
     CategoryDto categoryDto = categoryRepository.findById(productInsert.category())
         .map(CategoryMapper::FromCategoriaEntityJpatoCategoria)
         .map(CategoryMapper::FromCategoriaToCategoriaDto)
-        .orElseThrow(() -> new RuntimeException("Category not found"));
+        .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
 
     ProductDto productDto = new ProductDto(
         null,
@@ -56,20 +59,15 @@ public class ProductServiceImpl implements ProductService {
   }
 
   @Override
-  @Transactional
   public void deleteById(Long id) {
-    ProductDto existingProductDto = getById(id);
-
-    if (existingProductDto == null) {
-      throw new RuntimeException("Product not found");
-    }
+    getById(id);
     productRepository.deleteById(id);
   }
 
   @Override
   public Page<ProductDto> getAll(int page, int size) {
     if (page < 1 || size < 1) {
-      throw new IllegalArgumentException("Invalid page or size");
+      throw new ValidationException("Invalid page or size");
     }
     Page<ProductJpaEntity> productPage = productRepository
         .getAll(page, size);
@@ -90,7 +88,7 @@ public class ProductServiceImpl implements ProductService {
         .findById(id)
         .map(ProductMapper.getInstance()::fromProductJpaEntityToProduct)
         .map(ProductMapper.getInstance()::fromProductToProductDto)
-        .orElseThrow(() -> new RuntimeException("Product not found"));
+        .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
   }
 
   @Override
@@ -101,14 +99,13 @@ public class ProductServiceImpl implements ProductService {
   }
 
   @Override
-  @Transactional
   public ProductDto update(ProductUpdate productUpdate) {
     return productRepository.findById(productUpdate.id())
         .map(existingProductJpaEntity -> {
           CategoryDto categoryDto = categoryRepository.findById(productUpdate.category())
               .map(CategoryMapper::FromCategoriaEntityJpatoCategoria)
               .map(CategoryMapper::FromCategoriaToCategoriaDto)
-              .orElseThrow(() -> new RuntimeException("Category not found"));
+              .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
 
           ProductDto updatedProductDto = new ProductDto(
               productUpdate.id(),
@@ -123,39 +120,9 @@ public class ProductServiceImpl implements ProductService {
               ProductMapper.getInstance().fromProductJpaEntityToProduct(
                   productRepository.save(updatedProductJpaEntity)));
         })
-        .orElseThrow(() -> new RuntimeException("Product not found"));
+        .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
 
   }
-
-  /*
-   * @Override
-   * 
-   * @Transactional
-   * public ProductDto update(ProductUpdate productUpdate) {
-   * getById(productUpdate.id());
-   * 
-   * CategoryDto categoryDto =
-   * categoryRepository.findById(productUpdate.category())
-   * .map(CategoryMapper::FromCategoriaEntityJpatoCategoria)
-   * .map(CategoryMapper::FromCategoriaToCategoriaDto)
-   * .orElseThrow(() -> new RuntimeException("Category not found"));
-   * 
-   * ProductDto productDto = new ProductDto(
-   * productUpdate.id(),
-   * productUpdate.name(),
-   * categoryDto,
-   * productUpdate.description(),
-   * productUpdate.price(),
-   * productUpdate.stock());
-   * 
-   * ProductJpaEntity newProductJpaEntity =
-   * buildProductJpaEntityFromProductDto(productDto);
-   * 
-   * return ProductMapper.getInstance().fromProductToProductDto(
-   * ProductMapper.getInstance().fromProductJpaEntityToProduct(
-   * productRepository.save(newProductJpaEntity)));
-   * }
-   */
 
   private ProductJpaEntity buildProductJpaEntityFromProductDto(ProductDto productDto) {
     Product newProduct = ProductMapper.getInstance().fromProductDtoToProduct(productDto);

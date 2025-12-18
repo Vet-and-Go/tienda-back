@@ -1,4 +1,4 @@
-package com.grupo4.VetAndGo.controller.webmodel.exception;
+package com.grupo4.VetAndGo.controller.exception;
 
 import org.springframework.http.HttpStatus;
 

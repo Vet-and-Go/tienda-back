@@ -14,7 +14,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
+import com.grupo4.VetAndGo.domain.exception.ResourceNotFoundException;
+import com.grupo4.VetAndGo.domain.service.TokenUtils;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -33,7 +34,7 @@ class CategoryControllerTest {
     private CategoryService categoryService;
 
     @MockitoBean
-    private com.grupo4.VetAndGo.domain.service.TokenUtils tokenUtils;
+    private TokenUtils tokenUtils;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -65,7 +66,7 @@ class CategoryControllerTest {
         Long id = 1L;
         CategoryDto dto = new CategoryDto(id, "Alimentos", "Comida para mascotas");
 
-        when(categoryService.getById(id)).thenReturn(Optional.of(dto));
+        when(categoryService.getById(id)).thenReturn(dto);
 
         // Act & Assert
         mockMvc.perform(get("/api/categories/{id}", id))
@@ -82,7 +83,8 @@ class CategoryControllerTest {
     void testGetById_NotFound() throws Exception {
         // Arrange
         Long id = 999L;
-        when(categoryService.getById(id)).thenReturn(Optional.empty());
+        when(categoryService.getById(id))
+                .thenThrow(new ResourceNotFoundException("Not found"));
 
         // Act & Assert
         mockMvc.perform(get("/api/categories/{id}", id))

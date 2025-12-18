@@ -7,6 +7,9 @@ import com.grupo4.VetAndGo.domain.dto.ProductDto;
 import com.grupo4.VetAndGo.domain.model.Page;
 import com.grupo4.VetAndGo.domain.repository.CategoryRepository;
 import com.grupo4.VetAndGo.domain.repository.ProductRepository;
+import com.grupo4.VetAndGo.domain.exception.BussinesException;
+import com.grupo4.VetAndGo.domain.exception.ResourceNotFoundException;
+import com.grupo4.VetAndGo.domain.exception.ValidationException;
 import com.grupo4.VetAndGo.persistence.dao.jpa.entity.CategoryJpaEntity;
 import com.grupo4.VetAndGo.persistence.dao.jpa.entity.ProductJpaEntity;
 import org.junit.jupiter.api.Test;
@@ -66,11 +69,11 @@ class ProductServiceImplTest {
     when(productRepository.findByName("Dog Food")).thenReturn(Optional.of(new ProductJpaEntity()));
 
     // Act & Assert
-    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+    BussinesException exception = assertThrows(BussinesException.class, () -> {
       productServiceImpl.create(productInsert);
     });
 
-    assertEquals("Cannot create a product with an existing ID.", exception.getMessage());
+    assertEquals("Cannot create a product with an existing name.", exception.getMessage());
     verify(productRepository, times(1)).findByName("Dog Food");
     verify(productRepository, never()).save(any(ProductJpaEntity.class));
   }
@@ -83,7 +86,7 @@ class ProductServiceImplTest {
     when(categoryRepository.findById(999L)).thenReturn(Optional.empty());
 
     // Act & Assert
-    RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+    ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
       productServiceImpl.create(productInsert);
     });
 
@@ -118,7 +121,7 @@ class ProductServiceImplTest {
   @Test
   void testGetAll_ThrowsExceptionWhenPageInvalid() {
     // Act & Assert
-    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+    ValidationException exception = assertThrows(ValidationException.class, () -> {
       productServiceImpl.getAll(0, 10);
     });
 
@@ -128,7 +131,7 @@ class ProductServiceImplTest {
   @Test
   void testGetAll_ThrowsExceptionWhenSizeInvalid() {
     // Act & Assert
-    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+    ValidationException exception = assertThrows(ValidationException.class, () -> {
       productServiceImpl.getAll(1, 0);
     });
 
@@ -162,7 +165,7 @@ class ProductServiceImplTest {
     when(productRepository.findById(id)).thenReturn(Optional.empty());
 
     // Act & Assert
-    RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+    ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
       productServiceImpl.getById(id);
     });
 
@@ -208,8 +211,10 @@ class ProductServiceImplTest {
     // Arrange
     ProductUpdate productUpdate = new ProductUpdate(1L, "Dog Food Premium", 1L, "Premium dog food", 39.99, 150);
     CategoryJpaEntity categoryEntity = new CategoryJpaEntity(1L, "Alimentos", "Comida para mascotas");
-    ProductJpaEntity existingEntity = new ProductJpaEntity(1L, "Dog Food", categoryEntity, "Premium dog food", 29.99, 100);
-    ProductJpaEntity updatedEntity = new ProductJpaEntity(1L, "Dog Food Premium", categoryEntity, "Premium dog food", 39.99, 150);
+    ProductJpaEntity existingEntity = new ProductJpaEntity(1L, "Dog Food", categoryEntity, "Premium dog food", 29.99,
+        100);
+    ProductJpaEntity updatedEntity = new ProductJpaEntity(1L, "Dog Food Premium", categoryEntity, "Premium dog food",
+        39.99, 150);
 
     when(productRepository.findById(1L)).thenReturn(Optional.of(existingEntity));
     when(categoryRepository.findById(1L)).thenReturn(Optional.of(categoryEntity));
@@ -236,7 +241,7 @@ class ProductServiceImplTest {
     when(productRepository.findById(999L)).thenReturn(Optional.empty());
 
     // Act & Assert
-    RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+    ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
       productServiceImpl.update(productUpdate);
     });
 
@@ -250,13 +255,14 @@ class ProductServiceImplTest {
     // Arrange
     ProductUpdate productUpdate = new ProductUpdate(1L, "Dog Food", 999L, "Premium dog food", 29.99, 100);
     CategoryJpaEntity categoryEntity = new CategoryJpaEntity(1L, "Alimentos", "Comida para mascotas");
-    ProductJpaEntity existingEntity = new ProductJpaEntity(1L, "Dog Food", categoryEntity, "Premium dog food", 29.99, 100);
+    ProductJpaEntity existingEntity = new ProductJpaEntity(1L, "Dog Food", categoryEntity, "Premium dog food", 29.99,
+        100);
 
     when(productRepository.findById(1L)).thenReturn(Optional.of(existingEntity));
     when(categoryRepository.findById(999L)).thenReturn(Optional.empty());
 
     // Act & Assert
-    RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+    ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
       productServiceImpl.update(productUpdate);
     });
 
@@ -290,7 +296,7 @@ class ProductServiceImplTest {
     when(productRepository.findById(id)).thenReturn(Optional.empty());
 
     // Act & Assert
-    RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+    ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
       productServiceImpl.deleteById(id);
     });
 

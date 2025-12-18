@@ -24,6 +24,9 @@ public class ValidationException extends RuntimeException {
 
     @Override
     public String getMessage() {
+        if (violations.isEmpty()) {
+            return super.getMessage();
+        }
         return violations.stream()
                 .map(v -> v.getPropertyPath() + ": " + v.getMessage())
                 .collect(Collectors.joining(", "));

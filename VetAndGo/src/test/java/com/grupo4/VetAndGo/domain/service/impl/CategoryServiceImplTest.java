@@ -1,7 +1,10 @@
 package com.grupo4.VetAndGo.domain.service.impl;
 
 import com.grupo4.VetAndGo.domain.dto.CategoryDto;
+import com.grupo4.VetAndGo.domain.exception.BussinesException;
+import com.grupo4.VetAndGo.domain.exception.ResourceNotFoundException;
 import com.grupo4.VetAndGo.domain.repository.CategoryRepository;
+import com.grupo4.VetAndGo.domain.repository.ProductRepository;
 import com.grupo4.VetAndGo.persistence.dao.jpa.entity.CategoryJpaEntity;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,7 +25,7 @@ class CategoryServiceImplTest {
     @Mock
     private CategoryRepository categoryRepository;
     @Mock
-    private com.grupo4.VetAndGo.domain.repository.ProductRepository productRepository;
+    private ProductRepository productRepository;
 
     @InjectMocks
     private CategoryServiceImpl categoriaServiceImpl;
@@ -55,13 +58,13 @@ class CategoryServiceImplTest {
         when(categoryRepository.findById(id)).thenReturn(Optional.of(entity));
 
         // Act
-        Optional<CategoryDto> result = categoriaServiceImpl.getById(id);
+        CategoryDto result = categoriaServiceImpl.getById(id);
 
         // Assert
-        assertTrue(result.isPresent());
-        assertEquals(id, result.get().id());
-        assertEquals("Alimentos", result.get().name());
-        assertEquals("Comida para mascotas", result.get().description());
+        assertNotNull(result);
+        assertEquals(id, result.id());
+        assertEquals("Alimentos", result.name());
+        assertEquals("Comida para mascotas", result.description());
         verify(categoryRepository, times(1)).findById(id);
     }
 
@@ -72,10 +75,9 @@ class CategoryServiceImplTest {
         when(categoryRepository.findById(id)).thenReturn(Optional.empty());
 
         // Act
-        Optional<CategoryDto> result = categoriaServiceImpl.getById(id);
-
-        // Assert
-        assertFalse(result.isPresent());
+        // Act & Assert
+        assertThrows(ResourceNotFoundException.class,
+                () -> categoriaServiceImpl.getById(id));
         verify(categoryRepository, times(1)).findById(id);
     }
 
@@ -133,9 +135,10 @@ class CategoryServiceImplTest {
         when(categoryRepository.findById(id)).thenReturn(Optional.empty());
 
         // Act & Assert
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            categoriaServiceImpl.update(id, updateDto);
-        });
+        ResourceNotFoundException exception = assertThrows(
+                ResourceNotFoundException.class, () -> {
+                    categoriaServiceImpl.update(id, updateDto);
+                });
 
         assertEquals("La categoría con ID " + id + " no existe.", exception.getMessage());
         verify(categoryRepository, times(1)).findById(id);
@@ -167,11 +170,12 @@ class CategoryServiceImplTest {
         when(productRepository.existsByCategoryId(id)).thenReturn(true);
 
         // Act & Assert
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            categoriaServiceImpl.delete(id);
-        });
+        BussinesException exception = assertThrows(
+                BussinesException.class, () -> {
+                    categoriaServiceImpl.delete(id);
+                });
 
-        assertEquals("No se puede eliminar la categoría con ID " + id + " porque está asociada a productos.",
+        assertEquals("No se puede eliminar la categoría con ID " + id + " porque está asociada a un producto.",
                 exception.getMessage());
         verify(categoryRepository, times(1)).findById(id);
         verify(productRepository, times(1)).existsByCategoryId(id);
