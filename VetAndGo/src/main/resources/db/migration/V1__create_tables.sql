@@ -10,14 +10,13 @@ CREATE TABLE sessions (
     token VARCHAR(512) NOT NULL UNIQUE,
     user_id BIGINT NOT NULL,
     created_at TIMESTAMP NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES clients(id) ON DELETE CASCADE
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE categories (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL,
     description TEXT
-);
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
