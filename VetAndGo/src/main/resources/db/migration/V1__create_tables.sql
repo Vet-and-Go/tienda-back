@@ -1,4 +1,7 @@
-CREATE TABLE users (
+
+
+
+CREATE TABLE clients (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
@@ -10,7 +13,7 @@ CREATE TABLE sessions (
     token VARCHAR(512) NOT NULL UNIQUE,
     user_id BIGINT NOT NULL,
     created_at TIMESTAMP NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    FOREIGN KEY (user_id) REFERENCES clients(id) ON DELETE CASCADE
 );
 
 CREATE TABLE categories (
@@ -20,13 +23,17 @@ CREATE TABLE categories (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
+
 CREATE TABLE products (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL,
     category_id BIGINT,
     description TEXT,
     stock INT NOT NULL,
-    price DECIMAL(10, 2) NOT NULL,
+    base_price DECIMAL(10, 2) NOT NULL,
+    discount_percentage DECIMAL(5, 2) DEFAULT 0.00,
+    final_price DECIMAL(10, 2) NOT NULL,
+    image_url VARCHAR(512),
     FOREIGN KEY (category_id) REFERENCES categories(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 

@@ -1,7 +1,6 @@
 package com.grupo4.VetAndGo.domain.service.impl;
 
 import com.grupo4.VetAndGo.domain.dto.CategoryDto;
-import com.grupo4.VetAndGo.domain.exception.BussinesException;
 import com.grupo4.VetAndGo.domain.exception.ResourceNotFoundException;
 import com.grupo4.VetAndGo.domain.repository.CategoryRepository;
 import com.grupo4.VetAndGo.domain.repository.ProductRepository;
@@ -58,13 +57,13 @@ class CategoryServiceImplTest {
         when(categoryRepository.findById(id)).thenReturn(Optional.of(entity));
 
         // Act
-        CategoryDto result = categoriaServiceImpl.getById(id);
+        Optional<CategoryDto> result = categoriaServiceImpl.getById(id);
 
         // Assert
-        assertNotNull(result);
-        assertEquals(id, result.id());
-        assertEquals("Alimentos", result.name());
-        assertEquals("Comida para mascotas", result.description());
+        assertTrue(result.isPresent());
+        assertEquals(id, result.get().id());
+        assertEquals("Alimentos", result.get().name());
+        assertEquals("Comida para mascotas", result.get().description());
         verify(categoryRepository, times(1)).findById(id);
     }
 
@@ -76,7 +75,7 @@ class CategoryServiceImplTest {
 
         // Act
         // Act & Assert
-        assertThrows(ResourceNotFoundException.class,
+        assertThrows(com.grupo4.VetAndGo.domain.exception.ResourceNotFoundException.class,
                 () -> categoriaServiceImpl.getById(id));
         verify(categoryRepository, times(1)).findById(id);
     }
@@ -170,8 +169,8 @@ class CategoryServiceImplTest {
         when(productRepository.existsByCategoryId(id)).thenReturn(true);
 
         // Act & Assert
-        BussinesException exception = assertThrows(
-                BussinesException.class, () -> {
+        com.grupo4.VetAndGo.domain.exception.BussinesException exception = assertThrows(
+                com.grupo4.VetAndGo.domain.exception.BussinesException.class, () -> {
                     categoriaServiceImpl.delete(id);
                 });
 

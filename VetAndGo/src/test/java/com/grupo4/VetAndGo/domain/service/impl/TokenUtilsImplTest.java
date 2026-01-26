@@ -2,7 +2,6 @@ package com.grupo4.VetAndGo.domain.service.impl;
 
 import com.grupo4.VetAndGo.domain.exception.ValidationException;
 import com.grupo4.VetAndGo.domain.model.User;
-import com.grupo4.VetAndGo.domain.model.Role;
 import com.grupo4.VetAndGo.domain.repository.TokenUtilsRepository;
 import com.grupo4.VetAndGo.persistence.dao.jpa.entity.UserJpaEntity;
 import org.junit.jupiter.api.Test;
@@ -27,11 +26,11 @@ class TokenUtilsImplTest {
     void testGetUserFromToken_Success() {
         // Arrange
         String token = "validToken";
-        UserJpaEntity userEntity = new UserJpaEntity(1L, "user1", "pass1", Role.USER);
+        UserJpaEntity userEntity = new UserJpaEntity(1L, "user1", "pass1", com.grupo4.VetAndGo.domain.model.Role.USER);
         when(tokenUtilsRepository.getUserFromToken(token)).thenReturn(userEntity);
 
         // Act
-        User result = tokenUtilsImpl.getUserFromToken(token);
+        User result = tokenUtilsImpl.getUserbFromToken(token);
 
         // Assert
         assertNotNull(result);
@@ -48,7 +47,7 @@ class TokenUtilsImplTest {
         // Act & Assert
         ValidationException exception = assertThrows(
                 ValidationException.class, () -> {
-                    tokenUtilsImpl.getUserFromToken(token);
+                    tokenUtilsImpl.getUserbFromToken(token);
                 });
         assertEquals("Invalid token.", exception.getMessage());
     }
@@ -57,7 +56,7 @@ class TokenUtilsImplTest {
     void testDeleteToken_Success() {
         // Arrange
         String token = "validToken";
-        UserJpaEntity userEntity = new UserJpaEntity(1L, "user1", "pass1", Role.USER);
+        UserJpaEntity userEntity = new UserJpaEntity(1L, "user1", "pass1", com.grupo4.VetAndGo.domain.model.Role.USER);
         when(tokenUtilsRepository.getUserFromToken(token)).thenReturn(userEntity);
 
         // Act
@@ -71,7 +70,7 @@ class TokenUtilsImplTest {
     void testValidateToken_Valid() {
         // Arrange
         String token = "validToken";
-        UserJpaEntity userEntity = new UserJpaEntity(1L, "user1", "pass1", Role.USER);
+        UserJpaEntity userEntity = new UserJpaEntity(1L, "user1", "pass1", com.grupo4.VetAndGo.domain.model.Role.USER);
         when(tokenUtilsRepository.getUserFromToken(token)).thenReturn(userEntity);
 
         // Act

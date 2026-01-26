@@ -16,24 +16,24 @@ public class TokenUtilsImpl implements TokenUtils {
     }
 
     @Override
-    public User getUserFromToken(String token) {
+    public User getUserbFromToken(String token) {
         UserJpaEntity user = tokenUtilsRepository.getUserFromToken(token);
         if (user == null) {
             throw new ValidationException("Invalid token.");
         }
-        return UserMapper.FromUserJpaEntitytoUser(user);
+        return UserMapper.FromUserJpaEntityToUser(user);
     }
 
     @Override
     public void deleteToken(String token) {
-        User user = getUserFromToken(token);
+        User user = getUserbFromToken(token);
         tokenUtilsRepository.deleteToken(user.getId());
 
     }
 
     @Override
     public User validateToken(String token) {
-        User user = getUserFromToken(token);
+        User user = getUserbFromToken(token);
         return user;
     }
 }

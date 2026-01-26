@@ -25,14 +25,8 @@ skinparam ranksep 5
 ' Entities'
 class User{
     id
-    name
     username
-    email
     password
-    phone
-    address
-    birthdate
-    country
     role
 }
 

@@ -5,7 +5,7 @@ import com.grupo4.VetAndGo.domain.model.Category;
 import com.grupo4.VetAndGo.persistence.dao.jpa.entity.CategoryJpaEntity;
 
 public class CategoryMapper {
-    public static Category FromCategoriaEntityJpatoCategoria(CategoryJpaEntity categoryJpaEntity) {
+    public static Category FromCategoryJpaEntityToCategory(CategoryJpaEntity categoryJpaEntity) {
         if (categoryJpaEntity == null) {
             return null;
         }
@@ -16,7 +16,7 @@ public class CategoryMapper {
         );
 
     }
-    public static CategoryJpaEntity FromCategoriaToCategoriaEntityJpa(Category category) {
+    public static CategoryJpaEntity FromCategoryToCategoryJpaEntity(Category category) {
         if (category == null) {
             return null;
         }
@@ -26,7 +26,7 @@ public class CategoryMapper {
             category.getDescription()
         );
     }
-    public static Category FromCategoriaDtoToCategoria(CategoryDto categoryDto) {
+    public static Category FromCategoryDtoToCategory(CategoryDto categoryDto) {
         if (categoryDto == null) {
             return null;
         }
@@ -36,7 +36,7 @@ public class CategoryMapper {
             categoryDto.description()
         );
     }
-    public static CategoryDto FromCategoriaToCategoriaDto(Category category) {
+    public static CategoryDto FromCategoryToCategoryDto(Category category) {
         if (category == null) {
             return null;
         }

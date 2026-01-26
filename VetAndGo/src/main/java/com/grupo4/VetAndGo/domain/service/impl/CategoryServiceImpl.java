@@ -29,21 +29,20 @@ public class CategoryServiceImpl implements CategoryService {
             throw new ResourceNotFoundException("No se encontraron categorías.");
         }
         return categories.stream()
-                .map(CategoryMapper::FromCategoriaEntityJpatoCategoria)
-                .map(CategoryMapper::FromCategoriaToCategoriaDto)
+                .map(CategoryMapper::FromCategoryJpaEntityToCategory)
+                .map(CategoryMapper::FromCategoryToCategoryDto)
                 .toList();
     }
 
     @Override
-    public CategoryDto getById(Long id) {
+    public Optional<CategoryDto> getById(Long id) {
         Optional<CategoryJpaEntity> category = categoryRepository.findById(id);
         if (category.isEmpty()) {
             throw new ResourceNotFoundException("No se encontró la categoría con ID " + id + ".");
         }
         return category
-                .map(CategoryMapper::FromCategoriaEntityJpatoCategoria)
-                .map(CategoryMapper::FromCategoriaToCategoriaDto)
-                .get();
+                .map(CategoryMapper::FromCategoryJpaEntityToCategory)
+                .map(CategoryMapper::FromCategoryToCategoryDto);
     }
 
     @Override
@@ -52,10 +51,10 @@ public class CategoryServiceImpl implements CategoryService {
             throw new BussinesException("La categoría con nombre '" + categoryDto.name() + "' ya existe.");
         }
 
-        var categoria = CategoryMapper.FromCategoriaDtoToCategoria(categoryDto);
-        var saved = categoryRepository.save(CategoryMapper.FromCategoriaToCategoriaEntityJpa(categoria));
-        var result = CategoryMapper.FromCategoriaEntityJpatoCategoria(saved);
-        return CategoryMapper.FromCategoriaToCategoriaDto(result);
+        var categoria = CategoryMapper.FromCategoryDtoToCategory(categoryDto);
+        var saved = categoryRepository.save(CategoryMapper.FromCategoryToCategoryJpaEntity(categoria));
+        var result = CategoryMapper.FromCategoryJpaEntityToCategory(saved);
+        return CategoryMapper.FromCategoryToCategoryDto(result);
     }
 
     @Override
@@ -67,8 +66,8 @@ public class CategoryServiceImpl implements CategoryService {
                     existing.setDescription(categoryDto.description());
                     return categoryRepository.save(existing);
                 })
-                .map(CategoryMapper::FromCategoriaEntityJpatoCategoria)
-                .map(CategoryMapper::FromCategoriaToCategoriaDto)
+                .map(CategoryMapper::FromCategoryJpaEntityToCategory)
+                .map(CategoryMapper::FromCategoryToCategoryDto)
                 .orElseThrow(() -> new ResourceNotFoundException("La categoría con ID " + id + " no existe."));
     }
 

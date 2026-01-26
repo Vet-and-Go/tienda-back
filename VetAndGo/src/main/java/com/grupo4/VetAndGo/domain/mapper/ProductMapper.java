@@ -18,50 +18,64 @@ public class ProductMapper {
     return INSTANCE;
   }
 
-  public ProductDto fromProductToProductDto(Product product) {
+  public ProductDto FromProductToProductDto(Product product) {
     if (product == null) {
       return null;
     }
     return new ProductDto(
         product.getId(),
         product.getName(),
-        CategoryMapper.FromCategoriaToCategoriaDto(product.getCategory()),
+        CategoryMapper.FromCategoryToCategoryDto(product.getCategory()),
         product.getDescription(),
-        product.getPrice(),
-        product.getStock());
+        product.getBasePrice(),
+        product.getStock(),
+        product.getDiscountPercentage(),
+        product.getFinalPrice(),
+        product.getImageUrl());
   }
 
-  public Product fromProductDtoToProduct(ProductDto productDto) {
+  public Product FromProductDtoToProduct(ProductDto productDto) {
     if (productDto == null) {
       return null;
     }
     return new Product(
         productDto.id(),
         productDto.name(),
-        CategoryMapper.FromCategoriaDtoToCategoria(productDto.category()),
+        CategoryMapper.FromCategoryDtoToCategory(productDto.category()),
         productDto.description(),
-        productDto.price(),
-        productDto.stock());
+        productDto.basePrice(),
+        productDto.stock(),
+        productDto.discountPercentage(),
+        productDto.finalPrice(),
+        productDto.imageUrl());
   }
 
-  public Product fromProductJpaEntityToProduct(ProductJpaEntity productJpaEntity) {
+  public Product FromProductJpaEntityToProduct(ProductJpaEntity productJpaEntity) {
     if (productJpaEntity == null) {
       return null;
     }
     try {
-      return new Product(
+      Product product = new Product(
           productJpaEntity.getId(),
           productJpaEntity.getName(),
-          CategoryMapper.FromCategoriaEntityJpatoCategoria(productJpaEntity.getCategory()),
+          CategoryMapper.FromCategoryJpaEntityToCategory(productJpaEntity.getCategory()),
           productJpaEntity.getDescription(),
-          productJpaEntity.getPrice(),
-          productJpaEntity.getStock());
+          productJpaEntity.getBasePrice(),
+          productJpaEntity.getStock(),
+          productJpaEntity.getDiscountPercentage(),
+          productJpaEntity.getFinalPrice(),
+          productJpaEntity.getImageUrl());
+      // Si la entidad tiene finalPrice, lo usamos directamente
+      if (productJpaEntity.getFinalPrice() != null) {
+        product.setFinalPrice(productJpaEntity.getFinalPrice());
+      }
+      return product;
     } catch (RuntimeException e) {
       return null;
     }
   }
 
-  public ProductJpaEntity fromProductToProductJpaEntity(Product product) {
+  public ProductJpaEntity FromProductToProductJpaEntity(Product product) {
     if (product == null) {
       return null;
     }
@@ -69,10 +83,13 @@ public class ProductMapper {
       return new ProductJpaEntity(
           product.getId(),
           product.getName(),
-          CategoryMapper.FromCategoriaToCategoriaEntityJpa(product.getCategory()),
+          CategoryMapper.FromCategoryToCategoryJpaEntity(product.getCategory()),
           product.getDescription(),
-          product.getPrice(),
-          product.getStock());
+          product.getBasePrice(),
+          product.getStock(),
+          product.getDiscountPercentage(),
+          product.getFinalPrice(),
+          product.getImageUrl());
     } catch (RuntimeException e) {
       return null;
     }

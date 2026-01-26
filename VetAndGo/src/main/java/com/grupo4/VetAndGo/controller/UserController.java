@@ -1,6 +1,7 @@
 package com.grupo4.VetAndGo.controller;
 
 import com.grupo4.VetAndGo.controller.webmodel.request.User.UserInsert;
+import com.grupo4.VetAndGo.controller.webmodel.response.User.UserOverview;
 import com.grupo4.VetAndGo.domain.dto.LoginDto;
 import com.grupo4.VetAndGo.domain.dto.LoginResponseDto;
 import com.grupo4.VetAndGo.domain.dto.UserDto;
@@ -48,7 +49,7 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<UserDto> createUser(@RequestBody UserInsert userInsert) {
-        UserDto userToCreate = new UserDto(null, userInsert.username(), userInsert.password(), userInsert.role());
+        UserDto userToCreate = new UserDto(null, userInsert.username(), userInsert.password(), Role.USER);
         UserDto createdUser = userService.create(userToCreate);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
@@ -94,7 +95,6 @@ public class UserController {
             throw new ValidationException(
                     "Token inválido o expirado.");
         }
-
         UserDto userDto = new UserDto(user.getId(), user.getUsername(), user.getPassword(), user.getRole());
         return ResponseEntity.ok(userDto);
     }

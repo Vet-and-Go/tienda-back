@@ -1,127 +1,57 @@
 package com.grupo4.VetAndGo.domain.mapper;
 
-import com.grupo4.VetAndGo.domain.dto.CategoryDto;
-import com.grupo4.VetAndGo.domain.dto.ProductDto;
-import com.grupo4.VetAndGo.domain.model.Category;
-import com.grupo4.VetAndGo.domain.model.Product;
-import com.grupo4.VetAndGo.persistence.dao.jpa.entity.CategoryJpaEntity;
-import com.grupo4.VetAndGo.persistence.dao.jpa.entity.ProductJpaEntity;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import com.grupo4.VetAndGo.controller.mapper.ProductMapper;
+import com.grupo4.VetAndGo.controller.webmodel.request.product.ProductInsert;
+import com.grupo4.VetAndGo.controller.webmodel.request.product.ProductUpdate;
+import com.grupo4.VetAndGo.controller.webmodel.response.ProductResponse;
+import com.grupo4.VetAndGo.domain.dto.ProductDto;
 
 class ProductMapperTest {
 
   @Test
-  void testFromProductJpaEntityToProduct_Success() {
-    // Arrange
-    CategoryJpaEntity categoryEntity = new CategoryJpaEntity(1L, "Alimentos", "Comida para mascotas");
-    ProductJpaEntity entity = new ProductJpaEntity(1L, "Dog Food", categoryEntity, "Premium dog food", 29.99, 100);
-
-    // Act
-    Product result = ProductMapper.getInstance().fromProductJpaEntityToProduct(entity);
-
-    // Assert
-    assertNotNull(result);
-    assertEquals(1L, result.getId());
-    assertEquals("Dog Food", result.getName());
-    assertEquals("Premium dog food", result.getDescription());
-    assertEquals(29.99, result.getPrice());
-    assertEquals(100, result.getStock());
-    assertNotNull(result.getCategory());
-    assertEquals(1L, result.getCategory().getId());
+  void testFromProductDtoToProductResponse() {
+    ProductDto productDto = new ProductDto(1L, "Dog Food", null, "Premium dog food", 29.99, 100, "http://image.url");
+    ProductResponse productResponse = ProductMapper.FromProductDtoToProductResponse(productDto);
+    assertAll(
+        () -> assertEquals(productDto.id(), productResponse.id()),
+        () -> assertEquals(productDto.name(), productResponse.name()),
+        () -> assertEquals(productDto.description(), productResponse.description()),
+        () -> assertEquals(productDto.price(), productResponse.price()),
+        () -> assertEquals(productDto.stock(), productResponse.stock()),
+        () -> assertEquals(productDto.imageUrl(), productResponse.imageUrl()));
   }
 
   @Test
-  void testFromProductJpaEntityToProduct_Null() {
-    // Act
-    Product result = ProductMapper.getInstance().fromProductJpaEntityToProduct(null);
-
-    // Assert
-    assertNull(result);
+  void testFromProductInsertToProductDto() {
+    ProductInsert productInsert = new ProductInsert("Cat Toy", 2L, "Fun cat toy", 9.99, 50, "http://image.url");
+    ProductDto productDto = ProductMapper.FromProductInsertToProductDto(productInsert);
+    assertAll(
+        () -> assertEquals(productInsert.name(), productDto.name()),
+        // ProductInsert has category ID (Long), ProductDto has CategoryDto. Mapping probably leaves it null or handles it in service.
+        // Implementation said: null, // Will be handled in the service
+         () -> assertEquals(productInsert.description(), productDto.description()),
+        () -> assertEquals(productInsert.price(), productDto.price()),
+        () -> assertEquals(productInsert.stock(), productDto.stock()),
+        () -> assertEquals(productInsert.imageUrl(), productDto.imageUrl()));
   }
 
   @Test
-  void testFromProductToProductJpaEntity_Success() {
-    // Arrange
-    Category category = new Category(1L, "Juguetes", "Juguetes para mascotas");
-    Product product = new Product(1L, "Cat Toy", category, "Fun cat toy", 9.99, 50);
-
-    // Act
-    ProductJpaEntity result = ProductMapper.getInstance().fromProductToProductJpaEntity(product);
-
-    // Assert
-    assertNotNull(result);
-    assertEquals(1L, result.getId());
-    assertEquals("Cat Toy", result.getName());
-    assertEquals("Fun cat toy", result.getDescription());
-    assertEquals(9.99, result.getPrice());
-    assertEquals(50, result.getStock());
-    assertNotNull(result.getCategory());
-  }
-
-  @Test
-  void testFromProductToProductJpaEntity_Null() {
-    // Act
-    ProductJpaEntity result = ProductMapper.getInstance().fromProductToProductJpaEntity(null);
-
-    // Assert
-    assertNull(result);
-  }
-
-  @Test
-  void testFromProductDtoToProduct_Success() {
-    // Arrange
-    CategoryDto categoryDto = new CategoryDto(1L, "Medicamentos", "Medicamentos veterinarios");
-    ProductDto productDto = new ProductDto(1L, "Medicine X", categoryDto, "Veterinary medicine", 49.99, 200);
-
-    // Act
-    Product result = ProductMapper.getInstance().fromProductDtoToProduct(productDto);
-
-    // Assert
-    assertNotNull(result);
-    assertEquals(1L, result.getId());
-    assertEquals("Medicine X", result.getName());
-    assertEquals("Veterinary medicine", result.getDescription());
-    assertEquals(49.99, result.getPrice());
-    assertEquals(200, result.getStock());
-    assertNotNull(result.getCategory());
-  }
-
-  @Test
-  void testFromProductDtoToProduct_Null() {
-    // Act
-    Product result = ProductMapper.getInstance().fromProductDtoToProduct(null);
-
-    // Assert
-    assertNull(result);
-  }
-
-  @Test
-  void testFromProductToProductDto_Success() {
-    // Arrange
-    Category category = new Category(1L, "Accesorios", "Accesorios para mascotas");
-    Product product = new Product(1L, "Dog Collar", category, "Colorful dog collar", 15.99, 300);
-
-    // Act
-    ProductDto result = ProductMapper.getInstance().fromProductToProductDto(product);
-
-    // Assert
-    assertNotNull(result);
-    assertEquals(1L, result.id());
-    assertEquals("Dog Collar", result.name());
-    assertEquals("Colorful dog collar", result.description());
-    assertEquals(15.99, result.price());
-    assertEquals(300, result.stock());
-    assertNotNull(result.category());
-  }
-
-  @Test
-  void testFromProductToProductDto_Null() {
-    // Act
-    ProductDto result = ProductMapper.getInstance().fromProductToProductDto(null);
-
-    // Assert
-    assertNull(result);
+  void testFromProductUpdateToProductDto() {
+      ProductUpdate productUpdate = new ProductUpdate(1L, "Updated Name", 2L, "Updated Description", 19.99, 20, "http://image.url");
+      ProductDto productDto = ProductMapper.FromProductUpdateToProductDto(productUpdate);
+      assertAll(
+          () -> assertEquals(productUpdate.id(), productDto.id()),
+          () -> assertEquals(productUpdate.name(), productDto.name()),
+          // Impl sets category to null
+          () -> assertEquals(productUpdate.description(), productDto.description()),
+          () -> assertEquals(productUpdate.price(), productDto.price()),
+          () -> assertEquals(productUpdate.stock(), productDto.stock()),
+          () -> assertEquals(productUpdate.imageUrl(), productDto.imageUrl())
+      );
   }
 }

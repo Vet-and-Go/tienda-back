@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -33,7 +34,7 @@ class ProductRepositoryImplTest {
   void testFindByName_Success() {
     // Arrange
     CategoryJpaEntity categoryEntity = new CategoryJpaEntity(1L, "Alimentos", "Comida para mascotas");
-    ProductJpaEntity entity = new ProductJpaEntity(1L, "Dog Food", categoryEntity, "Premium dog food", 29.99, 100);
+    ProductJpaEntity entity = new ProductJpaEntity(1L, "Dog Food", categoryEntity, "Premium dog food", new BigDecimal("29.99"), 100, new BigDecimal("0.00"), new BigDecimal("29.99"), "url");
     when(productJpaDao.findByName("Dog Food")).thenReturn(Optional.of(entity));
 
     // Act
@@ -42,7 +43,7 @@ class ProductRepositoryImplTest {
     // Assert
     assertTrue(result.isPresent());
     assertEquals("Dog Food", result.get().getName());
-    assertEquals(29.99, result.get().getPrice());
+    assertEquals(new BigDecimal("29.99"), result.get().getBasePrice());
     verify(productJpaDao, times(1)).findByName("Dog Food");
   }
 
@@ -89,7 +90,7 @@ class ProductRepositoryImplTest {
   void testFindById_Success() {
     // Arrange
     CategoryJpaEntity categoryEntity = new CategoryJpaEntity(1L, "Alimentos", "Comida para mascotas");
-    ProductJpaEntity entity = new ProductJpaEntity(1L, "Dog Food", categoryEntity, "Premium dog food", 29.99, 100);
+    ProductJpaEntity entity = new ProductJpaEntity(1L, "Dog Food", categoryEntity, "Premium dog food", new BigDecimal("29.99"), 100, new BigDecimal("0.00"), new BigDecimal("29.99"), "url");
     when(productJpaDao.findById(1L)).thenReturn(Optional.of(entity));
 
     // Act
@@ -119,8 +120,8 @@ class ProductRepositoryImplTest {
   void testSave_Insert() {
     // Arrange
     CategoryJpaEntity categoryEntity = new CategoryJpaEntity(1L, "Alimentos", "Comida para mascotas");
-    ProductJpaEntity newEntity = new ProductJpaEntity(null, "Dog Food", categoryEntity, "Premium dog food", 29.99, 100);
-    ProductJpaEntity savedEntity = new ProductJpaEntity(1L, "Dog Food", categoryEntity, "Premium dog food", 29.99, 100);
+    ProductJpaEntity newEntity = new ProductJpaEntity(null, "Dog Food", categoryEntity, "Premium dog food", new BigDecimal("29.99"), 100, new BigDecimal("0.00"), new BigDecimal("29.99"), "url");
+    ProductJpaEntity savedEntity = new ProductJpaEntity(1L, "Dog Food", categoryEntity, "Premium dog food", new BigDecimal("29.99"), 100, new BigDecimal("0.00"), new BigDecimal("29.99"), "url");
     when(productJpaDao.insert(any(ProductJpaEntity.class))).thenReturn(savedEntity);
 
     // Act
@@ -138,7 +139,7 @@ class ProductRepositoryImplTest {
   void testSave_Update() {
     // Arrange
     CategoryJpaEntity categoryEntity = new CategoryJpaEntity(1L, "Alimentos", "Comida para mascotas");
-    ProductJpaEntity existingEntity = new ProductJpaEntity(1L, "Dog Food Premium", categoryEntity, "Premium dog food", 39.99, 150);
+    ProductJpaEntity existingEntity = new ProductJpaEntity(1L, "Dog Food Premium", categoryEntity, "Premium dog food", new BigDecimal("39.99"), 150, new BigDecimal("0.00"), new BigDecimal("39.99"), "url");
     when(productJpaDao.update(any(ProductJpaEntity.class))).thenReturn(existingEntity);
 
     // Act
@@ -148,7 +149,7 @@ class ProductRepositoryImplTest {
     assertNotNull(result);
     assertEquals(1L, result.getId());
     assertEquals("Dog Food Premium", result.getName());
-    assertEquals(39.99, result.getPrice());
+    assertEquals(new BigDecimal("39.99"), result.getBasePrice());
     verify(productJpaDao, times(1)).update(existingEntity);
     verify(productJpaDao, never()).insert(any());
   }
@@ -183,15 +184,15 @@ class ProductRepositoryImplTest {
     int page = 1;
     int size = 10;
     CategoryJpaEntity categoryEntity = new CategoryJpaEntity(1L, "Alimentos", "Comida para mascotas");
-    ProductJpaEntity entity1 = new ProductJpaEntity(1L, "Dog Food", categoryEntity, "Premium dog food", 29.99, 100);
-    ProductJpaEntity entity2 = new ProductJpaEntity(2L, "Cat Food", categoryEntity, "Premium cat food", 24.99, 150);
+    ProductJpaEntity entity1 = new ProductJpaEntity(1L, "Dog Food", categoryEntity, "Premium dog food", new BigDecimal("29.99"), 100, new BigDecimal("0.00"), new BigDecimal("29.99"), "url");
+    ProductJpaEntity entity2 = new ProductJpaEntity(2L, "Cat Food", categoryEntity, "Premium cat food", new BigDecimal("24.99"), 150, new BigDecimal("0.00"), new BigDecimal("24.99"), "url");
     List<ProductJpaEntity> productList = Arrays.asList(entity1, entity2);
 
-    when(productJpaDao.findAll(page, size)).thenReturn(productList);
+    when(productJpaDao.findAll(page, size, null, null, null)).thenReturn(productList);
     when(productJpaDao.count()).thenReturn(2L);
 
     // Act
-    Page<ProductJpaEntity> result = productRepository.getAll(page, size);
+    Page<ProductJpaEntity> result = productRepository.getAll(page, size, null, null, null);
 
     // Assert
     assertNotNull(result);
@@ -199,7 +200,7 @@ class ProductRepositoryImplTest {
     assertEquals(page, result.pageNumber());
     assertEquals(size, result.pageSize());
     assertEquals(2L, result.totalElements());
-    verify(productJpaDao, times(1)).findAll(page, size);
+    verify(productJpaDao, times(1)).findAll(page, size, null, null, null);
     verify(productJpaDao, times(1)).count();
   }
 
@@ -208,16 +209,16 @@ class ProductRepositoryImplTest {
     // Arrange
     int page = 1;
     int size = 10;
-    when(productJpaDao.findAll(page, size)).thenReturn(List.of());
+    when(productJpaDao.findAll(page, size, null, null, null)).thenReturn(List.of());
     when(productJpaDao.count()).thenReturn(0L);
 
     // Act
-    Page<ProductJpaEntity> result = productRepository.getAll(page, size);
+    Page<ProductJpaEntity> result = productRepository.getAll(page, size, null, null, null);
 
     // Assert
     assertNotNull(result);
     assertTrue(result.data().isEmpty());
     assertEquals(0L, result.totalElements());
-    verify(productJpaDao, times(1)).findAll(page, size);
+    verify(productJpaDao, times(1)).findAll(page, size, null, null, null);
   }
 }

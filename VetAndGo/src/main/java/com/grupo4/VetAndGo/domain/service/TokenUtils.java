@@ -3,7 +3,7 @@ package com.grupo4.VetAndGo.domain.service;
 import com.grupo4.VetAndGo.domain.model.User;
 
 public interface TokenUtils {
-    User getUserFromToken(String token);
+    User getUserbFromToken(String token);
 
     void deleteToken(String token);
 

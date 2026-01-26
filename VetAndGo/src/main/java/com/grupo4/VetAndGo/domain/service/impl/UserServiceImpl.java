@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> getAll() {
         return userRepository.findAll().stream()
-                .map(UserMapper::FromUserJpaEntitytoUser)
+                .map(UserMapper::FromUserJpaEntityToUser)
                 .map(UserMapper::FromUserToUserDto)
                 .toList();
     }
@@ -43,13 +43,13 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             throw new ResourceNotFoundException("User with id " + id + " not found");
         }
-        return UserMapper.FromUserToUserDto(UserMapper.FromUserJpaEntitytoUser(user));
+        return UserMapper.FromUserToUserDto(UserMapper.FromUserJpaEntityToUser(user));
     }
 
     @Override
     public UserDto findByUsername(String username) {
         return userRepository.findByUsername(username)
-                .map(UserMapper::FromUserJpaEntitytoUser)
+                .map(UserMapper::FromUserJpaEntityToUser)
                 .map(UserMapper::FromUserToUserDto)
                 .orElseThrow(() -> new ResourceNotFoundException("User with username " + username + " not found"));
     }
@@ -63,8 +63,8 @@ public class UserServiceImpl implements UserService {
         UserDto userToSave = new UserDto(null, userDto.username(), hashedPassword, userDto.role());
 
         User user = UserMapper.FromUserDtoToUser(userToSave);
-        UserJpaEntity savedUser = userRepository.save(UserMapper.FromUsertoUserJpaEntity(user));
-        return UserMapper.FromUserToUserDto(UserMapper.FromUserJpaEntitytoUser(savedUser));
+        UserJpaEntity savedUser = userRepository.save(UserMapper.FromUserToUserJpaEntity(user));
+        return UserMapper.FromUserToUserDto(UserMapper.FromUserJpaEntityToUser(savedUser));
     }
 
     @Override
@@ -86,8 +86,8 @@ public class UserServiceImpl implements UserService {
                 userDto.role() != null ? userDto.role() : existingUser.getRole());
 
         User user = UserMapper.FromUserDtoToUser(userToUpdate);
-        UserJpaEntity updatedUser = userRepository.save(UserMapper.FromUsertoUserJpaEntity(user));
-        return UserMapper.FromUserToUserDto(UserMapper.FromUserJpaEntitytoUser(updatedUser));
+        UserJpaEntity updatedUser = userRepository.save(UserMapper.FromUserToUserJpaEntity(user));
+        return UserMapper.FromUserToUserDto(UserMapper.FromUserJpaEntityToUser(updatedUser));
     }
 
     @Override

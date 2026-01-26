@@ -1,18 +1,18 @@
 package com.grupo4.VetAndGo.domain.repository;
 
 import com.grupo4.VetAndGo.domain.model.Page;
-import com.grupo4.VetAndGo.persistence.dao.jpa.entity.ProductJpaEntity;
+import com.grupo4.VetAndGo.domain.model.Product;
 
 import java.util.Optional;
 
 public interface ProductRepository {
-  Page<ProductJpaEntity> getAll(int page, int size);
+  Page<Product> getAll(int page, int size, Long categoryId, String sort, String search);
 
-  Optional<ProductJpaEntity> findById(Long id);
+  Optional<Product> findById(Long id);
 
-  ProductJpaEntity save(ProductJpaEntity productJpaEntity);
+  Product save(Product product);
 
-  Optional<ProductJpaEntity> findByName(String name);
+  Optional<Product> findByName(String name);
 
   boolean existsByCategoryId(Long categoryId);
 

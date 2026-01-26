@@ -6,7 +6,7 @@ import com.grupo4.VetAndGo.domain.dto.UserDto;
 
 public class UserMapper {
 
-    public static User FromUserJpaEntitytoUser(UserJpaEntity userJpaEntity){
+    public static User FromUserJpaEntityToUser(UserJpaEntity userJpaEntity){
         if (userJpaEntity == null){
             return null;
         }
@@ -17,7 +17,7 @@ public class UserMapper {
                 userJpaEntity.getRole()
         );
     }
-    public static UserJpaEntity FromUsertoUserJpaEntity(User user){
+    public static UserJpaEntity FromUserToUserJpaEntity(User user){
         if (user == null){
             return null;
         }

@@ -30,7 +30,7 @@ public class ProductJpaDaoImpl implements ProductJpaDao {
   @Override
   public boolean existsByCategoryId(Long categoryId) {
     Long count = entityManager.createQuery(
-        "SELECT COUNT(p) FROM ProductJpaEntity p WHERE p.category.id = :categoryId", Long.class)
+        "SELECT COUNT(p) FROM ProductJpaEntity p WHERE p.category = :categoryId", Long.class)
         .setParameter("categoryId", categoryId)
         .getSingleResult();
     return count > 0;
@@ -68,15 +68,48 @@ public class ProductJpaDaoImpl implements ProductJpaDao {
   }
 
   @Override
-  public List<ProductJpaEntity> findAll(int page, int size) {
+  public List<ProductJpaEntity> findAll(int page, int size, Long categoryId, String sort, String search) {
     int pageIndex = Math.max(page - 1, 0);
 
-    String sql = "SELECT p FROM ProductJpaEntity p ORDER BY p.id";
-    TypedQuery<ProductJpaEntity> productJpaEntityPage = entityManager
-        .createQuery(sql, ProductJpaEntity.class)
-        .setFirstResult(pageIndex * size)
-        .setMaxResults(size);
-    return productJpaEntityPage.getResultList();
+    StringBuilder sql = new StringBuilder("SELECT p FROM ProductJpaEntity p WHERE 1=1");
+
+    if (categoryId != null) {
+      sql.append(" AND p.category.id = :categoryId");
+    }
+
+    if (search != null && !search.isEmpty()) {
+      sql.append(" AND LOWER(p.name) LIKE LOWER(:search)");
+    }
+
+    if (sort != null && !sort.isEmpty()) {
+      switch (sort) {
+        case "price,asc":
+          sql.append(" ORDER BY p.finalPrice ASC");
+          break;
+        case "price,desc":
+          sql.append(" ORDER BY p.finalPrice DESC");
+          break;
+        default:
+          sql.append(" ORDER BY p.id ASC");
+          break;
+      }
+    } else {
+      sql.append(" ORDER BY p.id ASC");
+    }
+
+    TypedQuery<ProductJpaEntity> query = entityManager.createQuery(sql.toString(), ProductJpaEntity.class);
+
+    if (categoryId != null) {
+      query.setParameter("categoryId", categoryId);
+    }
+    
+    if (search != null && !search.isEmpty()) {
+      query.setParameter("search", "%" + search + "%");
+    }
+
+    query.setFirstResult(pageIndex * size);
+    query.setMaxResults(size);
+    return query.getResultList();
   }
 
   @Override

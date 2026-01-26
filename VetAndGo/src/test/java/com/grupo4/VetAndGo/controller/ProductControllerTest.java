@@ -105,7 +105,8 @@ class ProductControllerTest {
         .andExpect(jsonPath("$.id").value(1))
         .andExpect(jsonPath("$.name").value("Dog Food"))
         .andExpect(jsonPath("$.description").value("Premium dog food"))
-        .andExpect(jsonPath("$.price").value(29.99))
+        .andExpect(jsonPath("$.basePrice").value(29.99))
+        .andExpect(jsonPath("$.finalPrice").value(29.99))
         .andExpect(jsonPath("$.stock").value(100));
 
     verify(productService, times(1)).getById(id);
@@ -142,7 +143,8 @@ class ProductControllerTest {
         .andExpect(jsonPath("$.id").value(1))
         .andExpect(jsonPath("$.name").value("Dog Food"))
         .andExpect(jsonPath("$.description").value("Premium dog food"))
-        .andExpect(jsonPath("$.price").value(29.99))
+        .andExpect(jsonPath("$.basePrice").value(29.99))
+        .andExpect(jsonPath("$.finalPrice").value(29.99))
         .andExpect(jsonPath("$.stock").value(100));
 
     verify(productService, times(1)).create(any(ProductInsert.class));
@@ -183,7 +185,8 @@ class ProductControllerTest {
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.id").value(1))
         .andExpect(jsonPath("$.name").value("Dog Food Premium"))
-        .andExpect(jsonPath("$.price").value(39.99))
+        .andExpect(jsonPath("$.basePrice").value(39.99))
+        .andExpect(jsonPath("$.finalPrice").value(39.99))
         .andExpect(jsonPath("$.stock").value(150));
 
     verify(productService, times(1)).update(any(ProductUpdate.class));

@@ -5,7 +5,7 @@ import com.grupo4.VetAndGo.domain.dto.CategoryDto;
 
 public class CategoryMapper {
 
-    public static CategoryResponse fromCategoryDtoToCategoryResponse(CategoryDto categoryDto) {
+    public static CategoryResponse FromCategoryDtoToCategoryResponse(CategoryDto categoryDto) {
         if (categoryDto == null) {
             return null;
         }

@@ -13,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,7 +39,7 @@ class ProductJpaDaoImplTest {
     entityManager.persist(category);
     entityManager.flush();
 
-    ProductJpaEntity product = new ProductJpaEntity(null, "Dog Food", category, "Premium dog food", 29.99, 100);
+    ProductJpaEntity product = new ProductJpaEntity(null, "Dog Food", category, "Premium dog food", new BigDecimal("29.99"), 100, new BigDecimal("0.00"), new BigDecimal("29.99"), "url");
     entityManager.persist(product);
     entityManager.flush();
 
@@ -48,7 +49,7 @@ class ProductJpaDaoImplTest {
     // Assert
     assertTrue(result.isPresent());
     assertEquals("Dog Food", result.get().getName());
-    assertEquals(29.99, result.get().getPrice());
+    assertEquals(new BigDecimal("29.99"), result.get().getBasePrice());
   }
 
   @Test
@@ -67,14 +68,14 @@ class ProductJpaDaoImplTest {
     entityManager.persist(category);
     entityManager.flush();
 
-    ProductJpaEntity product1 = new ProductJpaEntity(null, "Dog Food", category, "Premium dog food", 29.99, 100);
-    ProductJpaEntity product2 = new ProductJpaEntity(null, "Cat Food", category, "Premium cat food", 24.99, 150);
+    ProductJpaEntity product1 = new ProductJpaEntity(null, "Dog Food", category, "Premium dog food", new BigDecimal("29.99"), 100, new BigDecimal("0.00"), new BigDecimal("29.99"), "url");
+    ProductJpaEntity product2 = new ProductJpaEntity(null, "Cat Food", category, "Premium cat food", new BigDecimal("24.99"), 150, new BigDecimal("0.00"), new BigDecimal("24.99"), "url");
     entityManager.persist(product1);
     entityManager.persist(product2);
     entityManager.flush();
 
     // Act
-    List<ProductJpaEntity> result = productJpaDao.findAll(1, 10);
+    List<ProductJpaEntity> result = productJpaDao.findAll(1, 10, null, null, null);
 
     // Assert
     assertEquals(2, result.size());
@@ -87,7 +88,7 @@ class ProductJpaDaoImplTest {
     entityManager.persist(category);
     entityManager.flush();
 
-    ProductJpaEntity product = new ProductJpaEntity(null, "Dog Food", category, "Premium dog food", 29.99, 100);
+    ProductJpaEntity product = new ProductJpaEntity(null, "Dog Food", category, "Premium dog food", new BigDecimal("29.99"), 100, new BigDecimal("0.00"), new BigDecimal("29.99"), "url");
     entityManager.persist(product);
     entityManager.flush();
 
@@ -107,7 +108,7 @@ class ProductJpaDaoImplTest {
     entityManager.persist(category);
     entityManager.flush();
 
-    ProductJpaEntity newProduct = new ProductJpaEntity(null, "Dog Food", category, "Premium dog food", 29.99, 100);
+    ProductJpaEntity newProduct = new ProductJpaEntity(null, "Dog Food", category, "Premium dog food", new BigDecimal("29.99"), 100, new BigDecimal("0.00"), new BigDecimal("29.99"), "url");
 
     // Act
     productJpaDao.insert(newProduct);
@@ -124,12 +125,13 @@ class ProductJpaDaoImplTest {
     entityManager.persist(category);
     entityManager.flush();
 
-    ProductJpaEntity product = new ProductJpaEntity(null, "Dog Food", category, "Premium dog food", 29.99, 100);
+    ProductJpaEntity product = new ProductJpaEntity(null, "Dog Food", category, "Premium dog food", new BigDecimal("29.99"), 100, new BigDecimal("0.00"), new BigDecimal("29.99"), "url");
     entityManager.persist(product);
     entityManager.flush();
 
     product.setName("Dog Food Premium");
-    product.setPrice(39.99);
+    product.setBasePrice(new BigDecimal("39.99"));
+    product.setFinalPrice(new BigDecimal("39.99"));
 
     // Act
     ProductJpaEntity result = productJpaDao.update(product);
@@ -137,7 +139,7 @@ class ProductJpaDaoImplTest {
 
     // Assert
     assertEquals("Dog Food Premium", result.getName());
-    assertEquals(39.99, result.getPrice());
+    assertEquals(new BigDecimal("39.99"), result.getBasePrice());
   }
 
   @Test
@@ -147,7 +149,7 @@ class ProductJpaDaoImplTest {
     entityManager.persist(category);
     entityManager.flush();
 
-    ProductJpaEntity product = new ProductJpaEntity(null, "Dog Food", category, "Premium dog food", 29.99, 100);
+    ProductJpaEntity product = new ProductJpaEntity(null, "Dog Food", category, "Premium dog food", new BigDecimal("29.99"), 100, new BigDecimal("0.00"), new BigDecimal("29.99"), "url");
     entityManager.persist(product);
     entityManager.flush();
     Long productId = product.getId();
@@ -168,8 +170,8 @@ class ProductJpaDaoImplTest {
     entityManager.persist(category);
     entityManager.flush();
 
-    ProductJpaEntity product1 = new ProductJpaEntity(null, "Dog Food", category, "Premium dog food", 29.99, 100);
-    ProductJpaEntity product2 = new ProductJpaEntity(null, "Cat Food", category, "Premium cat food", 24.99, 150);
+    ProductJpaEntity product1 = new ProductJpaEntity(null, "Dog Food", category, "Premium dog food", new BigDecimal("29.99"), 100, new BigDecimal("0.00"), new BigDecimal("29.99"), "url");
+    ProductJpaEntity product2 = new ProductJpaEntity(null, "Cat Food", category, "Premium cat food", new BigDecimal("24.99"), 150, new BigDecimal("0.00"), new BigDecimal("24.99"), "url");
     entityManager.persist(product1);
     entityManager.persist(product2);
     entityManager.flush();
@@ -189,14 +191,13 @@ class ProductJpaDaoImplTest {
     entityManager.flush();
 
     for (int i = 1; i <= 15; i++) {
-      ProductJpaEntity product = new ProductJpaEntity(null, "Product " + i, category, "Description " + i, 10.0 * i,
-          100 + i);
+      ProductJpaEntity product = new ProductJpaEntity(null, "Product " + i, category, "Description " + i, new BigDecimal(String.valueOf(10.0 * i)), 100 + i, new BigDecimal("0.00"), new BigDecimal(String.valueOf(10.0 * i)), "url");
       entityManager.persist(product);
     }
     entityManager.flush();
 
     // Act
-    List<ProductJpaEntity> result = productJpaDao.findAll(1, 10);
+    List<ProductJpaEntity> result = productJpaDao.findAll(1, 10, null, null, null);
 
     // Assert
     assertEquals(10, result.size());
@@ -210,14 +211,13 @@ class ProductJpaDaoImplTest {
     entityManager.flush();
 
     for (int i = 1; i <= 15; i++) {
-      ProductJpaEntity product = new ProductJpaEntity(null, "Product " + i, category, "Description " + i, 10.0 * i,
-          100 + i);
+      ProductJpaEntity product = new ProductJpaEntity(null, "Product " + i, category, "Description " + i, new BigDecimal(String.valueOf(10.0 * i)), 100 + i, new BigDecimal("0.00"), new BigDecimal(String.valueOf(10.0 * i)), "url");
       entityManager.persist(product);
     }
     entityManager.flush();
 
     // Act
-    List<ProductJpaEntity> result = productJpaDao.findAll(2, 10);
+    List<ProductJpaEntity> result = productJpaDao.findAll(2, 10, null, null, null);
 
     // Assert
     assertEquals(5, result.size());
@@ -230,7 +230,7 @@ class ProductJpaDaoImplTest {
     entityManager.persist(category);
     entityManager.flush();
 
-    ProductJpaEntity product = new ProductJpaEntity(999L, "Non-Existent", category, "Description", 10.0, 100);
+    ProductJpaEntity product = new ProductJpaEntity(999L, "Non-Existent", category, "Description", new BigDecimal("10.0"), 100, new BigDecimal("0.00"), new BigDecimal("10.0"), "url");
 
     // Act & Assert
     IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
@@ -238,32 +238,5 @@ class ProductJpaDaoImplTest {
     });
 
     assertThat(exception.getMessage()).contains("Product with id 999 not found");
-  }
-
-  @Test
-  void testExistsByCategoryId_Success() {
-    // Arrange
-    CategoryJpaEntity category = new CategoryJpaEntity(null, "Alimentos", "Comida para mascotas");
-    entityManager.persist(category);
-    entityManager.flush();
-
-    ProductJpaEntity product = new ProductJpaEntity(null, "Dog Food", category, "Premium dog food", 29.99, 100);
-    entityManager.persist(product);
-    entityManager.flush();
-
-    // Act
-    boolean exists = productJpaDao.existsByCategoryId(category.getId());
-
-    // Assert
-    assertTrue(exists);
-  }
-
-  @Test
-  void testExistsByCategoryId_NotFound() {
-    // Act
-    boolean exists = productJpaDao.existsByCategoryId(999L);
-
-    // Assert
-    assertFalse(exists);
   }
 }

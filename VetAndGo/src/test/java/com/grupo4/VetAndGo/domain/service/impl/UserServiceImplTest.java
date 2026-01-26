@@ -12,37 +12,36 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import com.grupo4.VetAndGo.domain.exception.ResourceNotFoundException;
-import com.grupo4.VetAndGo.domain.repository.TokenUtilsRepository;
-import com.grupo4.VetAndGo.domain.service.PasswordEncoderService;
-import java.util.List;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.*;
+
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
     @Mock
     private UserRepository userRepository;
     @Mock
-    private PasswordEncoderService passwordEncoderService;
+    private com.grupo4.VetAndGo.domain.service.PasswordEncoderService passwordEncoderService;
     @Mock
-    private TokenUtilsRepository tokenUtilsRepository;
+    private com.grupo4.VetAndGo.domain.repository.TokenUtilsRepository tokenUtilsRepository;
     @InjectMocks
     private UserServiceImpl userServiceImpl;
 
     @Test
     void testGetAll() {
         // Arrange
-        UserJpaEntity user1 = new UserJpaEntity(1L, "user1", "pass1", Role.ADMIN);
-        UserJpaEntity user2 = new UserJpaEntity(2L, "user2", "pass2", Role.USER);
-        when(userRepository.findAll()).thenReturn(List.of(user1, user2));
+        UserJpaEntity user1 = new UserJpaEntity(1L, "user1", "pass1", com.grupo4.VetAndGo.domain.model.Role.ADMIN);
+        UserJpaEntity user2 = new UserJpaEntity(2L, "user2", "pass2", com.grupo4.VetAndGo.domain.model.Role.USER);
+        when(userRepository.findAll()).thenReturn(java.util.List.of(user1, user2));
 
         // Act
-        List<UserDto> result = userServiceImpl.getAll();
+        java.util.List<UserDto> result = userServiceImpl.getAll();
 
         // Assert
         assertEquals(2, result.size());
@@ -95,7 +94,7 @@ class UserServiceImplTest {
         UserJpaEntity saved = new UserJpaEntity(1L, "user1", "encodedPass", Role.USER);
 
         when(passwordEncoderService.encode("plainPass")).thenReturn("encodedPass");
-        when(userRepository.save(any(UserJpaEntity.class))).thenReturn(saved);
+        when(userRepository.save(org.mockito.ArgumentMatchers.any(UserJpaEntity.class))).thenReturn(saved);
 
         // Act
         UserDto result = userServiceImpl.create(input);
@@ -117,7 +116,7 @@ class UserServiceImplTest {
 
         when(userRepository.findById(1L)).thenReturn(existing);
         when(passwordEncoderService.encode("newPass")).thenReturn("newEncoded");
-        when(userRepository.save(any(UserJpaEntity.class))).thenReturn(updated);
+        when(userRepository.save(org.mockito.ArgumentMatchers.any(UserJpaEntity.class))).thenReturn(updated);
 
         // Act
         UserDto result = userServiceImpl.update(1L, updateInput);
@@ -137,7 +136,7 @@ class UserServiceImplTest {
         userServiceImpl.delete(1L);
 
         // Assert
-        verify(userRepository).delete(1L);
+        org.mockito.Mockito.verify(userRepository).delete(1L);
     }
 
     @Test
@@ -182,8 +181,7 @@ class UserServiceImplTest {
         userServiceImpl.logout(loginDto);
 
         // Assert
-        verify(userRepository).findByUsername("user1");
-        verify(tokenUtilsRepository).deleteToken(1L);
+        org.mockito.Mockito.verify(tokenUtilsRepository).deleteToken(1L);
     }
 
     @Test

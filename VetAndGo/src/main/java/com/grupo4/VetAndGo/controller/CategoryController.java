@@ -20,6 +20,7 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
+
     @GetMapping("")
     public ResponseEntity<List<CategoryDto>> getAllCategories() {
         List<CategoryDto> categories = categoryService.getAll();
@@ -28,8 +29,9 @@ public class CategoryController {
 
     @GetMapping("/{id}")
     public ResponseEntity<CategoryDto> getCategoryById(@PathVariable Long id) {
-        CategoryDto categoryDto = categoryService.getById(id);
-        return ResponseEntity.ok(categoryDto);
+        return categoryService.getById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @RequireAdmin

@@ -7,20 +7,23 @@ import com.grupo4.VetAndGo.domain.dto.ProductDto;
 
 public class ProductMapper {
 
-  public static ProductResponse fromProductDtoToProductResponse(ProductDto productDto) {
+  public static ProductResponse FromProductDtoToProductResponse(ProductDto productDto) {
     if (productDto == null) {
       return null;
     }
     return new ProductResponse(
         productDto.id(),
         productDto.name(),
-        CategoryMapper.fromCategoryDtoToCategoryResponse(productDto.category()),
+        CategoryMapper.FromCategoryDtoToCategoryResponse(productDto.category()),
         productDto.description(),
-        productDto.price(),
-        productDto.stock());
+        productDto.basePrice(),
+        productDto.stock(),
+        productDto.discountPercentage(),
+        productDto.finalPrice(),
+        productDto.imageUrl());
   }
 
-  public static ProductDto fromProductInsertToProductDto(ProductInsert productInsert) {
+  public static ProductDto FromProductInsertToProductDto(ProductInsert productInsert) {
     if (productInsert == null) {
       return null;
     }
@@ -29,11 +32,14 @@ public class ProductMapper {
         productInsert.name(),
         null, // Will be handled in the service
         productInsert.description(),
-        productInsert.price(),
-        productInsert.stock());
+        productInsert.basePrice(),
+        productInsert.stock(),
+        productInsert.discountPercentage(),
+        null, // Will be calculated
+        productInsert.imageUrl());
   }
 
-  public static ProductDto fromProductUpdateToProductDto(ProductUpdate productUpdate) {
+  public static ProductDto FromProductUpdateToProductDto(ProductUpdate productUpdate) {
     if (productUpdate == null) {
       return null;
     }
@@ -42,7 +48,10 @@ public class ProductMapper {
         productUpdate.name(),
         null, // Will be handled in the service
         productUpdate.description(),
-        productUpdate.price(),
-        productUpdate.stock());
+        productUpdate.basePrice(),
+        productUpdate.stock(),
+        productUpdate.discountPercentage(),
+        null, // Will be calculated
+        productUpdate.imageUrl());
   }
 }

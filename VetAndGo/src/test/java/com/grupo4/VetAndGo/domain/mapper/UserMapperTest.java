@@ -11,15 +11,19 @@ import static org.junit.jupiter.api.Assertions.*;
 class UserMapperTest {
 
     @Test
-    void testFromUserJpaEntitytoUser() {
-        UserJpaEntity entity = new UserJpaEntity(1L, "username", "password", Role.ADMIN);
-        User user = UserMapper.FromUserJpaEntitytoUser(entity);
+    void testFromUserJpaEntitytoUser_Success() {
+        // Arrange
+        UserJpaEntity entity = new UserJpaEntity(1L, "username", "password", Role.USER);
 
-        assertNotNull(user);
-        assertEquals(entity.getId(), user.getId());
-        assertEquals(entity.getUsername(), user.getUsername());
-        assertEquals(entity.getPassword(), user.getPassword());
-        assertEquals(entity.getRole(), user.getRole());
+        // Act
+        User result = UserMapper.FromUserJpaEntitytoUser(entity);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(1L, result.getId());
+        assertEquals("username", result.getUsername());
+        assertEquals("password", result.getPassword());
+        assertEquals(Role.USER, result.getRole());
     }
 
     @Test
@@ -28,15 +32,19 @@ class UserMapperTest {
     }
 
     @Test
-    void testFromUsertoUserJpaEntity() {
-        User user = new User(1L, "username", "password", Role.ADMIN);
-        UserJpaEntity entity = UserMapper.FromUsertoUserJpaEntity(user);
+    void testFromUsertoUserJpaEntity_Success() {
+        // Arrange
+        User user = new User(1L, "username", "password", Role.USER);
 
-        assertNotNull(entity);
-        assertEquals(user.getId(), entity.getId());
-        assertEquals(user.getUsername(), entity.getUsername());
-        assertEquals(user.getPassword(), entity.getPassword());
-        assertEquals(user.getRole(), entity.getRole());
+        // Act
+        UserJpaEntity result = UserMapper.FromUsertoUserJpaEntity(user);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(1L, result.getId());
+        assertEquals("username", result.getUsername());
+        assertEquals("password", result.getPassword());
+        assertEquals(Role.USER, result.getRole());
     }
 
     @Test
@@ -45,15 +53,19 @@ class UserMapperTest {
     }
 
     @Test
-    void testFromUserDtoToUser() {
-        UserDto dto = new UserDto(1L, "username", "password", Role.ADMIN);
-        User user = UserMapper.FromUserDtoToUser(dto);
+    void testFromUserDtoToUser_Success() {
+        // Arrange
+        UserDto dto = new UserDto(1L, "username", "password", Role.USER);
 
-        assertNotNull(user);
-        assertEquals(dto.id(), user.getId());
-        assertEquals(dto.username(), user.getUsername());
-        assertEquals(dto.password(), user.getPassword());
-        assertEquals(dto.role(), user.getRole());
+        // Act
+        User result = UserMapper.FromUserDtoToUser(dto);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(1L, result.getId());
+        assertEquals("username", result.getUsername());
+        assertEquals("password", result.getPassword());
+        assertEquals(Role.USER, result.getRole());
     }
 
     @Test
@@ -62,15 +74,19 @@ class UserMapperTest {
     }
 
     @Test
-    void testFromUserToUserDto() {
-        User user = new User(1L, "username", "password", Role.ADMIN);
-        UserDto dto = UserMapper.FromUserToUserDto(user);
+    void testFromUserToUserDto_Success() {
+        // Arrange
+        User user = new User(1L, "username", "password", Role.USER);
 
-        assertNotNull(dto);
-        assertEquals(user.getId(), dto.id());
-        assertEquals(user.getUsername(), dto.username());
-        assertEquals(user.getPassword(), dto.password());
-        assertEquals(user.getRole(), dto.role());
+        // Act
+        UserDto result = UserMapper.FromUserToUserDto(user);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(1L, result.id());
+        assertEquals("username", result.username());
+        assertEquals("password", result.password());
+        assertEquals(Role.USER, result.role());
     }
 
     @Test

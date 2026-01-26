@@ -5,7 +5,7 @@ import com.grupo4.VetAndGo.controller.webmodel.response.Categoria.CategoriaDetai
 import com.grupo4.VetAndGo.domain.dto.CategoryDto;
 
 public class CategoriaMapper {
-    public static CategoryDto fromCategoriaInsertToCategoriaDto(CategoryInsert categoryInsert) {
+    public static CategoryDto FromCategoryInsertToCategoryDto(CategoryInsert categoryInsert) {
         if (categoryInsert == null) {
             return null;
         }
@@ -15,7 +15,7 @@ public class CategoriaMapper {
                 categoryInsert.description()
         );
     }
-    public static CategoryDto fromCategoriaUpdateToCategoriaDto(Long id, CategoryInsert categoriaUpdate) {
+    public static CategoryDto FromCategoryUpdateToCategoryDto(Long id, CategoryInsert categoriaUpdate) {
         if (categoriaUpdate == null) {
             return null;
         }
@@ -25,7 +25,7 @@ public class CategoriaMapper {
                 categoriaUpdate.description()
         );
     }
-    public static CategoriaDetail fromCategoriaDtoToCategoriaDetail(CategoryDto categoryDto) {
+    public static CategoriaDetail FromCategoryDtoToCategoriaDetail(CategoryDto categoryDto) {
         if (categoryDto == null) {
             return null;
         }

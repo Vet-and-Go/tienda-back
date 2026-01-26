@@ -9,7 +9,7 @@ public interface ProductJpaDao extends GenericJpaDao<ProductJpaEntity> {
 
   // Optional<ProductJpaEntity> findById(Long id);
 
-  List<ProductJpaEntity> findAll(int page, int size);
+  List<ProductJpaEntity> findAll(int page, int size, Long categoryId, String sort, String search);
 
   Optional<ProductJpaEntity> findByName(String name);
 

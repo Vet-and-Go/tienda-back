@@ -4,7 +4,7 @@ import com.grupo4.VetAndGo.domain.model.Role;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "users")
+@Table(name = "clients")
 public class UserJpaEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
