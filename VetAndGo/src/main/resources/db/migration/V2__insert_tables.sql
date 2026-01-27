@@ -6,51 +6,39 @@ INSERT INTO categories (name, description) VALUES
 ('Salud', 'Suplementos, antiparasitarios y productos de parafarmacia veterinaria.');
 
 INSERT INTO products (name, category_id, description, stock, base_price, discount_percentage, final_price, image_url) VALUES
-('Pienso Premium Perro 12kg', 1, 'Alimento completo y equilibrado para perros adultos de todas las razas.', 50, 45.99, 10.00, 41.39, 'https://images.unsplash.com/photo-1568640347023-a616a30bc3bd?auto=format&fit=crop&w=800&q=80'),
-('Comida Húmeda Gato Salmón', 1, 'Latas de comida húmeda gourmet sabor salmón para gatos exigentes.', 100, 1.99, 0.00, 1.99, 'https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&w=800&q=80'),
-('Snack Hueso Dental', 1, 'Snack masticable que ayuda a limpiar los dientes y refrescar el aliento.', 200, 3.50, 15.00, 2.98, 'https://images.unsplash.com/photo-1582798358481-d199fb7347bb?auto=format&fit=crop&w=800&q=80'),
-('Pelota Resistente', 2, 'Pelota de goma casi indestructible para perros activos.', 80, 8.99, 0.00, 8.99, 'https://images.unsplash.com/photo-1615266895738-11f1371cd7e5?auto=format&fit=crop&w=800&q=80'),
-('Rascador Árbol para Gatos', 2, 'Torre rascador con múltiples niveles y cueva para dormir.', 20, 59.90, 20.00, 47.92, 'https://images.unsplash.com/photo-1545249390-6bdfa286032f?auto=format&fit=crop&w=800&q=80'),
-('Ratón de Peluche', 2, 'Juguete clásico con catnip para estimular el instinto cazador.', 150, 2.99, 0.00, 2.99, 'https://images.unsplash.com/photo-1615486511484-92e172cc416d?auto=format&fit=crop&w=800&q=80'),
-('Cama Suave XL', 3, 'Cama acolchada y mullida para perros grandes, desenfundable y lavable.', 15, 34.95, 0.00, 34.95, 'https://images.unsplash.com/photo-1541599540903-216a46ca1dc0?auto=format&fit=crop&w=800&q=80'),
-('Collar Ajustable Reflectante', 3, 'Collar de nylon resistente con bandas reflectantes para paseos nocturnos.', 60, 12.50, 5.00, 11.88, 'https://images.unsplash.com/photo-1605639156481-244775d6f803?auto=format&fit=crop&w=800&q=80'),
-('Transportín Viaje', 3, 'Transportín homologado para viajes en avión y coche, seguro y ventilado.', 25, 29.99, 0.00, 29.99, 'https://images.unsplash.com/photo-1601758228041-f3b2795255f1?auto=format&fit=crop&w=800&q=80'),
-('Champú Piel Sensible', 4, 'Champú hipoalergénico con aloe vera para mascotas con piel delicada.', 40, 9.99, 0.00, 9.99, 'https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?auto=format&fit=crop&w=800&q=80'),
-('Cepillo Carda Suave', 4, 'Elimina el pelo muerto y desenreda sin dañar la piel.', 50, 7.50, 10.00, 6.75, 'https://images.unsplash.com/photo-1623903178351-171804f3dbda?auto=format&fit=crop&w=800&q=80'),
-('Antiparasitario Pipeta', 5, 'Protección mensual contra pulgas, garrapatas y mosquitos.', 100, 8.95, 0.00, 8.95, 'https://images.unsplash.com/photo-1576201836106-db1758fd1c97?auto=format&fit=crop&w=800&q=80'),
--- Más productos de Alimentación
-('Pienso Junior Cachorros 5kg', 1, 'Alimento especial para cachorros con DHA y calcio para un crecimiento saludable.', 45, 28.99, 0.00, 28.99, 'https://images.unsplash.com/photo-1589924691995-400dc9ecc119?auto=format&fit=crop&w=800&q=80'),
-('Comida Húmeda Perro Pollo', 1, 'Latas de 400g con trozos de pollo natural en salsa.', 85, 2.45, 0.00, 2.45, 'https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&w=800&q=80'),
-('Pienso Gato Esterilizado 3kg', 1, 'Alimento completo para gatos esterilizados con control de peso.', 60, 22.50, 8.00, 20.70, 'https://images.unsplash.com/photo-1611003228941-98852ba62227?auto=format&fit=crop&w=800&q=80'),
-('Snack Natural Pollo Deshidratado', 1, 'Tiras de pechuga de pollo 100% natural sin conservantes.', 120, 5.99, 0.00, 5.99, 'https://images.unsplash.com/photo-1628009368231-7bb7cfcb0def?auto=format&fit=crop&w=800&q=80'),
-('Pienso Senior Perro 10kg', 1, 'Fórmula especial para perros mayores de 7 años con condroprotectores.', 35, 42.90, 12.00, 37.75, 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?auto=format&fit=crop&w=800&q=80'),
-('Snack Dental Gato', 1, 'Galletas crujientes que ayudan a reducir el sarro en gatos.', 95, 4.20, 0.00, 4.20, 'https://images.unsplash.com/photo-1548681528-6a5c45b66b42?auto=format&fit=crop&w=800&q=80'),
--- Más productos de Juguetes
-('Kong Rellenable Classic', 2, 'Juguete interactivo para rellenar con premios y mantener entretenido.', 70, 14.99, 0.00, 14.99, 'https://images.unsplash.com/photo-1603201667230-bd9574a4c976?auto=format&fit=crop&w=800&q=80'),
-('Cuerda Nudo Triple', 2, 'Juguete de cuerda resistente ideal para juegos de tira y afloja.', 110, 6.50, 0.00, 6.50, 'https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=800&q=80'),
-('Túnel Plegable para Gatos', 2, 'Túnel de tela con múltiples entradas para juego y escondite.', 40, 15.90, 25.00, 11.93, 'https://images.unsplash.com/photo-1573865526739-10c1d3a1f0cc?auto=format&fit=crop&w=800&q=80'),
-('Disco Volador para Perros', 2, 'Frisbee suave y flexible para juegos al aire libre.', 65, 9.99, 0.00, 9.99, 'https://images.unsplash.com/photo-1587764379873-97837921fd44?auto=format&fit=crop&w=800&q=80'),
-('Peluche Pato con Sonido', 2, 'Peluche suave con sonido chirriante para estimular el juego.', 90, 7.99, 0.00, 7.99, 'https://images.unsplash.com/photo-1591769225440-811ad7d6eab3?auto=format&fit=crop&w=800&q=80'),
--- Más productos de Accesorios
-('Correa Extensible 5m', 3, 'Correa retráctil con freno automático para paseos cómodos.', 55, 18.95, 0.00, 18.95, 'https://images.unsplash.com/photo-1622290291468-a28f7a7e8f4f?auto=format&fit=crop&w=800&q=80'),
-('Arnés Acolchado Talla M', 3, 'Arnés ergonómico con acolchado en pecho y espalda.', 48, 24.50, 15.00, 20.83, 'https://images.unsplash.com/photo-1601758123927-4f99ec3ac23e?auto=format&fit=crop&w=800&q=80'),
-('Bebedero Automático 2L', 3, 'Fuente de agua con filtro para mantener el agua fresca y oxigenada.', 30, 32.99, 0.00, 32.99, 'https://images.unsplash.com/photo-1589789602567-b85e92a0fde1?auto=format&fit=crop&w=800&q=80'),
-('Comedero Elevado Doble', 3, 'Set de comedero y bebedero elevados, altura ajustable.', 25, 27.90, 0.00, 27.90, 'https://images.unsplash.com/photo-1616698002951-fd984c7af527?auto=format&fit=crop&w=800&q=80'),
-('Manta Térmica para Mascotas', 3, 'Manta suave con tejido térmico que retiene el calor corporal.', 38, 19.99, 0.00, 19.99, 'https://images.unsplash.com/photo-1615751072497-5f5169febe17?auto=format&fit=crop&w=800&q=80'),
-('Placa Identificativa Grabada', 3, 'Placa personalizable de acero inoxidable con grabado láser.', 200, 6.99, 0.00, 6.99, 'https://images.unsplash.com/photo-1600077106724-946750eeaf3c?auto=format&fit=crop&w=800&q=80'),
--- Más productos de Higiene
-('Toallitas Húmedas Multiusos', 4, 'Pack de 80 toallitas para limpieza rápida de patas y pelo.', 75, 5.50, 0.00, 5.50, 'https://images.unsplash.com/photo-1609684031552-2c9e4394c8cb?auto=format&fit=crop&w=800&q=80'),
-('Cortaúñas Profesional', 4, 'Cortaúñas de acero inoxidable con protección de seguridad.', 60, 11.90, 0.00, 11.90, 'https://images.unsplash.com/photo-1606214174585-fe31582dc6ee?auto=format&fit=crop&w=800&q=80'),
-('Champú Antipulgas Natural', 4, 'Champú con aceites esenciales de citronela y neem.', 52, 12.99, 18.00, 10.65, 'https://images.unsplash.com/photo-1620843002805-05a08cb72f57?auto=format&fit=crop&w=800&q=80'),
-('Spray Eliminador de Olores', 4, 'Neutralizador enzimático de olores para hogar y tejidos.', 45, 8.90, 0.00, 8.90, 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80'),
-('Cepillo de Dientes para Perros', 4, 'Kit con cepillo de doble cabezal y pasta dental sabor carne.', 70, 6.99, 0.00, 6.99, 'https://images.unsplash.com/photo-1628288420616-1fd9a1635446?auto=format&fit=crop&w=800&q=80'),
--- Más productos de Salud
-('Suplemento Articular', 5, 'Condroprotector con glucosamina y condroitina para articulaciones.', 80, 24.99, 10.00, 22.49, 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=800&q=80'),
-('Collar Antiparasitario 8 meses', 5, 'Protección prolongada contra parásitos externos con efecto repelente.', 65, 16.50, 0.00, 16.50, 'https://images.unsplash.com/photo-1576201836106-db1758fd1c97?auto=format&fit=crop&w=800&q=80'),
-('Probióticos Digestivos', 5, 'Suplemento con probióticos para mejorar la salud intestinal.', 55, 18.90, 0.00, 18.90, 'https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?auto=format&fit=crop&w=800&q=80'),
-('Vendaje Autoadhesivo', 5, 'Venda elástica veterinaria que se adhiere a sí misma, pack 3 unidades.', 90, 7.50, 0.00, 7.50, 'https://images.unsplash.com/photo-1603398938378-e54eab446dde?auto=format&fit=crop&w=800&q=80'),
-('Omega 3 para Mascotas', 5, 'Aceite de salmón rico en ácidos grasos para piel y pelaje brillante.', 72, 14.99, 0.00, 14.99, 'https://images.unsplash.com/photo-1585421514738-01798e348b17?auto=format&fit=crop&w=800&q=80'),
-('Vitaminas Multifunción', 5, 'Complejo vitamínico completo en formato tableta masticable.', 88, 12.50, 0.00, 12.50, 'https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?auto=format&fit=crop&w=800&q=80');
--- INSERT INTO clients (username, password, role) VALUES
+-- ALIMENTACIÓN
+('Pienso Premium Perro 12kg', 1, 'Alimento completo y equilibrado para perros adultos.', 50, 45.99, 10.00, 41.39, 'https://imgs.search.brave.com/rwR6Wp7s39d_R84haqyPht1ftT2yatD-a01pNG_7ObQ/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9lcmEy/dnJtems1bi5leGFj/dGRuLmNvbS93cC1j/b250ZW50L3VwbG9h/ZHMvMjAyMS8wNi9E/aWdlc3Rpb24tc2Vu/c2libGUtMTBrZy1Q/aWVuc28tc3VwZXIt/cHJlbWl1bS1wZXJy/by1rYXNhbHVkaW50/ZWdyYWwtMTA4MHgx/MDgwcHgtMzYweDM2/MC5qcGc_c3RyaXA9/YWxsJmxvc3N5PTEm/c3NsPTE'),
+('Comida Húmeda Gato Salmón', 1, 'Latas de comida húmeda gourmet sabor salmón.', 100, 1.99, 0.00, 1.99, 'https://imgs.search.brave.com/u8AlG24IfOszRivcQs9tJQNCTSit__9u_SsjBsLK7NU/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly93d3cu/ZGVzcGVuc2EuZXMv/ZG9jdW1lbnRzLzEw/MTgwLzEwNzM2LzM3/MDI1Ml9NLmpwZw'),
+('Snack Hueso Dental', 1, 'Snack masticable que ayuda a limpiar los dientes.', 200, 3.50, 15.00, 2.98, 'https://imgs.search.brave.com/1L9Bn4HLzIgr-AvCaTe9LjyJPYIIerBOINLsuJTss-s/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL0kv/NzFCc3RwSFBkekwu/anBn'),
+('Pienso Gato Esterilizado 3kg', 1, 'Alimento equilibrado para control de peso en gatos.', 60, 22.50, 8.00, 20.70, 'https://imgs.search.brave.com/R8mEDLhpRX1OpJU0akuzDWuSmw-Ycs3dr2mS1BY8vkQ/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9jbGFy/ZWwuaW1naXgubmV0/L21lZGlhL2NhdGFs/b2cvcHJvZHVjdC9B/L2wvQWxpbWVudG9f/R2F0b19Fc3Rlcmls/aXphZG9fVWx0aW1h/XzEuNUtnX2IzZGY2/NzViOGQ1ODk3YjYy/YmE0MDA0MTlmYTgw/NjQ5Y2VjZWYyYjBf/MTk0NzY0XzEuanBn/P2F1dG89Zm9ybWF0/JmZpdD1tYXgmdz0x/NzAwJnE9MTAw'),
+('Snack Natural Pollo', 1, 'Tiras de pechuga de pollo deshidratada 100% natural.', 120, 5.99, 0.00, 5.99, 'https://imgs.search.brave.com/vsHbqP4-zc2Y6JPwhDQxeA1O4-4A53WdGhRB4cfZGr4/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL0kv/NzF6ZmdEcGp3Y0wu/anBn'),
+
+-- JUGUETES Y ACCESORIOS
+('Rascador Árbol para Gatos', 2, 'Torre rascador con múltiples niveles y cueva.', 20, 59.90, 20.00, 47.92, 'https://imgs.search.brave.com/hjbFjjXuCX3BHsDKsZldVRPLyfKIGCXwIDkJp4MtxPU/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly93d3cu/dGllbmRhbmltYWwu/ZXMvZHcvaW1hZ2Uv/djIvQkRMUV9QUkQv/b24vZGVtYW5kd2Fy/ZS5zdGF0aWMvLS9T/aXRlcy1raXdva28t/bWFzdGVyLWNhdGFs/b2cvZGVmYXVsdC9k/d2RiMmFlMWE2L2lt/YWdlcy9NYXJrZXRw/bGFjZS84NDM1NDI4/NzM3NDEyLmpwZz9z/dz0yNzUmc2g9Mjc1/JnNtPWZpdA'),
+('Kong Classic Rojo', 2, 'Juguete de caucho resistente para rellenar con premios.', 70, 14.99, 0.00, 14.99, 'https://imgs.search.brave.com/zeX0M2CS39_d0vzIMp5v2Oo44RvLbqUzPmpxhyOO3s8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly93d3cu/YW5pbWFsdWpvcy5j/b20vMTU1Mi1tZWRp/dW1fZGVmYXVsdC9r/b25nLWNsYXNzaWMt/cm9qby1qdWd1ZXRl/LXJlbGxlbmFibGUt/cGFyYS1wZXJyb3Mu/anBn'),
+('Cuerda Nudo Triple', 2, 'Juguete de cuerda de algodón para tirar y aflojar.', 110, 6.50, 0.00, 6.50, 'https://imgs.search.brave.com/kP6QLAqxAY7bkyTx9_m7LFYgqpMUO-TRqnwq4HlIW2I/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL0kv/MzF1eWktQWxLQVMu/anBn'),
+('Túnel Plegable Gatos', 2, 'Túnel de poliéster con tres entradas y mirilla.', 40, 15.90, 25.00, 11.93, 'https://imgs.search.brave.com/sQmB5qzyfwgR_YccyrR50_CL0BY9mtsomqm31y1Q7KI/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9jZG4u/bWFub21hbm8uY29t/L3R1bmVsLXBhcmEt/Z2F0b3MtY3J1amll/bnRlLWNvbi1ib2xh/cy1qdWd1ZXRlLXBs/ZWdhYmxlLXBhcmEt/Z2F0b3MtbmVncm8t/UC00MDM2MDc3OC0x/NTUzODUxODZfMS5q/cGc'),
+('Frisbee de Goma', 2, 'Disco volador flexible para juegos en el parque.', 65, 9.99, 0.00, 9.99, 'https://imgs.search.brave.com/P76q4USBwmllSmamcQ0tk-a07MpcsqVFkEaW5X55DY4/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9zcGFj/ZS10aGVwcm9maXQu/bnljMy5kaWdpdGFs/b2NlYW5zcGFjZXMu/Y29tL3B1YmxpYy9Q/cm9kdWN0cy9mcmlz/YmVlLXBhcmEtcGVy/cm9zLWRlLWdvbWEt/ZXZhXzY1NzkyODRj/ZjMzMmIud2VicA'),
+
+-- DESCANSO Y TRANSPORTE
+('Cama Suave XL', 3, 'Cama acolchada y mullida para perros grandes.', 15, 34.95, 0.00, 34.95, 'https://imgs.search.brave.com/AOzMgHleJ27bkTXVsGbif4t3pilv-odfJfK5tXdsS2Y/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL0kv/NTFqK3Mxak9EWkwu/anBn'),
+('Transportín Viaje', 3, 'Transportín homologado para viajes, seguro y ventilado.', 25, 29.99, 0.00, 29.99, 'https://imgs.search.brave.com/bqw3mLL0SqTTWL0wQ-Z5gGtIdr0EDkv0l67TgsmcHqE/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL0kv/NDFqQzNoS09mbEwu/anBn'),
+('Correa Extensible 5m', 3, 'Correa retráctil con freno de seguridad.', 55, 18.95, 0.00, 18.95, 'https://imgs.search.brave.com/uyFoQTjwKbyLgq7nB_ovuodfMBUW1Wmead5n1Jcq9fw/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9zMS5z/dGF0aWNsZC5jb20v/MjAyMS8wMy8wOC9j/b3JyZWEtZXh0ZW5z/aWJsZS1wYXJhLXBl/cnJvcy01LW1ldHJv/cy1vdWdlLmpwZw'),
+('Arnés Acolchado Azul', 3, 'Arnés ergonómico reflectante talla mediana.', 48, 24.50, 15.00, 20.83, 'https://imgs.search.brave.com/2RvDRFwYEGeAznk-F8yfRV62hmQaKvLoQy-amHfNdH4/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly93d3cu/bnVuYXBldC5jb20v/MTU1MS1ob21lX2Rl/ZmF1bHQvcmVkLWRp/bmdvLWFybmVzLWFj/b2xjaGFkby1henVs/LmpwZw'),
+('Fuente de Agua 2L', 3, 'Bebedero automático con filtro de carbón.', 30, 32.99, 0.00, 32.99, 'https://imgs.search.brave.com/6Weh411Jw4IGHGV6gkzgn_s4PwuYgUYa2IXGZCwCMnw/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL0kv/MzFucFdYVy0xR0wu/anBn'),
+('Comedero Acero Inox', 3, 'Bol de acero inoxidable con base antideslizante.', 150, 8.50, 0.00, 8.50, 'https://imgs.search.brave.com/ORByCzCVTvOMnnF9qUw4XzG7zV3TA38BB_KEllbT2bA/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL0kv/NjFuSmljQTNuVkwu/anBn'),
+
+-- HIGIENE
+('Champú Piel Sensible', 4, 'Champú hipoalergénico con aloe vera.', 40, 9.99, 0.00, 9.99, 'https://imgs.search.brave.com/ek3XxX9WabdgXywy985avYRGy4UUzUcIE24b5k1XVBg/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL0kv/MzExK1l0SmVnZkwu/anBn'),
+('Toallitas Higiénicas', 4, 'Pack 80 toallitas para limpieza de patas y cara.', 75, 5.50, 0.00, 5.50, 'https://imgs.search.brave.com/OqFXIe6lEHmEl3yr_SDXwnyC_kKLWlf_PC0Xk9ceGjs/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMtbmEuc3NsLWlt/YWdlcy1hbWF6b24u/Y29tL2ltYWdlcy9J/Lzcxd0wteEdpMkpM/LmpwZw'),
+('Cortaúñas Ergonómico', 4, 'Tijera para uñas con tope de seguridad.', 60, 11.90, 0.00, 11.90, 'https://imgs.search.brave.com/rsdMimEX5wwq38EPubRYjDjC9WPV3b0GJhSCT8mL7hU/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL0kv/NTE3RjVWZG9XSEwu/anBn'),
+('Spray Quita-Olores', 4, 'Eliminador enzimático de manchas y olores.', 45, 8.90, 0.00, 8.90, 'https://imgs.search.brave.com/oijqB4SMbHaibVsDzhVZpGP7AKBch-vgQezhrL49J2w/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly93d3cu/b25saW5lem9vLmVz/L21lZGlhLzA3L2Uy/L2Y4LzE3MzQ4OTg3/NTMvZWNvZG9yLXVm/MjAwLWVjb2Rvci1l/Y29wZXQtdXJpbmRl/dGVrdG9yLWh1bmRl/ZmVybmhhbHRlc3By/YXkuanBnP3RzPTE3/MzU0OTIxNDc'),
+('Kit Cepillo Dental', 4, 'Pasta de dientes sabor carne y dos cepillos.', 70, 6.99, 0.00, 6.99, 'https://imgs.search.brave.com/aoy-0S5PpgyNsOqUEp4pkqKoctOjZfC4gZZETH5f4TM/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMtZXUuc3NsLWlt/YWdlcy1hbWF6b24u/Y29tL2ltYWdlcy9J/LzcxaGc5T3RqNXJM/Ll9BQ19VTDMwMF9T/UjMwMCwyMDBfLmpw/Zw'),
+
+-- SALUD
+('Vitaminas Multifunción', 5, 'Complejo vitamínico completo en tableta masticable.', 88, 12.50, 0.00, 12.50, 'https://imgs.search.brave.com/xSNbDYk0ELxzShxbLhHFMFg4gTkFtZRTB99adKW617Y/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMtbmEuc3NsLWlt/YWdlcy1hbWF6b24u/Y29tL2ltYWdlcy9J/Lzgxc1NMVUxvVGFM/LmpwZw'),
+('Aceite de Salmón Omega-3', 5, 'Suplemento líquido para un pelaje brillante.', 72, 14.99, 0.00, 14.99, 'https://imgs.search.brave.com/3TdRPQaQ7k_u0QfXuNUATS-YnUMWRUmWb8hCEycMdHY/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly93d3cu/dW5tdW5kb2FncmFu/ZWwuZXMvMjU1NS1s/YXJnZV9kZWZhdWx0/L2FjZWl0ZS1kZS1z/YWxtb24tb21lZ2Et/My0yNTBnLmpwZw'),
+('Vendaje Cohesivo', 5, 'Venda elástica que no se pega al pelo.', 90, 7.50, 0.00, 7.50, 'https://imgs.search.brave.com/VrZ_y_0nzLtn64lAMcAOOxAgX4XamdYhP8f9iAXjPNE/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL0kv/ODFUbWtLck85RFMu/anBn');
+
 -- ('user1', 'pass', 'USER'),
 -- ('admin', 'admin', 'ADMIN');
