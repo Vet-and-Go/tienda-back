@@ -1,4 +1,4 @@
-package com.grupo4.VetAndGo.domain.infrastructura;
+package com.grupo4.VetAndGo.spring;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
