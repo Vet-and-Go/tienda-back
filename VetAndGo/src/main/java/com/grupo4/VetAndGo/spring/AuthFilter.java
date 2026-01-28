@@ -33,10 +33,53 @@ public class AuthFilter extends OncePerRequestFilter {
       HttpServletResponse response,
       FilterChain filterChain) throws ServletException, IOException {
 
-    if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
-      filterChain.doFilter(request, response);
-      return;
+    package com.vetandgo.tienda.filter;
+
+import org.springframework.stereotype.Component;
+import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+@Component
+public class AuthFilter implements Filter {
+
+    @Override
+    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
+            throws IOException, ServletException {
+        
+        HttpServletResponse response = (HttpServletResponse) res;
+        HttpServletRequest request = (HttpServletRequest) req;
+        
+        // ⭐ AGREGAR ESTAS LÍNEAS DE CORS ⭐
+        response.setHeader("Access-Control-Allow-Origin", "http://vetandgo-store-front.preproducciondaw.cip.fpmislata.com");
+        response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With");
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Max-Age", "3600");
+        
+        // Manejar peticiones OPTIONS (preflight)
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            response.setStatus(HttpServletResponse.SC_OK);
+            return; // No continuar con el filtro
+        }
+        
+        // Tu lógica de autenticación existente aquí...
+        // ...
+        
+        chain.doFilter(req, res);
     }
+
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+        // Inicialización si es necesaria
+    }
+
+    @Override
+    public void destroy() {
+        // Limpieza si es necesaria
+    }
+}
 
     try {
       HandlerExecutionChain handlerChain = handlerMapping.getHandler(request);
