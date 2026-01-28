@@ -14,7 +14,6 @@ import com.grupo4.VetAndGo.domain.model.Page;
 import com.grupo4.VetAndGo.domain.service.ProductService;
 import com.grupo4.VetAndGo.controller.mapper.ProductMapper;
 
-@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {

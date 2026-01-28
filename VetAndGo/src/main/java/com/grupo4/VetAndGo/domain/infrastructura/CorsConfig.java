@@ -9,16 +9,6 @@ public class CorsConfig implements WebMvcConfigurer {
 
   @Override
   public void addCorsMappings(CorsRegistry registry) {
-    registry.addMapping("/api/**")
-        .allowedOrigins(
-            "http://vetandgo-store-front.preproducciondaw.cip.fpmislata.com",
-            "http://localhost:3000",
-            "http://localhost:8080",
-            "http://vetandgo-bank-back.preproducciondaw.cip.fpmislata.com"
-        )
-        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-        .allowedHeaders("*")
-        .allowCredentials(false)
-        .maxAge(3600);
+    // CORS is handled by CorsFilter instead
   }
 }
