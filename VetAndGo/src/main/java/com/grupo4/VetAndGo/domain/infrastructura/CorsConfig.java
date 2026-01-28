@@ -13,10 +13,12 @@ public class CorsConfig implements WebMvcConfigurer {
         .allowedOrigins(
             "http://vetandgo-store-front.preproducciondaw.cip.fpmislata.com",
             "http://localhost:3000",
-            "http://localhost:8080"
+            "http://localhost:8080",
+            "http://vetandgo-bank-back.preproducciondaw.cip.fpmislata.com"
         )
         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
         .allowedHeaders("*")
-        .allowCredentials(false);
+        .allowCredentials(false)
+        .maxAge(3600);
   }
 }
