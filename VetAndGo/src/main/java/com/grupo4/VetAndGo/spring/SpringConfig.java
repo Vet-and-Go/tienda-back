@@ -1,12 +1,27 @@
 package com.grupo4.VetAndGo.spring;
 
+import java.beans.Customizer;
+
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+
 import com.grupo4.VetAndGo.domain.infrastructura.PasswordEncoderImpl;
 import com.grupo4.VetAndGo.domain.repository.CategoryRepository;
 import com.grupo4.VetAndGo.domain.repository.ProductRepository;
 import com.grupo4.VetAndGo.domain.repository.TokenUtilsRepository;
 import com.grupo4.VetAndGo.domain.repository.UserRepository;
-import com.grupo4.VetAndGo.domain.service.*;
-import com.grupo4.VetAndGo.domain.service.impl.*;
+import com.grupo4.VetAndGo.domain.service.CategoryService;
+import com.grupo4.VetAndGo.domain.service.PasswordEncoderService;
+import com.grupo4.VetAndGo.domain.service.ProductService;
+import com.grupo4.VetAndGo.domain.service.TokenUtils;
+import com.grupo4.VetAndGo.domain.service.UserService;
+import com.grupo4.VetAndGo.domain.service.impl.CategoryServiceImpl;
+import com.grupo4.VetAndGo.domain.service.impl.ProductServiceImpl;
+import com.grupo4.VetAndGo.domain.service.impl.TokenUtilsImpl;
+import com.grupo4.VetAndGo.domain.service.impl.UserServiceImpl;
 import com.grupo4.VetAndGo.persistence.dao.jpa.CategoryJpaDao;
 import com.grupo4.VetAndGo.persistence.dao.jpa.ProductJpaDao;
 import com.grupo4.VetAndGo.persistence.dao.jpa.TokenUtilsJpaDao;
@@ -19,11 +34,6 @@ import com.grupo4.VetAndGo.persistence.repository.impl.CategoryRepositoryImpl;
 import com.grupo4.VetAndGo.persistence.repository.impl.ProductRepositoryImpl;
 import com.grupo4.VetAndGo.persistence.repository.impl.TokenUtilsRepositoryImpl;
 import com.grupo4.VetAndGo.persistence.repository.impl.UserRepositoryImpl;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @Configuration
 @Profile("!test")
