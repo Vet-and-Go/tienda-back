@@ -10,50 +10,48 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/categories")
 public class CategoryController {
 
-    private final CategoryService categoryService;
+  private final CategoryService categoryService;
 
-    public CategoryController(CategoryService categoryService) {
-        this.categoryService = categoryService;
-    }
+  public CategoryController(CategoryService categoryService) {
+    this.categoryService = categoryService;
+  }
 
+  @GetMapping("")
+  public ResponseEntity<List<CategoryDto>> getAllCategories() {
+    List<CategoryDto> categories = categoryService.getAll();
+    return ResponseEntity.ok(categories);
+  }
 
-    @GetMapping("")
-    public ResponseEntity<List<CategoryDto>> getAllCategories() {
-        List<CategoryDto> categories = categoryService.getAll();
-        return ResponseEntity.ok(categories);
-    }
+  @GetMapping("/{id}")
+  public ResponseEntity<CategoryDto> getCategoryById(@PathVariable Long id) {
+    return categoryService.getById(id)
+        .map(ResponseEntity::ok)
+        .orElse(ResponseEntity.notFound().build());
+  }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<CategoryDto> getCategoryById(@PathVariable Long id) {
-        return categoryService.getById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
+  @RequireAdmin
+  @PostMapping
+  public ResponseEntity<CategoryDto> createCategory(@RequestBody CategoryInsert categoryInsert) {
+    CategoryDto categoryDto = new CategoryDto(null, categoryInsert.name(), categoryInsert.description());
+    CategoryDto created = categoryService.create(categoryDto);
+    return ResponseEntity.status(HttpStatus.CREATED).body(created);
+  }
 
-    @RequireAdmin
-    @PostMapping
-    public ResponseEntity<CategoryDto> createCategory(@RequestBody CategoryInsert categoryInsert) {
-        CategoryDto categoryDto = new CategoryDto(null, categoryInsert.name(), categoryInsert.description());
-        CategoryDto created = categoryService.create(categoryDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
-    }
+  @RequireAdmin
+  @PutMapping("/{id}")
+  public ResponseEntity<CategoryDto> updateCategory(@PathVariable Long id, @RequestBody CategoryDto categoryDto) {
+    CategoryDto updated = categoryService.update(id, categoryDto);
+    return ResponseEntity.ok(updated);
+  }
 
-    @RequireAdmin
-    @PutMapping("/{id}")
-    public ResponseEntity<CategoryDto> updateCategory(@PathVariable Long id, @RequestBody CategoryDto categoryDto) {
-        CategoryDto updated = categoryService.update(id, categoryDto);
-        return ResponseEntity.ok(updated);
-    }
-
-    @RequireAdmin
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
-        categoryService.delete(id);
-        return ResponseEntity.noContent().build();
-    }
+  @RequireAdmin
+  @DeleteMapping("/{id}")
+  public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
+    categoryService.delete(id);
+    return ResponseEntity.noContent().build();
+  }
 }
