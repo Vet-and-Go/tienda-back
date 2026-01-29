@@ -3,17 +3,17 @@ package com.grupo4.VetAndGo.domain.infrastructura;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-/*
+
 @Configuration
 public class CorsConfig implements WebMvcConfigurer {
 
   @Override
   public void addCorsMappings(CorsRegistry registry) {
-    registry.addMapping("/api/**")
-        .allowedOrigins("http://vetandgo-store-front.preproducciondaw.cip.fpmislata.com", "http://localhost:3000")
-        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+    registry.addMapping("/**")
+        .allowedOriginPatterns("*")
+        .allowedMethods("*")
         .allowedHeaders("*")
-        .allowCredentials(true);
+        .allowCredentials(true)
+        .maxAge(3600);
   }
 }
-*/
