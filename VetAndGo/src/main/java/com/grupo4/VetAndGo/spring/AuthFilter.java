@@ -31,15 +31,6 @@
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-            response.setHeader("Access-Control-Allow-Origin", "http://vetandgo-store-front.preproducciondaw.cip.fpmislata.com");
-            response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-            response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-            response.setHeader("Access-Control-Allow-Credentials", "true");
-    
-            if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
-            response.setStatus(HttpServletResponse.SC_OK);
-            return;
-            }
         try {
             HandlerExecutionChain handlerChain = handlerMapping.getHandler(request);
             
@@ -52,7 +43,6 @@
                         sendError(response, HttpServletResponse.SC_UNAUTHORIZED, "Missing or invalid token");
                         return;
                     }
-                    
                     
                     User user = tokenUtils.getUserbFromToken(token);
                     if (user == null) {
@@ -78,8 +68,6 @@
 
         filterChain.doFilter(request, response);
     }
-
-
  
  private String extractToken(HttpServletRequest request) {
  String authHeader = request.getHeader("Authorization");

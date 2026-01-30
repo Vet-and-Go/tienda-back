@@ -10,13 +10,15 @@ public class CorsConfig implements WebMvcConfigurer {
   @Override
   public void addCorsMappings(CorsRegistry registry) {
     registry.addMapping("/**")
-        .allowedOrigins(
-            "http://localhost:3000",
-            "http://localhost:4200",
+        .allowedOriginPatterns(
+            "http://localhost:*",
+            "https://localhost:*",
             "http://vetandgo-bank-front.preproducciondaw.cip.fpmislata.com",
-            "http://vetandgo-store-front.preproducciondaw.cip.fpmislata.com")
+            "http://vetandgo-store-front.preproducciondaw.cip.fpmislata.com",
+            "https://vetandgo-bank-front.preproducciondaw.cip.fpmislata.com",
+            "https://vetandgo-store-front.preproducciondaw.cip.fpmislata.com")
         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD")
-        .allowedHeaders("Content-Type", "Authorization", "X-Requested-With", "Accept")
+        .allowedHeaders("*")
         .allowCredentials(true)
         .maxAge(3600);
   }
