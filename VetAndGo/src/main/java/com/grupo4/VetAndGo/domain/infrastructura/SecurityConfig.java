@@ -33,7 +33,7 @@ public class SecurityConfig {
         "http://localhost:4201",
         "http://localhost:4202"));
     configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD"));
-    configuration.setAllowedHeaders(Arrays.asList("*"));
+    configuration.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization", "X-Requested-With", "Accept"));
     configuration.setAllowCredentials(true);
     configuration.setMaxAge(3600L);
 
