@@ -11,10 +11,8 @@ public class CorsConfig implements WebMvcConfigurer {
   public void addCorsMappings(CorsRegistry registry) {
     registry.addMapping("/**")
         .allowedOrigins(
-            "http://localhost:3000",
-            "http://localhost:4200",
-            "http://vetandgo-bank-front.preproducciondaw.cip.fpmislata.com",
-            "http://vetandgo-store-front.preproducciondaw.cip.fpmislata.com")
+            "http://localhost:4201",
+            "http://localhost:4202")
         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD")
         .allowedHeaders("Content-Type", "Authorization", "X-Requested-With", "Accept")
         .allowCredentials(true)
