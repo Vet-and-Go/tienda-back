@@ -31,6 +31,15 @@
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        String requestMethod = request.getMethod();
+
+        // Permitir OPTIONS sin validación (CORS preflight)
+        if ("OPTIONS".equalsIgnoreCase(requestMethod)) {
+            System.out.println("OPTIONS request, permitir sin validación");
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         try {
             HandlerExecutionChain handlerChain = handlerMapping.getHandler(request);
             
