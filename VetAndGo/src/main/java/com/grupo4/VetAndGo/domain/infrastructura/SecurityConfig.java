@@ -34,6 +34,7 @@ public class SecurityConfig {
         "http://localhost:4200",
         "http://localhost:4201",
         "http://localhost:4202",
+        "http://localhost:8082",
         "http://vetandgo-bank-front.preproducciondaw.cip.fpmislata.com",
         "http://vetandgo-store-front.preproducciondaw.cip.fpmislata.com"));
     configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD"));
