@@ -30,15 +30,22 @@ public class AuthFilter extends OncePerRequestFilter {
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {
-    response.setHeader("Access-Control-Allow-Origin", "http://localhost:4202");
-    response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-    response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    response.setHeader("Access-Control-Allow-Credentials", "true");
+    // response.setHeader("Access-Control-Allow-Origin", "http://localhost:4202");
+    // response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE,
+    // OPTIONS");
+    // response.setHeader("Access-Control-Allow-Headers", "Content-Type,
+    // Authorization");
+    // response.setHeader("Access-Control-Allow-Credentials", "true");
+    //
+    //
+    String requestMethod = request.getMethod();
 
-    if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
-      response.setStatus(HttpServletResponse.SC_OK);
+    if ("OPTIONS".equalsIgnoreCase(requestMethod)) {
+      System.out.println("OPTIONS request, permitir sin validación");
+      filterChain.doFilter(request, response);
       return;
     }
+
     try {
       HandlerExecutionChain handlerChain = handlerMapping.getHandler(request);
 
