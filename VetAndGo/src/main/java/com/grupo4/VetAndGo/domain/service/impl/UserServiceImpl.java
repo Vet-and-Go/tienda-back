@@ -17,110 +17,111 @@ import java.util.List;
 
 public class UserServiceImpl implements UserService {
 
-    private final PasswordEncoderService passwordEncoderService;
-    private final TokenUtilsRepository tokenUtils;
-    private final UserRepository userRepository;
+  private final PasswordEncoderService passwordEncoderService;
+  private final TokenUtilsRepository tokenUtils;
+  private final UserRepository userRepository;
 
-    public UserServiceImpl(PasswordEncoderService passwordEncoderService,
-            TokenUtilsRepository tokenUtils,
-            UserRepository userRepository) {
-        this.passwordEncoderService = passwordEncoderService;
-        this.tokenUtils = tokenUtils;
-        this.userRepository = userRepository;
+  public UserServiceImpl(PasswordEncoderService passwordEncoderService,
+      TokenUtilsRepository tokenUtils,
+      UserRepository userRepository) {
+    this.passwordEncoderService = passwordEncoderService;
+    this.tokenUtils = tokenUtils;
+    this.userRepository = userRepository;
+  }
+
+  @Override
+  public List<UserDto> getAll() {
+    return userRepository.findAll().stream()
+        .map(UserMapper::fromUserJpaEntityToUser)
+        .map(UserMapper::fromUserToUserDto)
+        .toList();
+  }
+
+  @Override
+  public UserDto getById(Long id) {
+    UserJpaEntity user = userRepository.findById(id);
+    if (user == null) {
+      throw new ResourceNotFoundException("User with id " + id + " not found");
+    }
+    return UserMapper.fromUserToUserDto(UserMapper.fromUserJpaEntityToUser(user));
+  }
+
+  @Override
+  public UserDto findByUsername(String username) {
+    return userRepository.findByUsername(username)
+        .map(UserMapper::fromUserJpaEntityToUser)
+        .map(UserMapper::fromUserToUserDto)
+        .orElseThrow(() -> new ResourceNotFoundException("User with username " + username + " not found"));
+  }
+
+  @Override
+  public UserDto create(UserDto userDto) {
+    if (userDto.id() != null && userRepository.findById(userDto.id()) != null) {
+      throw new BussinesException("User with id " + userDto.id() + " already exists");
+    }
+    String hashedPassword = passwordEncoderService.encode(userDto.password());
+    UserDto userToSave = new UserDto(null, userDto.username(), hashedPassword, userDto.role());
+
+    User user = UserMapper.fromUserDtoToUser(userToSave);
+    UserJpaEntity savedUser = userRepository.save(UserMapper.fromUserToUserJpaEntity(user));
+    return UserMapper.fromUserToUserDto(UserMapper.fromUserJpaEntityToUser(savedUser));
+  }
+
+  @Override
+  public UserDto update(Long id, UserDto userDto) {
+    UserJpaEntity existingUser = userRepository.findById(id);
+    if (existingUser == null) {
+      throw new ResourceNotFoundException("User with id " + id + " not found");
+    }
+    if (userDto.role() == null) {
+      throw new ValidationException("Role is required");
     }
 
-    @Override
-    public List<UserDto> getAll() {
-        return userRepository.findAll().stream()
-                .map(UserMapper::FromUserJpaEntityToUser)
-                .map(UserMapper::FromUserToUserDto)
-                .toList();
+    String password = determinePassword(userDto.password(), existingUser.getPassword());
+
+    UserDto userToUpdate = new UserDto(
+        id,
+        userDto.username() != null ? userDto.username() : existingUser.getUsername(),
+        password,
+        userDto.role() != null ? userDto.role() : existingUser.getRole());
+
+    User user = UserMapper.fromUserDtoToUser(userToUpdate);
+    UserJpaEntity updatedUser = userRepository.save(UserMapper.fromUserToUserJpaEntity(user));
+    return UserMapper.fromUserToUserDto(UserMapper.fromUserJpaEntityToUser(updatedUser));
+  }
+
+  @Override
+  public void delete(Long id) {
+    UserJpaEntity existingUser = userRepository.findById(id);
+    if (existingUser == null) {
+      throw new ResourceNotFoundException("User with id " + id + " not found");
     }
+    userRepository.delete(id);
+  }
 
-    @Override
-    public UserDto getById(Long id) {
-        UserJpaEntity user = userRepository.findById(id);
-        if (user == null) {
-            throw new ResourceNotFoundException("User with id " + id + " not found");
-        }
-        return UserMapper.FromUserToUserDto(UserMapper.FromUserJpaEntityToUser(user));
+  @Override
+  public String login(LoginDto loginDto) {
+    UserJpaEntity user = userRepository.findByUsername(loginDto.username())
+        .orElseThrow(() -> new ValidationException("User " + loginDto.username() + " not found."));
+
+    if (!passwordEncoderService.verify(loginDto.password(), user.getPassword())) {
+      throw new ValidationException("Incorrect password for user " + loginDto.username() + ".");
+
     }
+    return tokenUtils.createSessionToken(user.getId());
+  }
 
-    @Override
-    public UserDto findByUsername(String username) {
-        return userRepository.findByUsername(username)
-                .map(UserMapper::FromUserJpaEntityToUser)
-                .map(UserMapper::FromUserToUserDto)
-                .orElseThrow(() -> new ResourceNotFoundException("User with username " + username + " not found"));
+  @Override
+  public void logout(LoginDto loginDto) {
+    UserJpaEntity user = userRepository.findByUsername(loginDto.username())
+        .orElseThrow(() -> new ValidationException("User " + loginDto.username() + " not found."));
+    tokenUtils.deleteToken(user.getId());
+  }
+
+  private String determinePassword(String newPassword, String existingPassword) {
+    if (newPassword != null && !newPassword.isEmpty() && !newPassword.equals(existingPassword)) {
+      return passwordEncoderService.encode(newPassword);
     }
-
-    @Override
-    public UserDto create(UserDto userDto) {
-        if (userDto.id() != null && userRepository.findById(userDto.id()) != null) {
-            throw new BussinesException("User with id " + userDto.id() + " already exists");
-        }
-        String hashedPassword = passwordEncoderService.encode(userDto.password());
-        UserDto userToSave = new UserDto(null, userDto.username(), hashedPassword, userDto.role());
-
-        User user = UserMapper.FromUserDtoToUser(userToSave);
-        UserJpaEntity savedUser = userRepository.save(UserMapper.FromUserToUserJpaEntity(user));
-        return UserMapper.FromUserToUserDto(UserMapper.FromUserJpaEntityToUser(savedUser));
-    }
-
-    @Override
-    public UserDto update(Long id, UserDto userDto) {
-        UserJpaEntity existingUser = userRepository.findById(id);
-        if (existingUser == null) {
-            throw new ResourceNotFoundException("User with id " + id + " not found");
-        }
-        if (userDto.role() == null) {
-            throw new ValidationException("Role is required");
-        }
-
-        String password = determinePassword(userDto.password(), existingUser.getPassword());
-
-        UserDto userToUpdate = new UserDto(
-                id,
-                userDto.username() != null ? userDto.username() : existingUser.getUsername(),
-                password,
-                userDto.role() != null ? userDto.role() : existingUser.getRole());
-
-        User user = UserMapper.FromUserDtoToUser(userToUpdate);
-        UserJpaEntity updatedUser = userRepository.save(UserMapper.FromUserToUserJpaEntity(user));
-        return UserMapper.FromUserToUserDto(UserMapper.FromUserJpaEntityToUser(updatedUser));
-    }
-
-    @Override
-    public void delete(Long id) {
-        UserJpaEntity existingUser = userRepository.findById(id);
-        if (existingUser == null) {
-            throw new ResourceNotFoundException("User with id " + id + " not found");
-        }
-        userRepository.delete(id);
-    }
-
-    @Override
-    public String login(LoginDto loginDto) {
-        UserJpaEntity user = userRepository.findByUsername(loginDto.username())
-                .orElseThrow(() -> new ValidationException("User " + loginDto.username() + " not found."));
-
-        if (!passwordEncoderService.verify(loginDto.password(), user.getPassword())) {
-            throw new ValidationException("Incorrect password for user " + loginDto.username() + ".");
-        }
-        return tokenUtils.createSessionToken(user.getId());
-    }
-
-    @Override
-    public void logout(LoginDto loginDto) {
-        UserJpaEntity user = userRepository.findByUsername(loginDto.username())
-                .orElseThrow(() -> new ValidationException("User " + loginDto.username() + " not found."));
-        tokenUtils.deleteToken(user.getId());
-    }
-
-    private String determinePassword(String newPassword, String existingPassword) {
-        if (newPassword != null && !newPassword.isEmpty() && !newPassword.equals(existingPassword)) {
-            return passwordEncoderService.encode(newPassword);
-        }
-        return existingPassword;
-    }
+    return existingPassword;
+  }
 }

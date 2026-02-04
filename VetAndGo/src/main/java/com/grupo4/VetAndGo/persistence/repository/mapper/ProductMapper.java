@@ -17,14 +17,14 @@ public class ProductMapper {
     return INSTANCE;
   }
 
-  public ProductJpaEntity FromProductToProductJpaEntity(Product product) {
+  public ProductJpaEntity fromProductToProductJpaEntity(Product product) {
     if (product == null) {
       return null;
     }
     return new ProductJpaEntity(
         product.getId(),
         product.getName(),
-        CategoryMapper.getInstance().FromCategoryToCategoryJpaEntity(product.getCategory()),
+        CategoryMapper.getInstance().fromCategoryToCategoryJpaEntity(product.getCategory()),
         product.getDescription(),
         product.getBasePrice(),
         product.getStock(),
@@ -33,14 +33,14 @@ public class ProductMapper {
         product.getImageUrl());
   }
 
-  public Product FromProductJpaEntityToProduct(ProductJpaEntity productJpaEntity) {
+  public Product fromProductJpaEntityToProduct(ProductJpaEntity productJpaEntity) {
     if (productJpaEntity == null) {
       return null;
     }
     Product product = new Product(
         productJpaEntity.getId(),
         productJpaEntity.getName(),
-        CategoryMapper.getInstance().FromCategoryJpaEntityToCategory(productJpaEntity.getCategory()),
+        CategoryMapper.getInstance().fromCategoryJpaEntityToCategory(productJpaEntity.getCategory()),
         productJpaEntity.getDescription(),
         productJpaEntity.getBasePrice(),
         productJpaEntity.getStock(),

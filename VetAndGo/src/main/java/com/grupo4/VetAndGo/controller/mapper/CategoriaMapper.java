@@ -5,35 +5,34 @@ import com.grupo4.VetAndGo.controller.webmodel.response.Categoria.CategoriaDetai
 import com.grupo4.VetAndGo.domain.dto.CategoryDto;
 
 public class CategoriaMapper {
-    public static CategoryDto FromCategoryInsertToCategoryDto(CategoryInsert categoryInsert) {
-        if (categoryInsert == null) {
-            return null;
-        }
-        return new CategoryDto(
-                null,
-                categoryInsert.name(),
-                categoryInsert.description()
-        );
+  public static CategoryDto fromCategoryInsertToCategoryDto(CategoryInsert categoryInsert) {
+    if (categoryInsert == null) {
+      return null;
     }
-    public static CategoryDto FromCategoryUpdateToCategoryDto(Long id, CategoryInsert categoriaUpdate) {
-        if (categoriaUpdate == null) {
-            return null;
-        }
-        return new CategoryDto(
-                id,
-                categoriaUpdate.name(),
-                categoriaUpdate.description()
-        );
+    return new CategoryDto(
+        null,
+        categoryInsert.name(),
+        categoryInsert.description());
+  }
+
+  public static CategoryDto fromCategoryUpdateToCategoryDto(Long id, CategoryInsert categoriaUpdate) {
+    if (categoriaUpdate == null) {
+      return null;
     }
-    public static CategoriaDetail FromCategoryDtoToCategoriaDetail(CategoryDto categoryDto) {
-        if (categoryDto == null) {
-            return null;
-        }
-        return new CategoriaDetail(
-                categoryDto.id(),
-                categoryDto.name(),
-                categoryDto.description()
-        );
+    return new CategoryDto(
+        id,
+        categoriaUpdate.name(),
+        categoriaUpdate.description());
+  }
+
+  public static CategoriaDetail fromCategoryDtoToCategoriaDetail(CategoryDto categoryDto) {
+    if (categoryDto == null) {
+      return null;
     }
+    return new CategoriaDetail(
+        categoryDto.id(),
+        categoryDto.name(),
+        categoryDto.description());
+  }
 
 }

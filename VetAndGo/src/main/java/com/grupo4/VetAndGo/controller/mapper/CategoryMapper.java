@@ -5,13 +5,13 @@ import com.grupo4.VetAndGo.domain.dto.CategoryDto;
 
 public class CategoryMapper {
 
-    public static CategoryResponse FromCategoryDtoToCategoryResponse(CategoryDto categoryDto) {
-        if (categoryDto == null) {
-            return null;
-        }
-        return new CategoryResponse(
-                categoryDto.id(),
-                categoryDto.name(),
-                categoryDto.description());
+  public static CategoryResponse fromCategoryDtoToCategoryResponse(CategoryDto categoryDto) {
+    if (categoryDto == null) {
+      return null;
     }
+    return new CategoryResponse(
+        categoryDto.id(),
+        categoryDto.name(),
+        categoryDto.description());
+  }
 }

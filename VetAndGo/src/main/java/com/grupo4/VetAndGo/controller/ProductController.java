@@ -35,7 +35,7 @@ public class ProductController {
     Page<ProductDto> productDtoPage = productService.getAll(page, size, categoryId, sort, search);
 
     List<ProductResponse> productResponses = productDtoPage.data().stream()
-        .map(ProductMapper::FromProductDtoToProductResponse)
+        .map(ProductMapper::fromProductDtoToProductResponse)
         .toList();
 
     Page<ProductResponse> productResponsePage = new Page<>(
@@ -49,16 +49,16 @@ public class ProductController {
   @GetMapping("/{id}")
   public ResponseEntity<ProductResponse> getProductById(@PathVariable Long id) {
     ProductDto productDto = productService.getById(id);
-    ProductResponse productResponse = ProductMapper.FromProductDtoToProductResponse(productDto);
+    ProductResponse productResponse = ProductMapper.fromProductDtoToProductResponse(productDto);
     return new ResponseEntity<>(productResponse, org.springframework.http.HttpStatus.OK);
   }
 
   @RequireAdmin
   @PostMapping
   public ResponseEntity<ProductResponse> createProduct(@RequestBody ProductInsert productInsert) {
-    ProductDto productDto = ProductMapper.FromProductInsertToProductDto(productInsert);
+    ProductDto productDto = ProductMapper.fromProductInsertToProductDto(productInsert);
     ProductDto createdProduct = productService.create(productDto);
-    ProductResponse productResponse = ProductMapper.FromProductDtoToProductResponse(createdProduct);
+    ProductResponse productResponse = ProductMapper.fromProductDtoToProductResponse(createdProduct);
     return new ResponseEntity<>(productResponse, org.springframework.http.HttpStatus.CREATED);
   }
 
@@ -66,9 +66,9 @@ public class ProductController {
   @PutMapping("/{id}")
   public ResponseEntity<ProductResponse> updateProduct(@PathVariable Long id,
       @RequestBody ProductUpdate productRequest) {
-    ProductDto productDto = ProductMapper.FromProductUpdateToProductDto(productRequest);
+    ProductDto productDto = ProductMapper.fromProductUpdateToProductDto(productRequest);
     ProductDto updatedProduct = productService.update(productDto);
-    ProductResponse productResponse = ProductMapper.FromProductDtoToProductResponse(updatedProduct);
+    ProductResponse productResponse = ProductMapper.fromProductDtoToProductResponse(updatedProduct);
     return new ResponseEntity<>(productResponse, org.springframework.http.HttpStatus.OK);
   }
 

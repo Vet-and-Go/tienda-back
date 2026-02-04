@@ -15,7 +15,7 @@ public class ProductRepositoryImpl implements ProductRepository {
   @Override
   public Optional<Product> findByName(String name) {
     return productJpaDao.findByName(name)
-        .map(ProductMapper.getInstance()::FromProductJpaEntityToProduct);
+        .map(ProductMapper.getInstance()::fromProductJpaEntityToProduct);
   }
 
   @Override
@@ -37,7 +37,7 @@ public class ProductRepositoryImpl implements ProductRepository {
   @Override
   public Page<Product> getAll(int page, int size, Long categoryId, String sort, String search) {
     List<Product> products = productJpaDao.findAll(page, size, categoryId, sort, search).stream()
-        .map(ProductMapper.getInstance()::FromProductJpaEntityToProduct)
+        .map(ProductMapper.getInstance()::fromProductJpaEntityToProduct)
         .toList();
     long totalItems = productJpaDao.count();
     return new Page<>(products, page, size, totalItems);
@@ -46,18 +46,18 @@ public class ProductRepositoryImpl implements ProductRepository {
   @Override
   public Optional<Product> findById(Long id) {
     return productJpaDao.findById(id)
-        .map(ProductMapper.getInstance()::FromProductJpaEntityToProduct);
+        .map(ProductMapper.getInstance()::fromProductJpaEntityToProduct);
   }
 
   @Override
   public Product save(Product product) {
-    ProductJpaEntity entity = ProductMapper.getInstance().FromProductToProductJpaEntity(product);
+    ProductJpaEntity entity = ProductMapper.getInstance().fromProductToProductJpaEntity(product);
     ProductJpaEntity savedEntity;
     if (entity.getId() == null) {
       savedEntity = productJpaDao.insert(entity);
     } else {
       savedEntity = productJpaDao.update(entity);
     }
-    return ProductMapper.getInstance().FromProductJpaEntityToProduct(savedEntity);
+    return ProductMapper.getInstance().fromProductJpaEntityToProduct(savedEntity);
   }
 }

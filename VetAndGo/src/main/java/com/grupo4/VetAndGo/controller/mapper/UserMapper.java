@@ -6,26 +6,36 @@ import com.grupo4.VetAndGo.domain.dto.UserDto;
 
 public class UserMapper {
 
-    public UserDetail FromUserDtoToUserDetail(UserDto userDto){
-        if (userDto == null){
-            return null;
-        }
-        return new UserDetail(
-                userDto.id(),
-                userDto.username(),
-                userDto.username(),
-                userDto.role()
-        );
+  public UserDetail fromUserDtoToClientDetail(UserDto userDto) {
+    if (userDto == null) {
+      return null;
     }
-    public UserDto FromUserInsertToUserDto(UserInsert userInsert){
-        if (userInsert == null){
-            return null;
-        }
-        return new UserDto(
-                null,
-                userInsert.username(),
-                userInsert.password(),
-                userInsert.role()
-        );
+    return new UserDetail(
+        userDto.id(),
+        userDto.username(),
+        userDto.password(),
+        userDto.role());
+  }
+
+  public UserDto fromUserInsetToClientDto(UserInsert userInsert) {
+    if (userInsert == null) {
+      return null;
     }
+    return new UserDto(
+        null,
+        userInsert.username(),
+        userInsert.password(),
+        userInsert.role());
+  }
+
+  public static UserDetail fromUserDtoToUserDetail(UserDto userDto) {
+    if (userDto == null) {
+      return null;
+    }
+    return new UserDetail(
+        userDto.id(),
+        userDto.username(),
+        userDto.password(),
+        userDto.role());
+  }
 }
