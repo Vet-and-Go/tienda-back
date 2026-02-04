@@ -36,8 +36,7 @@ public class AuthFilter extends OncePerRequestFilter {
     // response.setHeader("Access-Control-Allow-Headers", "Content-Type,
     // Authorization");
     // response.setHeader("Access-Control-Allow-Credentials", "true");
-    //
-    //
+
     String requestMethod = request.getMethod();
 
     if ("OPTIONS".equalsIgnoreCase(requestMethod)) {
