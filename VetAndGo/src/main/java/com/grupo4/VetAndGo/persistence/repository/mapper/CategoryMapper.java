@@ -1,3 +1,11 @@
+// ********************************************************
+// ********************************************************
+//
+// This is bound to be deleted and refactor all uses. º↓º
+//
+// ********************************************************
+// ********************************************************
+
 package com.grupo4.VetAndGo.persistence.repository.mapper;
 
 import com.grupo4.VetAndGo.domain.model.Category;

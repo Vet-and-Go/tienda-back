@@ -16,8 +16,12 @@ public class OrderRepositoryImpl implements OrderRepository {
 
   @Override
   public List<OrderJpaEntity> getAll(Long userId) {
-    List<OrderJpaEntity> orders = orderJpaDao.findAll();
-    return orders;
+    if (userId != null) {
+      return orderJpaDao.findAll().stream()
+          .filter(order -> order.getUser() != null && order.getUser().getId().equals(userId))
+          .toList();
+    }
+    return orderJpaDao.findAll();
   }
 
   @Override

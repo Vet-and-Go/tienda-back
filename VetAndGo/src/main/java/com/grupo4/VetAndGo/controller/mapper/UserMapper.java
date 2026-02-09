@@ -17,6 +17,17 @@ public class UserMapper {
         userDto.role());
   }
 
+  public static UserDto fromUserDetailToUserDto(UserDetail userDetail) {
+    if (userDetail == null) {
+      return null;
+    }
+    return new UserDto(
+        userDetail.id(),
+        userDetail.name(),
+        userDetail.username(),
+        userDetail.role());
+  }
+
   public UserDto fromUserInsetToClientDto(UserInsert userInsert) {
     if (userInsert == null) {
       return null;

@@ -19,9 +19,6 @@ public class OrderJpaDaoImpl implements OrderJpaDao {
 
   @Override
   public Optional<OrderJpaEntity> findById(Long id) {
-    TypedQuery<OrderJpaEntity> query = entityManager.createQuery(
-        "SELECT o FROM OrderJpaEntity o WHERE o.id = :id",
-        OrderJpaEntity.class);
     return Optional.ofNullable(entityManager.find(OrderJpaEntity.class, id));
   }
 
@@ -37,9 +34,7 @@ public class OrderJpaDaoImpl implements OrderJpaDao {
     if (managed == null) {
       throw new IllegalArgumentException("Order with ID " + jpaEntity.getId() + " does not exist.");
     }
-    entityManager.flush();
     return entityManager.merge(jpaEntity);
-
   }
 
   @Override
@@ -50,12 +45,18 @@ public class OrderJpaDaoImpl implements OrderJpaDao {
 
   @Override
   public List<OrderJpaEntity> findAll() {
-    return List.of();
+    TypedQuery<OrderJpaEntity> query = entityManager.createQuery(
+        "SELECT o FROM OrderJpaEntity o", 
+        OrderJpaEntity.class);
+    return query.getResultList();
   }
 
   @Override
   public void deleteById(Long id) {
-    entityManager.remove(entityManager.find(OrderJpaEntity.class, id));
+    OrderJpaEntity order = entityManager.find(OrderJpaEntity.class, id);
+    if (order != null) {
+      entityManager.remove(order);
+    }
   }
 
 }

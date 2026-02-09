@@ -14,4 +14,14 @@ public class CategoryMapper {
         categoryDto.name(),
         categoryDto.description());
   }
+
+  public static CategoryDto fromCategoryResponseToCategoryDto(CategoryResponse categoryResponse) {
+    if (categoryResponse == null) {
+      return null;
+    }
+    return new CategoryDto(
+        categoryResponse.id(),
+        categoryResponse.name(),
+        categoryResponse.description());
+  }
 }

@@ -23,9 +23,24 @@ public class ProductMapper {
         productDto.imageUrl());
   }
 
+  public static ProductDto fromProductResponseToProductDto(ProductResponse productResponse) {
+    if (productResponse == null) {
+      return null;
+    }
+    return new ProductDto(
+        productResponse.id(),
+        productResponse.name(),
+        CategoryMapper.fromCategoryResponseToCategoryDto(productResponse.category()),
+        productResponse.description(),
+        productResponse.basePrice(),
+        productResponse.stock(),
+        productResponse.discountPercentage(),
+        productResponse.finalPrice(),
+        productResponse.imageUrl());
+  }
+
   public static ProductDto fromProductInsertToProductDto(ProductInsert productInsert) {
 
-  
     if (productInsert == null) {
       return null;
     }

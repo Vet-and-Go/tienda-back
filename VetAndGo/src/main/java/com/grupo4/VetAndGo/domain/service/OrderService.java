@@ -1,11 +1,11 @@
 package com.grupo4.VetAndGo.domain.service;
 
 import java.util.List;
+import java.util.Map;
 
-import com.grupo4.VetAndGo.controller.webmodel.request.Order.OrderInsert;
 import com.grupo4.VetAndGo.domain.dto.OrderDto;
 import com.grupo4.VetAndGo.domain.dto.ProductDto;
-import com.grupo4.VetAndGo.domain.dto.UserDto;
+import com.grupo4.VetAndGo.domain.model.enums.OrderState;
 
 public interface OrderService {
   List<OrderDto> getAll(Long userId);
@@ -14,14 +14,11 @@ public interface OrderService {
 
   List<ProductDto> getProductsFromOrder(Long orderId);
 
-  // Bound to be OrderInsert and OrderUpdate º↓º
-  OrderDto create(OrderInsert order, UserDto user);
+  OrderDto create(Map<Long, Integer> productQuantities, OrderState state, Long userId);
 
-  OrderDto update(OrderDto orderDto);
+  OrderDto update(Long id, Map<Long, Integer> productQuantities, OrderState state);
 
-  void orderToPending(Long id);
-
-  void orderToProcessed(Long id);
+  void changeState(Long id, OrderState newState);
 
   void delete(Long id);
 }

@@ -12,11 +12,13 @@ public class OrderMapper {
     }
     return new Order(
         orderJpaEntity.getId(),
-        orderJpaEntity.getProducts().stream()
-            .map(ProductMapper.getInstance()::fromProductJpaEntityToProduct)
+        orderJpaEntity.getItems().stream()
+            .map(OrderItemMapper::fromOrderItemJpaEntityToOrderItem)
             .toList(),
         orderJpaEntity.getState(),
-        UserMapper.fromUserJpaEntityToUser(orderJpaEntity.getUser()));
+        UserMapper.fromUserJpaEntityToUser(orderJpaEntity.getUser()),
+        orderJpaEntity.getOrderDate(),
+        orderJpaEntity.getTotalAmount());
   }
 
   public static OrderJpaEntity fromOrderToOrderJpaEntity(Order order) {
@@ -25,11 +27,13 @@ public class OrderMapper {
     }
     OrderJpaEntity orderJpaEntity = new OrderJpaEntity();
     orderJpaEntity.setId(order.getId());
-    orderJpaEntity.setProducts(order.getProducts().stream()
-        .map(ProductMapper.getInstance()::fromProductToProductJpaEntity)
+    orderJpaEntity.setItems(order.getItems().stream()
+        .map(OrderItemMapper::fromOrderItemToOrderItemJpaEntity)
         .toList());
     orderJpaEntity.setState(order.getState());
     orderJpaEntity.setUser(UserMapper.fromUserToUserJpaEntity(order.getUser()));
+    orderJpaEntity.setOrderDate(order.getOrderDate());
+    orderJpaEntity.setTotalAmount(order.getTotalAmount());
     return orderJpaEntity;
   }
 
@@ -39,11 +43,13 @@ public class OrderMapper {
     }
     return new OrderDto(
         order.getId(),
-        order.getProducts().stream()
-            .map(ProductMapper.getInstance()::fromProductToProductDto)
+        order.getItems().stream()
+            .map(OrderItemMapper::fromOrderItemToOrderItemDto)
             .toList(),
         order.getState(),
-        UserMapper.fromUserToUserDto(order.getUser()));
+        UserMapper.fromUserToUserDto(order.getUser()),
+        order.getOrderDate(),
+        order.getTotalAmount());
   }
 
   public static Order fromOrderDtoToOrder(OrderDto orderDto) {
@@ -52,10 +58,12 @@ public class OrderMapper {
     }
     return new Order(
         orderDto.id(),
-        orderDto.products().stream()
-            .map(ProductMapper.getInstance()::fromProductDtoToProduct)
+        orderDto.items().stream()
+            .map(OrderItemMapper::fromOrderItemDtoToOrderItem)
             .toList(),
         orderDto.state(),
-        UserMapper.fromUserDtoToUser(orderDto.user()));
+        UserMapper.fromUserDtoToUser(orderDto.user()),
+        orderDto.orderDate(),
+        orderDto.totalAmount());
   }
 }
