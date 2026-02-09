@@ -80,7 +80,6 @@ public class AuthFilter extends OncePerRequestFilter {
       // Ignore errors in handler mapping to allow request to proceed to 404 or other
       // handlers
     }
-
     filterChain.doFilter(request, response);
   }
 

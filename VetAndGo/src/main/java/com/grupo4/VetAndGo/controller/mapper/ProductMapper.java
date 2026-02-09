@@ -7,14 +7,14 @@ import com.grupo4.VetAndGo.domain.dto.ProductDto;
 
 public class ProductMapper {
 
-  public static ProductResponse FromProductDtoToProductResponse(ProductDto productDto) {
+  public static ProductResponse fromProductDtoToProductResponse(ProductDto productDto) {
     if (productDto == null) {
       return null;
     }
     return new ProductResponse(
         productDto.id(),
         productDto.name(),
-        CategoryMapper.FromCategoryDtoToCategoryResponse(productDto.category()),
+        CategoryMapper.fromCategoryDtoToCategoryResponse(productDto.category()),
         productDto.description(),
         productDto.basePrice(),
         productDto.stock(),
@@ -23,7 +23,24 @@ public class ProductMapper {
         productDto.imageUrl());
   }
 
-  public static ProductDto FromProductInsertToProductDto(ProductInsert productInsert) {
+  public static ProductDto fromProductResponseToProductDto(ProductResponse productResponse) {
+    if (productResponse == null) {
+      return null;
+    }
+    return new ProductDto(
+        productResponse.id(),
+        productResponse.name(),
+        CategoryMapper.fromCategoryResponseToCategoryDto(productResponse.category()),
+        productResponse.description(),
+        productResponse.basePrice(),
+        productResponse.stock(),
+        productResponse.discountPercentage(),
+        productResponse.finalPrice(),
+        productResponse.imageUrl());
+  }
+
+  public static ProductDto fromProductInsertToProductDto(ProductInsert productInsert) {
+
     if (productInsert == null) {
       return null;
     }
@@ -39,7 +56,7 @@ public class ProductMapper {
         productInsert.imageUrl());
   }
 
-  public static ProductDto FromProductUpdateToProductDto(ProductUpdate productUpdate) {
+  public static ProductDto fromProductUpdateToProductDto(ProductUpdate productUpdate) {
     if (productUpdate == null) {
       return null;
     }
