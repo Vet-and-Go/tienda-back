@@ -1,5 +1,7 @@
 package com.grupo4.VetAndGo.spring;
 
+import java.beans.Customizer;
+
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +21,6 @@ import com.grupo4.VetAndGo.domain.service.ProductService;
 import com.grupo4.VetAndGo.domain.service.TokenUtils;
 import com.grupo4.VetAndGo.domain.service.UserService;
 import com.grupo4.VetAndGo.domain.service.impl.CategoryServiceImpl;
-import com.grupo4.VetAndGo.domain.service.impl.OrderServiceImpl;
 import com.grupo4.VetAndGo.domain.service.impl.ProductServiceImpl;
 import com.grupo4.VetAndGo.domain.service.impl.TokenUtilsImpl;
 import com.grupo4.VetAndGo.domain.service.impl.UserServiceImpl;
@@ -38,6 +39,7 @@ import com.grupo4.VetAndGo.persistence.repository.impl.OrderRepositoryImpl;
 import com.grupo4.VetAndGo.persistence.repository.impl.ProductRepositoryImpl;
 import com.grupo4.VetAndGo.persistence.repository.impl.TokenUtilsRepositoryImpl;
 import com.grupo4.VetAndGo.persistence.repository.impl.UserRepositoryImpl;
+import org.springframework.web.client.RestTemplate;
 
 @Configuration
 @Profile("!test")
@@ -125,6 +127,17 @@ public class SpringConfig {
   @Bean
   TokenUtilsJpaDao tokenUtilsJpaDao() {
     return new TokenUtilsJpaDaoImpl();
+  }
+
+
+
+  @Bean
+  public PaymentService paymentService(com.grupo4.VetAndGo.nanoServices.payment.PaymentService nanoPaymentService) {
+    return new PaymentServiceImpl(nanoPaymentService);
+  }
+  @Bean
+  public com.grupo4.VetAndGo.nanoServices.payment.PaymentService nanoPaymentService(RestTemplate restTemplate) {
+      return new com.grupo4.VetAndGo.nanoServices.payment.impl.PaymentServiceImpl(restTemplate);
   }
 
 }
