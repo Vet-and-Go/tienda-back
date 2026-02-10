@@ -17,10 +17,13 @@ import com.grupo4.VetAndGo.domain.repository.UserRepository;
 import com.grupo4.VetAndGo.domain.service.CategoryService;
 import com.grupo4.VetAndGo.domain.service.OrderService;
 import com.grupo4.VetAndGo.domain.service.PasswordEncoderService;
+import com.grupo4.VetAndGo.domain.service.PaymentService;
 import com.grupo4.VetAndGo.domain.service.ProductService;
 import com.grupo4.VetAndGo.domain.service.TokenUtils;
 import com.grupo4.VetAndGo.domain.service.UserService;
 import com.grupo4.VetAndGo.domain.service.impl.CategoryServiceImpl;
+import com.grupo4.VetAndGo.domain.service.impl.OrderServiceImpl;
+import com.grupo4.VetAndGo.domain.service.impl.PaymentServiceImpl;
 import com.grupo4.VetAndGo.domain.service.impl.ProductServiceImpl;
 import com.grupo4.VetAndGo.domain.service.impl.TokenUtilsImpl;
 import com.grupo4.VetAndGo.domain.service.impl.UserServiceImpl;
@@ -129,12 +132,16 @@ public class SpringConfig {
     return new TokenUtilsJpaDaoImpl();
   }
 
-
+  @Bean
+  public RestTemplate restTemplate() {
+    return new RestTemplate();
+  }
 
   @Bean
   public PaymentService paymentService(com.grupo4.VetAndGo.nanoServices.payment.PaymentService nanoPaymentService) {
     return new PaymentServiceImpl(nanoPaymentService);
   }
+  
   @Bean
   public com.grupo4.VetAndGo.nanoServices.payment.PaymentService nanoPaymentService(RestTemplate restTemplate) {
       return new com.grupo4.VetAndGo.nanoServices.payment.impl.PaymentServiceImpl(restTemplate);
