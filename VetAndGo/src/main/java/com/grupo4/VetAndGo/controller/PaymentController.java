@@ -19,8 +19,19 @@ public class PaymentController {
     }
 
     @PostMapping("/process")
-    public ResponseEntity<Void> processPayment(@RequestBody CardPaymentRequest request) {
-        paymentService.processPayment(request);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<String> processPayment(@RequestBody CardPaymentRequest request) {
+        CardPaymentRequest storeRequest = new CardPaymentRequest(
+            request.login(),
+            request.apiToken(),
+            request.cardNumber(),
+            request.expirationDate(),
+            request.cvc(),
+            request.fullName(),
+            "ES61 1234 5678 9012 3456 7890",
+            request.amount(),
+            request.concept()
+        );
+        paymentService.processPayment(storeRequest);
+        return ResponseEntity.ok("Pago procesado exitosamente");
     }
 }
