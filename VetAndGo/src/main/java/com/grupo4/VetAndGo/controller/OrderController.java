@@ -17,9 +17,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.grupo4.VetAndGo.controller.webmodel.request.CheckoutRequest;
 import com.grupo4.VetAndGo.controller.webmodel.request.Order.OrderInsert;
 import com.grupo4.VetAndGo.controller.webmodel.request.Order.OrderItemRequest;
 import com.grupo4.VetAndGo.controller.webmodel.request.Order.OrderUpdate;
+import com.grupo4.VetAndGo.controller.webmodel.response.CheckoutResponse;
 import com.grupo4.VetAndGo.controller.webmodel.response.Order.OrderResponse;
 import com.grupo4.VetAndGo.domain.dto.OrderDto;
 import com.grupo4.VetAndGo.domain.model.enums.OrderState;
@@ -107,5 +109,33 @@ public class OrderController {
     orderService.changeState(id, state);
     OrderDto order = orderService.getById(id);
     return ResponseEntity.ok(com.grupo4.VetAndGo.controller.mapper.OrderMapper.fromOrderDtoToOrderResponse(order));
+  }
+
+  @PostMapping("/checkout")
+  public ResponseEntity<CheckoutResponse> checkout(
+      @Valid @RequestBody CheckoutRequest request,
+      @RequestParam Long userId) {
+    
+    try {
+      Map<Long, Integer> productQuantities = request.items().stream()
+          .collect(Collectors.toMap(
+              OrderItemRequest::productId,
+              OrderItemRequest::quantity,
+              Integer::sum));
+      
+      OrderDto order = orderService.checkout(
+          productQuantities, userId, request.cardNumber(), request.expirationDate(),
+          request.cvc(), request.fullName(), request.login(), request.apiToken(), request.concept());
+      
+      OrderResponse orderResponse = com.grupo4.VetAndGo.controller.mapper.OrderMapper
+          .fromOrderDtoToOrderResponse(order);
+      
+      return ResponseEntity.status(HttpStatus.CREATED)
+          .body(new CheckoutResponse(orderResponse, "SUCCESS", "Checkout completed successfully"));
+      
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+          .body(new CheckoutResponse(null, "FAILED", "Checkout failed: " + e.getMessage()));
+    }
   }
 }

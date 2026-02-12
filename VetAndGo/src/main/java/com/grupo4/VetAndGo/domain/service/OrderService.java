@@ -21,4 +21,7 @@ public interface OrderService {
   void changeState(Long id, OrderState newState);
 
   void delete(Long id);
+
+  OrderDto checkout(Map<Long, Integer> productQuantities, Long userId, String cardNumber, 
+      String expirationDate, String cvc, String fullName, String login, String apiToken, String concept);
 }

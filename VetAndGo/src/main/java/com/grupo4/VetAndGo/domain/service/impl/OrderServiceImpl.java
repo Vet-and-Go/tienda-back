@@ -5,14 +5,15 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
+import org.springframework.transaction.annotation.Transactional;
+
+import com.grupo4.VetAndGo.controller.dto.CardPaymentRequest;
 import com.grupo4.VetAndGo.domain.dto.OrderDto;
 import com.grupo4.VetAndGo.domain.dto.ProductDto;
 import com.grupo4.VetAndGo.domain.exception.ResourceNotFoundException;
 import com.grupo4.VetAndGo.domain.mapper.OrderMapper;
 import com.grupo4.VetAndGo.domain.mapper.ProductMapper;
-import com.grupo4.VetAndGo.domain.model.Order;
 import com.grupo4.VetAndGo.domain.model.OrderItem;
 import com.grupo4.VetAndGo.domain.model.Product;
 import com.grupo4.VetAndGo.domain.model.enums.OrderState;
@@ -20,6 +21,7 @@ import com.grupo4.VetAndGo.domain.repository.OrderRepository;
 import com.grupo4.VetAndGo.domain.repository.ProductRepository;
 import com.grupo4.VetAndGo.domain.repository.UserRepository;
 import com.grupo4.VetAndGo.domain.service.OrderService;
+import com.grupo4.VetAndGo.domain.service.PaymentService;
 import com.grupo4.VetAndGo.persistence.dao.jpa.entity.OrderItemJpaEntity;
 import com.grupo4.VetAndGo.persistence.dao.jpa.entity.OrderJpaEntity;
 import com.grupo4.VetAndGo.persistence.dao.jpa.entity.ProductJpaEntity;
@@ -27,15 +29,17 @@ import com.grupo4.VetAndGo.persistence.dao.jpa.entity.UserJpaEntity;
 
 public class OrderServiceImpl implements OrderService {
 
-  private OrderRepository orderRepository;
-  private ProductRepository productRepository;
-  private UserRepository userRepository;
+  private final OrderRepository orderRepository;
+  private final ProductRepository productRepository;
+  private final UserRepository userRepository;
+  private final PaymentService paymentService;
 
   public OrderServiceImpl(OrderRepository orderRepository, ProductRepository productRepository,
-      UserRepository userRepository) {
+      UserRepository userRepository, PaymentService paymentService) {
     this.orderRepository = orderRepository;
     this.productRepository = productRepository;
     this.userRepository = userRepository;
+    this.paymentService = paymentService;
   }
 
   @Override
@@ -140,6 +144,31 @@ public class OrderServiceImpl implements OrderService {
           return orderRepository.save(existing);
         })
         .orElseThrow(() -> new ResourceNotFoundException("Order with ID " + id + " not found."));
+  }
+
+  @Override
+  @Transactional
+  public OrderDto checkout(Map<Long, Integer> productQuantities, Long userId, String cardNumber, 
+      String expirationDate, String cvc, String fullName, String login, String apiToken, String concept) {
+    
+    OrderDto order = create(productQuantities, OrderState.PENDING, userId);
+    
+    try {
+      CardPaymentRequest paymentRequest = new CardPaymentRequest(
+          login, apiToken, cardNumber, expirationDate, cvc, fullName,
+          "ES61 1234 5678 9012 3456 7890",
+          order.totalAmount().doubleValue(),
+          concept
+      );
+      
+      paymentService.processPayment(paymentRequest);
+      changeState(order.id(), OrderState.PROCESSED);
+      return getById(order.id());
+      
+    } catch (Exception e) {
+      delete(order.id());
+      throw new RuntimeException("Payment failed: " + e.getMessage(), e);
+    }
   }
 
   private List<OrderItemJpaEntity> createOrderItems(OrderJpaEntity order, Map<Long, Integer> productQuantities) {

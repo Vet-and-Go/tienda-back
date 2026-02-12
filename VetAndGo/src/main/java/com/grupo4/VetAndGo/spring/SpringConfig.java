@@ -1,12 +1,11 @@
 package com.grupo4.VetAndGo.spring;
 
-import java.beans.Customizer;
-
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.web.client.RestTemplate;
 
 import com.grupo4.VetAndGo.domain.infrastructura.PasswordEncoderImpl;
 import com.grupo4.VetAndGo.domain.repository.CategoryRepository;
@@ -42,7 +41,6 @@ import com.grupo4.VetAndGo.persistence.repository.impl.OrderRepositoryImpl;
 import com.grupo4.VetAndGo.persistence.repository.impl.ProductRepositoryImpl;
 import com.grupo4.VetAndGo.persistence.repository.impl.TokenUtilsRepositoryImpl;
 import com.grupo4.VetAndGo.persistence.repository.impl.UserRepositoryImpl;
-import org.springframework.web.client.RestTemplate;
 
 @Configuration
 @Profile("!test")
@@ -56,8 +54,8 @@ public class SpringConfig {
 
   @Bean
   OrderService orderService(OrderRepository orderRepository, UserRepository userRepository,
-      ProductRepository productRepository) {
-    return new OrderServiceImpl(orderRepository, productRepository, userRepository);
+      ProductRepository productRepository, PaymentService paymentService) {
+    return new OrderServiceImpl(orderRepository, productRepository, userRepository, paymentService);
   }
 
   @Bean
