@@ -9,31 +9,32 @@ import com.grupo4.VetAndGo.persistence.dao.jpa.entity.UserJpaEntity;
 
 public class TokenUtilsImpl implements TokenUtils {
 
-    private final TokenUtilsRepository tokenUtilsRepository;
+  private final TokenUtilsRepository tokenUtilsRepository;
 
-    public TokenUtilsImpl(TokenUtilsRepository tokenUtilsRepository) {
-        this.tokenUtilsRepository = tokenUtilsRepository;
+  public TokenUtilsImpl(TokenUtilsRepository tokenUtilsRepository) {
+    this.tokenUtilsRepository = tokenUtilsRepository;
+  }
+
+  @Override
+  public User getUserbFromToken(String token) {
+    UserJpaEntity user = tokenUtilsRepository.getUserFromToken(token);
+    if (user == null) {
+      throw new ValidationException("Invalid token.");
     }
+    return UserMapper.fromUserJpaEntityToUser(user);
+  }
 
-    @Override
-    public User getUserbFromToken(String token) {
-        UserJpaEntity user = tokenUtilsRepository.getUserFromToken(token);
-        if (user == null) {
-            throw new ValidationException("Invalid token.");
-        }
-        return UserMapper.FromUserJpaEntityToUser(user);
-    }
+  @Override
+  public void deleteToken(String token) {
+    User user = getUserbFromToken(token);
+    tokenUtilsRepository.deleteToken(user.getId());
 
-    @Override
-    public void deleteToken(String token) {
-        User user = getUserbFromToken(token);
-        tokenUtilsRepository.deleteToken(user.getId());
+  }
 
-    }
+  @Override
+  public User validateToken(String token) {
+    User user = getUserbFromToken(token);
+    return user;
+  }
 
-    @Override
-    public User validateToken(String token) {
-        User user = getUserbFromToken(token);
-        return user;
-    }
 }

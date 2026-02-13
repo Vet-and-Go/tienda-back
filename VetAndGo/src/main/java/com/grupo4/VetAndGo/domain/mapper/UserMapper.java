@@ -6,48 +6,59 @@ import com.grupo4.VetAndGo.domain.dto.UserDto;
 
 public class UserMapper {
 
-    public static User FromUserJpaEntityToUser(UserJpaEntity userJpaEntity){
-        if (userJpaEntity == null){
-            return null;
-        }
-        return new User(
-                userJpaEntity.getId(),
-                userJpaEntity.getUsername(),
-                userJpaEntity.getPassword(),
-                userJpaEntity.getRole()
-        );
+  private static UserMapper INSTANCE;
+
+  private UserMapper() {
+  }
+
+  public static UserMapper getInstance() {
+    if (INSTANCE == null) {
+      INSTANCE = new UserMapper();
     }
-    public static UserJpaEntity FromUserToUserJpaEntity(User user){
-        if (user == null){
-            return null;
-        }
-        return new UserJpaEntity(
-                user.getId(),
-                user.getUsername(),
-                user.getPassword(),
-                user.getRole()
-        );
+    return INSTANCE;
+  }
+
+  public static User fromUserJpaEntityToUser(UserJpaEntity userJpaEntity) {
+    if (userJpaEntity == null) {
+      return null;
     }
-    public static User FromUserDtoToUser(UserDto userDto){
-        if (userDto == null){
-            return null;
-        }
-        return new User(
-                userDto.id(),
-                userDto.username(),
-                userDto.password(),
-                userDto.role()
-        );
+    return new User(
+        userJpaEntity.getId(),
+        userJpaEntity.getUsername(),
+        userJpaEntity.getPassword(),
+        userJpaEntity.getRole());
+  }
+
+  public static UserJpaEntity fromUserToUserJpaEntity(User user) {
+    if (user == null) {
+      return null;
     }
-    public static UserDto FromUserToUserDto(User user){
-        if (user == null){
-            return null;
-        }
-        return new UserDto(
-                user.getId(),
-                user.getUsername(),
-                user.getPassword(),
-                user.getRole()
-        );
+    return new UserJpaEntity(
+        user.getId(),
+        user.getUsername(),
+        user.getPassword(),
+        user.getRole());
+  }
+
+  public static User fromUserDtoToUser(UserDto userDto) {
+    if (userDto == null) {
+      return null;
     }
+    return new User(
+        userDto.id(),
+        userDto.username(),
+        userDto.password(),
+        userDto.role());
+  }
+
+  public static UserDto fromUserToUserDto(User user) {
+    if (user == null) {
+      return null;
+    }
+    return new UserDto(
+        user.getId(),
+        user.getUsername(),
+        user.getPassword(),
+        user.getRole());
+  }
 }

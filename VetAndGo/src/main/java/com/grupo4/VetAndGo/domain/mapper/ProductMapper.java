@@ -18,14 +18,14 @@ public class ProductMapper {
     return INSTANCE;
   }
 
-  public ProductDto FromProductToProductDto(Product product) {
+  public ProductDto fromProductToProductDto(Product product) {
     if (product == null) {
       return null;
     }
     return new ProductDto(
         product.getId(),
         product.getName(),
-        CategoryMapper.FromCategoryToCategoryDto(product.getCategory()),
+        CategoryMapper.fromCategoryToCategoryDto(product.getCategory()),
         product.getDescription(),
         product.getBasePrice(),
         product.getStock(),
@@ -34,14 +34,14 @@ public class ProductMapper {
         product.getImageUrl());
   }
 
-  public Product FromProductDtoToProduct(ProductDto productDto) {
+  public Product fromProductDtoToProduct(ProductDto productDto) {
     if (productDto == null) {
       return null;
     }
     return new Product(
         productDto.id(),
         productDto.name(),
-        CategoryMapper.FromCategoryDtoToCategory(productDto.category()),
+        CategoryMapper.fromCategoryDtoToCategory(productDto.category()),
         productDto.description(),
         productDto.basePrice(),
         productDto.stock(),
@@ -50,7 +50,7 @@ public class ProductMapper {
         productDto.imageUrl());
   }
 
-  public Product FromProductJpaEntityToProduct(ProductJpaEntity productJpaEntity) {
+  public Product fromProductJpaEntityToProduct(ProductJpaEntity productJpaEntity) {
     if (productJpaEntity == null) {
       return null;
     }
@@ -58,7 +58,7 @@ public class ProductMapper {
       Product product = new Product(
           productJpaEntity.getId(),
           productJpaEntity.getName(),
-          CategoryMapper.FromCategoryJpaEntityToCategory(productJpaEntity.getCategory()),
+          CategoryMapper.fromCategoryJpaEntityToCategory(productJpaEntity.getCategory()),
           productJpaEntity.getDescription(),
           productJpaEntity.getBasePrice(),
           productJpaEntity.getStock(),
@@ -75,7 +75,7 @@ public class ProductMapper {
     }
   }
 
-  public ProductJpaEntity FromProductToProductJpaEntity(Product product) {
+  public ProductJpaEntity fromProductToProductJpaEntity(Product product) {
     if (product == null) {
       return null;
     }
@@ -83,7 +83,7 @@ public class ProductMapper {
       return new ProductJpaEntity(
           product.getId(),
           product.getName(),
-          CategoryMapper.FromCategoryToCategoryJpaEntity(product.getCategory()),
+          CategoryMapper.fromCategoryToCategoryJpaEntity(product.getCategory()),
           product.getDescription(),
           product.getBasePrice(),
           product.getStock(),

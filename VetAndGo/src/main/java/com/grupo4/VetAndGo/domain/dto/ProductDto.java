@@ -1,7 +1,5 @@
 package com.grupo4.VetAndGo.domain.dto;
 
-
-import com.grupo4.VetAndGo.domain.dto.CategoryDto;
 import jakarta.validation.constraints.*;
 import java.math.BigDecimal;
 

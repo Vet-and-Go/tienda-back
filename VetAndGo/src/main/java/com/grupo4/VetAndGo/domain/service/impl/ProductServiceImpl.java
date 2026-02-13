@@ -19,7 +19,7 @@ public class ProductServiceImpl implements ProductService {
   private final CategoryRepository categoryRepository;
 
   public ProductServiceImpl(ProductRepository productRepository,
-                            CategoryRepository categoryRepository) {
+      CategoryRepository categoryRepository) {
     this.categoryRepository = categoryRepository;
     this.productRepository = productRepository;
   }
@@ -32,10 +32,10 @@ public class ProductServiceImpl implements ProductService {
     }
     System.out.println("Creating product: " + productDto);
 
-    var product = ProductMapper.getInstance().FromProductDtoToProduct(productDto);
+    var product = ProductMapper.getInstance().fromProductDtoToProduct(productDto);
     var saved = productRepository.save(product);
-    
-    return ProductMapper.getInstance().FromProductToProductDto(saved);
+
+    return ProductMapper.getInstance().fromProductToProductDto(saved);
   }
 
   @Override
@@ -55,9 +55,9 @@ public class ProductServiceImpl implements ProductService {
       throw new IllegalArgumentException("Invalid page or size");
     }
     Page<Product> productPage = productRepository.getAll(page, size, categoryId, sort, search);
-    
+
     List<ProductDto> productDtos = productPage.data().stream()
-        .map(ProductMapper.getInstance()::FromProductToProductDto)
+        .map(ProductMapper.getInstance()::fromProductToProductDto)
         .toList();
     return new Page<>(
         productDtos,
@@ -70,28 +70,27 @@ public class ProductServiceImpl implements ProductService {
   public ProductDto getById(Long id) {
     return productRepository
         .findById(id)
-        .map(ProductMapper.getInstance()::FromProductToProductDto)
+        .map(ProductMapper.getInstance()::fromProductToProductDto)
         .orElseThrow(() -> new RuntimeException("Product not found"));
   }
 
   @Override
   public Optional<ProductDto> findById(Long id) {
     return productRepository.findById(id)
-        .map(ProductMapper.getInstance()::FromProductToProductDto);
+        .map(ProductMapper.getInstance()::fromProductToProductDto);
   }
 
   @Override
   @Transactional
   public ProductDto update(ProductDto productDto) {
     if (productRepository.findByName(productDto.name()).isPresent()) {
-      throw new IllegalArgumentException("Cannot create a product with an existing ID."); 
+      throw new IllegalArgumentException("Cannot create a product with an existing ID.");
     }
     getById(productDto.id());
-    
-    Product newProduct = ProductMapper.getInstance().FromProductDtoToProduct(productDto);
-    return ProductMapper.getInstance().FromProductToProductDto(
-            productRepository.save(newProduct));
+
+    Product newProduct = ProductMapper.getInstance().fromProductDtoToProduct(productDto);
+    return ProductMapper.getInstance().fromProductToProductDto(
+        productRepository.save(newProduct));
   }
-  
 
 }

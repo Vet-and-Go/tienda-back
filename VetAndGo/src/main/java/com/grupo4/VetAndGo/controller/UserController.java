@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+//@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -84,7 +85,7 @@ public class UserController {
     }
 
     String token = userService.login(loginDto);
-    LoginResponseDto response = new LoginResponseDto(token, user.username(), user.role().toString());
+    LoginResponseDto response = new LoginResponseDto(token, user.username(), user.role().toString(), user.id());
     return ResponseEntity.ok(response);
   }
 

@@ -14,75 +14,75 @@ import java.util.Optional;
 
 public class CategoryServiceImpl implements CategoryService {
 
-    private final CategoryRepository categoryRepository;
-    private final ProductRepository productRepository;
+  private final CategoryRepository categoryRepository;
+  private final ProductRepository productRepository;
 
-    public CategoryServiceImpl(CategoryRepository categoryRepository, ProductRepository productRepository) {
-        this.categoryRepository = categoryRepository;
-        this.productRepository = productRepository;
+  public CategoryServiceImpl(CategoryRepository categoryRepository, ProductRepository productRepository) {
+    this.categoryRepository = categoryRepository;
+    this.productRepository = productRepository;
+  }
+
+  @Override
+  public List<CategoryDto> getAll() {
+    List<CategoryJpaEntity> categories = categoryRepository.findAll();
+    if (categories.isEmpty()) {
+      throw new ResourceNotFoundException("No se encontraron categorías.");
+    }
+    return categories.stream()
+        .map(CategoryMapper::fromCategoryJpaEntityToCategory)
+        .map(CategoryMapper::fromCategoryToCategoryDto)
+        .toList();
+  }
+
+  @Override
+  public Optional<CategoryDto> getById(Long id) {
+    Optional<CategoryJpaEntity> category = categoryRepository.findById(id);
+    if (category.isEmpty()) {
+      throw new ResourceNotFoundException("No se encontró la categoría con ID " + id + ".");
+    }
+    return category
+        .map(CategoryMapper::fromCategoryJpaEntityToCategory)
+        .map(CategoryMapper::fromCategoryToCategoryDto);
+  }
+
+  @Override
+  public CategoryDto create(CategoryDto categoryDto) {
+    if (categoryRepository.findByName(categoryDto.name()).isPresent()) {
+      throw new BussinesException("La categoría con nombre '" + categoryDto.name() + "' ya existe.");
     }
 
-    @Override
-    public List<CategoryDto> getAll() {
-        List<CategoryJpaEntity> categories = categoryRepository.findAll();
-        if (categories.isEmpty()) {
-            throw new ResourceNotFoundException("No se encontraron categorías.");
-        }
-        return categories.stream()
-                .map(CategoryMapper::FromCategoryJpaEntityToCategory)
-                .map(CategoryMapper::FromCategoryToCategoryDto)
-                .toList();
-    }
+    var categoria = CategoryMapper.fromCategoryDtoToCategory(categoryDto);
+    var saved = categoryRepository.save(CategoryMapper.fromCategoryToCategoryJpaEntity(categoria));
+    var result = CategoryMapper.fromCategoryJpaEntityToCategory(saved);
+    return CategoryMapper.fromCategoryToCategoryDto(result);
+  }
 
-    @Override
-    public Optional<CategoryDto> getById(Long id) {
-        Optional<CategoryJpaEntity> category = categoryRepository.findById(id);
-        if (category.isEmpty()) {
-            throw new ResourceNotFoundException("No se encontró la categoría con ID " + id + ".");
-        }
-        return category
-                .map(CategoryMapper::FromCategoryJpaEntityToCategory)
-                .map(CategoryMapper::FromCategoryToCategoryDto);
-    }
+  @Override
+  public CategoryDto update(Long id, CategoryDto categoryDto) {
 
-    @Override
-    public CategoryDto create(CategoryDto categoryDto) {
-        if (categoryRepository.findByName(categoryDto.name()).isPresent()) {
-            throw new BussinesException("La categoría con nombre '" + categoryDto.name() + "' ya existe.");
-        }
+    return categoryRepository.findById(id)
+        .map(existing -> {
+          existing.setName(categoryDto.name());
+          existing.setDescription(categoryDto.description());
+          return categoryRepository.save(existing);
+        })
+        .map(CategoryMapper::fromCategoryJpaEntityToCategory)
+        .map(CategoryMapper::fromCategoryToCategoryDto)
+        .orElseThrow(() -> new ResourceNotFoundException("La categoría con ID " + id + " no existe."));
+  }
 
-        var categoria = CategoryMapper.FromCategoryDtoToCategory(categoryDto);
-        var saved = categoryRepository.save(CategoryMapper.FromCategoryToCategoryJpaEntity(categoria));
-        var result = CategoryMapper.FromCategoryJpaEntityToCategory(saved);
-        return CategoryMapper.FromCategoryToCategoryDto(result);
-    }
-
-    @Override
-    public CategoryDto update(Long id, CategoryDto categoryDto) {
-
-        return categoryRepository.findById(id)
-                .map(existing -> {
-                    existing.setName(categoryDto.name());
-                    existing.setDescription(categoryDto.description());
-                    return categoryRepository.save(existing);
-                })
-                .map(CategoryMapper::FromCategoryJpaEntityToCategory)
-                .map(CategoryMapper::FromCategoryToCategoryDto)
-                .orElseThrow(() -> new ResourceNotFoundException("La categoría con ID " + id + " no existe."));
-    }
-
-    @Override
-    public void delete(Long id) {
-        if (!categoryRepository.findById(id).isPresent()) {
-            throw new ResourceNotFoundException("La categoría con ID " + id + " no existe.");
-
-        }
-        if (productRepository.existsByCategoryId(id)) {
-            throw new BussinesException(
-                    "No se puede eliminar la categoría con ID " + id + " porque está asociada a un producto.");
-        }
-
-        categoryRepository.deleteById(id);
+  @Override
+  public void delete(Long id) {
+    if (!categoryRepository.findById(id).isPresent()) {
+      throw new ResourceNotFoundException("La categoría con ID " + id + " no existe.");
 
     }
+    if (productRepository.existsByCategoryId(id)) {
+      throw new BussinesException(
+          "No se puede eliminar la categoría con ID " + id + " porque está asociada a un producto.");
+    }
+
+    categoryRepository.deleteById(id);
+
+  }
 }
