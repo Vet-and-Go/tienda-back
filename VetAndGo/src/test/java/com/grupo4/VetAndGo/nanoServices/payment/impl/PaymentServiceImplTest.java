@@ -41,7 +41,6 @@ class PaymentServiceImplTest {
 
         String expectedUrl = "http://localhost:8080/api/bank-accounts/payment";
         
-        // We verify that postForEntity is called with the expected URL and a Map payload
         verify(restTemplate).postForEntity(eq(expectedUrl), any(Map.class), eq(Void.class));
     }
 }
